@@ -35,6 +35,13 @@ Objednat jízdu
 <p class="text-lg">Stav objednávky:</p>
 <p id="statusText" class="text-2xl font-bold mt-2"></p>
 <p id="statusMessage" class="mt-4 text-gray-300"></p>
+
+<a id="callDriverBtn"
+href="tel:+420123456789"
+class="hidden mt-6 inline-block bg-green-600 px-6 py-3 rounded font-bold">
+📞 Zavolat řidiče
+</a>
+
 </div>
 
 </div>
@@ -100,6 +107,9 @@ if (docSnap.exists()) {
 const data = docSnap.data();
 const statusText = document.getElementById("statusText");
 const statusMessage = document.getElementById("statusMessage");
+const callBtn = document.getElementById("callDriverBtn");
+
+callBtn.classList.add("hidden");
 
 let czText = "";
 let enText = "";
@@ -122,6 +132,7 @@ message = "Řidič dorazí přibližně za " + data.eta + " minut.";
 message = "Řidič je na cestě k vám.";
 }
 
+callBtn.classList.remove("hidden");
 statusText.className = "text-2xl font-bold mt-2 text-green-400";
 }
 
