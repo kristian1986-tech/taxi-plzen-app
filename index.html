@@ -115,7 +115,13 @@ statusText.className = "text-2xl font-bold mt-2 text-yellow-400";
 if(data.status === "confirmed") {
 czText = "Potvrzena";
 enText = "confirmed";
+
+if(data.eta) {
+message = "Řidič dorazí přibližně za " + data.eta + " minut.";
+} else {
 message = "Řidič je na cestě k vám.";
+}
+
 statusText.className = "text-2xl font-bold mt-2 text-green-400";
 }
 
