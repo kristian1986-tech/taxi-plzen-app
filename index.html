@@ -43,7 +43,7 @@ Objednat jízdu
 <p id="statusMessage" class="mt-4 text-gray-300"></p>
 
 <a id="callDriverBtn"
-href="tel:+420777842870"
+href="tel:+420777123456"
 class="hidden mt-6 inline-block bg-green-600 px-6 py-3 rounded font-bold">
 📞 Zavolat řidiče
 </a>
@@ -69,11 +69,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-window.calculatePrice = function() {
+const formSection = document.getElementById("formSection");
+const statusSection = document.getElementById("statusSection");
 
+window.calculatePrice = function() {
 const distance = parseFloat(document.getElementById("distance").value);
 const basePrice = 50;
-const pricePerKm = 25;
+const pricePerKm = 30;
 
 if(distance && distance > 0) {
 const total = basePrice + (distance * pricePerKm);
@@ -82,7 +84,6 @@ document.getElementById("priceEstimate").innerText =
 } else {
 document.getElementById("priceEstimate").innerText = "";
 }
-
 };
 
 window.createRide = async function() {
@@ -101,8 +102,6 @@ const basePrice = 50;
 const pricePerKm = 30;
 const totalPrice = basePrice + (distance * pricePerKm);
 
-try {
-
 const docRef = await addDoc(collection(db, "rides"), {
 pickup,
 destination,
@@ -113,16 +112,12 @@ status: "new",
 createdAt: serverTimestamp()
 });
 
-document.getElementById("formSection").classList.add("hidden");
-document.getElementById("statusSection").classList.remove("hidden");
+localStorage.setItem("activeRideId", docRef.id);
+
+formSection.classList.add("hidden");
+statusSection.classList.remove("hidden");
 
 listenToStatus(docRef.id);
-
-} catch (e) {
-alert("Chyba při odesílání.");
-console.error(e);
-}
-
 };
 
 function listenToStatus(rideId) {
@@ -140,46 +135,44 @@ const callBtn = document.getElementById("callDriverBtn");
 
 callBtn.classList.add("hidden");
 
-let czText = "";
-let enText = "";
-let message = "";
-
 if(data.status === "new") {
-czText = "Nová";
-enText = "new";
-message = "Čekáme na potvrzení řidiče.";
+statusText.innerText = "Nová (new)";
 statusText.className = "text-2xl font-bold mt-2 text-yellow-400";
+statusMessage.innerText = "Čekáme na potvrzení řidiče.";
 }
 
 if(data.status === "confirmed") {
-czText = "Potvrzena";
-enText = "confirmed";
-message = "Řidič dorazí přibližně za " + (data.eta || 5) + " minut.";
-callBtn.classList.remove("hidden");
+statusText.innerText = "Potvrzena (confirmed)";
 statusText.className = "text-2xl font-bold mt-2 text-green-400";
+statusMessage.innerText = "Řidič dorazí přibližně za " + (data.eta || 5) + " minut.";
+callBtn.classList.remove("hidden");
 }
 
 if(data.status === "rejected") {
-czText = "Zamítnuta";
-enText = "rejected";
-message = "Řidič je momentálně nedostupný. Zkuste to prosím znovu.";
+statusText.innerText = "Zamítnuta (rejected)";
 statusText.className = "text-2xl font-bold mt-2 text-red-500";
+statusMessage.innerText = "Řidič je momentálně nedostupný.";
+localStorage.removeItem("activeRideId");
 }
 
 if(data.status === "completed") {
-czText = "Dokončena";
-enText = "completed";
-message = "Děkujeme za využití naší služby.";
+statusText.innerText = "Dokončena (completed)";
 statusText.className = "text-2xl font-bold mt-2 text-gray-400";
+statusMessage.innerText = "Děkujeme za využití služby.";
+localStorage.removeItem("activeRideId");
 }
-
-statusText.innerText = czText + " (" + enText + ")";
-statusMessage.innerText = message;
 
 }
 
 });
+}
 
+// 🔥 verifică la deschidere dacă există comandă activă
+const savedRide = localStorage.getItem("activeRideId");
+if(savedRide) {
+formSection.classList.add("hidden");
+statusSection.classList.remove("hidden");
+listenToStatus(savedRide);
 }
 
 </script>
