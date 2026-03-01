@@ -34,6 +34,7 @@ Objednat jízdu
 <div id="statusSection" class="hidden text-center mt-6">
 <p class="text-lg">Stav objednávky:</p>
 <p id="statusText" class="text-2xl font-bold mt-2"></p>
+<p id="statusMessage" class="mt-4 text-gray-300"></p>
 </div>
 
 </div>
@@ -98,35 +99,42 @@ if (docSnap.exists()) {
 
 const data = docSnap.data();
 const statusText = document.getElementById("statusText");
+const statusMessage = document.getElementById("statusMessage");
 
 let czText = "";
 let enText = "";
+let message = "";
 
 if(data.status === "new") {
 czText = "Nová";
 enText = "new";
+message = "Čekáme na potvrzení řidiče.";
 statusText.className = "text-2xl font-bold mt-2 text-yellow-400";
 }
 
 if(data.status === "confirmed") {
 czText = "Potvrzena";
 enText = "confirmed";
+message = "Řidič je na cestě k vám.";
 statusText.className = "text-2xl font-bold mt-2 text-green-400";
 }
 
 if(data.status === "rejected") {
 czText = "Zamítnuta";
 enText = "rejected";
+message = "Řidič je momentálně nedostupný. Zkuste to prosím znovu.";
 statusText.className = "text-2xl font-bold mt-2 text-red-500";
 }
 
 if(data.status === "completed") {
 czText = "Dokončena";
 enText = "completed";
+message = "Děkujeme za využití naší služby.";
 statusText.className = "text-2xl font-bold mt-2 text-gray-400";
 }
 
 statusText.innerText = czText + " (" + enText + ")";
+statusMessage.innerText = message;
 
 }
 
