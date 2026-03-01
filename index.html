@@ -75,7 +75,7 @@ const statusSection = document.getElementById("statusSection");
 window.calculatePrice = function() {
 const distance = parseFloat(document.getElementById("distance").value);
 const basePrice = 50;
-const pricePerKm = 30;
+const pricePerKm = 25;
 
 if(distance && distance > 0) {
 const total = basePrice + (distance * pricePerKm);
@@ -88,12 +88,43 @@ document.getElementById("priceEstimate").innerText = "";
 
 window.createRide = async function() {
 
-const pickup = document.getElementById("pickup").value;
-const destination = document.getElementById("destination").value;
-const phone = document.getElementById("phone").value;
+const pickup = document.getElementById("pickup").value.trim();
+const destination = document.getElementById("destination").value.trim();
+const phoneInput = document.getElementById("phone");
+let phone = phoneInput.value.trim();
 const distance = parseFloat(document.getElementById("distance").value) || 0;
 
-if(!pickup || !destination || !phone) {
+// eliminăm spații
+phone = phone.replace(/\s+/g, "");
+
+// validare internațională (8–15 cifre, optional +)
+const phoneRegex = /^\+?[0-9]{8,15}$/;
+
+if(!phoneRegex.test(phone)) {
+
+phoneInput.classList.add("border-red-500");
+phoneInput.classList.remove("border-gray-700");
+
+if(!document.getElementById("phoneError")) {
+const errorMsg = document.createElement("p");
+errorMsg.id = "phoneError";
+errorMsg.className = "text-red-400 text-sm mt-1";
+errorMsg.innerText = "Zadejte platné telefonní číslo (8–15 číslic, např. +420777123456)";
+phoneInput.parentNode.insertBefore(errorMsg, phoneInput.nextSibling);
+}
+
+return;
+
+} else {
+
+phoneInput.classList.remove("border-red-500");
+phoneInput.classList.add("border-gray-700");
+
+const oldError = document.getElementById("phoneError");
+if(oldError) oldError.remove();
+}
+
+if(!pickup || !destination) {
 alert("Vyplňte všechna pole");
 return;
 }
@@ -167,7 +198,7 @@ localStorage.removeItem("activeRideId");
 });
 }
 
-// 🔥 verifică la deschidere dacă există comandă activă
+// verifică dacă există comandă activă la deschidere
 const savedRide = localStorage.getItem("activeRideId");
 if(savedRide) {
 formSection.classList.add("hidden");
