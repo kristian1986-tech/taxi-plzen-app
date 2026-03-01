@@ -21,8 +21,14 @@ class="w-full p-3 rounded bg-gray-800 border border-gray-700">
 <input id="destination" type="text" placeholder="Kam jedete?"
 class="w-full p-3 rounded bg-gray-800 border border-gray-700">
 
+<input id="distance" type="number" placeholder="Přibližná vzdálenost (km)"
+class="w-full p-3 rounded bg-gray-800 border border-gray-700"
+oninput="calculatePrice()">
+
 <input id="phone" type="tel" placeholder="Telefon"
 class="w-full p-3 rounded bg-gray-800 border border-gray-700">
+
+<p id="priceEstimate" class="text-green-400 font-bold text-lg"></p>
 
 <button onclick="createRide()"
 class="w-full bg-yellow-500 text-black font-bold py-3 rounded mt-4">
@@ -37,7 +43,7 @@ Objednat jízdu
 <p id="statusMessage" class="mt-4 text-gray-300"></p>
 
 <a id="callDriverBtn"
-href="tel:+420777842870"
+href="tel:+420777123456"
 class="hidden mt-6 inline-block bg-green-600 px-6 py-3 rounded font-bold">
 📞 Zavolat řidiče
 </a>
@@ -63,23 +69,46 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+window.calculatePrice = function() {
+
+const distance = parseFloat(document.getElementById("distance").value);
+const basePrice = 50;
+const pricePerKm = 30;
+
+if(distance && distance > 0) {
+const total = basePrice + (distance * pricePerKm);
+document.getElementById("priceEstimate").innerText =
+"Odhadovaná cena: " + total + " Kč";
+} else {
+document.getElementById("priceEstimate").innerText = "";
+}
+
+};
+
 window.createRide = async function() {
 
 const pickup = document.getElementById("pickup").value;
 const destination = document.getElementById("destination").value;
 const phone = document.getElementById("phone").value;
+const distance = parseFloat(document.getElementById("distance").value) || 0;
 
 if(!pickup || !destination || !phone) {
 alert("Vyplňte všechna pole");
 return;
 }
 
+const basePrice = 50;
+const pricePerKm = 30;
+const totalPrice = basePrice + (distance * pricePerKm);
+
 try {
 
 const docRef = await addDoc(collection(db, "rides"), {
-pickup: pickup,
-destination: destination,
-phone: phone,
+pickup,
+destination,
+phone,
+distance,
+estimatedPrice: totalPrice,
 status: "new",
 createdAt: serverTimestamp()
 });
@@ -125,13 +154,7 @@ statusText.className = "text-2xl font-bold mt-2 text-yellow-400";
 if(data.status === "confirmed") {
 czText = "Potvrzena";
 enText = "confirmed";
-
-if(data.eta) {
-message = "Řidič dorazí přibližně za " + data.eta + " minut.";
-} else {
-message = "Řidič je na cestě k vám.";
-}
-
+message = "Řidič dorazí přibližně za " + (data.eta || 5) + " minut.";
 callBtn.classList.remove("hidden");
 statusText.className = "text-2xl font-bold mt-2 text-green-400";
 }
