@@ -4,17 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Taxi Plzeň</title>
-
 <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
+
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
 
 <div class="w-full max-w-md p-6">
 
 <h1 class="text-3xl font-bold mb-6 text-center">Taxi Plzeň</h1>
 
-<div class="space-y-4">
+<div id="formSection" class="space-y-4">
 
 <input id="pickup" type="text" placeholder="Odkud jedete?"
 class="w-full p-3 rounded bg-gray-800 border border-gray-700">
@@ -30,26 +29,27 @@ class="w-full bg-yellow-500 text-black font-bold py-3 rounded mt-4">
 Objednat jízdu
 </button>
 
-<p id="message" class="text-green-400 text-center mt-4"></p>
-
 </div>
+
+<div id="statusSection" class="hidden text-center mt-6">
+<p class="text-lg">Stav objednávky:</p>
+<p id="statusText" class="text-2xl font-bold mt-2"></p>
+</div>
+
 </div>
 
 <script type="module">
 
-// Firebase imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// 🔥 CONFIGUL TĂU
 const firebaseConfig = {
   apiKey: "AIzaSyCSapx5d9v_fxpPBzuOfnH66lvQoQ8H-6E",
   authDomain: "taxi-kristian.firebaseapp.com",
   projectId: "taxi-kristian",
   storageBucket: "taxi-kristian.firebasestorage.app",
   messagingSenderId: "872925880546",
-  appId: "1:872925880546:web:12da74898c90a0155b7ebb",
-  measurementId: "G-6W7305ZX43"
+  appId: "1:872925880546:web:12da74898c90a0155b7ebb"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -67,7 +67,8 @@ return;
 }
 
 try {
-await addDoc(collection(db, "rides"), {
+
+const docRef = await addDoc(collection(db, "rides"), {
 pickup: pickup,
 destination: destination,
 phone: phone,
@@ -75,17 +76,47 @@ status: "new",
 createdAt: serverTimestamp()
 });
 
-document.getElementById("message").innerText =
-"Objednávka byla odeslána.";
+document.getElementById("formSection").classList.add("hidden");
+document.getElementById("statusSection").classList.remove("hidden");
 
-document.getElementById("pickup").value = "";
-document.getElementById("destination").value = "";
-document.getElementById("phone").value = "";
+listenToStatus(docRef.id);
 
 } catch (e) {
 alert("Chyba při odesílání.");
 console.error(e);
 }
+
+};
+
+function listenToStatus(rideId) {
+
+const rideRef = doc(db, "rides", rideId);
+
+onSnapshot(rideRef, (docSnap) => {
+
+if (docSnap.exists()) {
+
+const data = docSnap.data();
+const statusText = document.getElementById("statusText");
+
+statusText.innerText = data.status;
+
+if(data.status === "new") {
+statusText.className = "text-2xl font-bold mt-2 text-yellow-400";
+}
+if(data.status === "confirmed") {
+statusText.className = "text-2xl font-bold mt-2 text-green-400";
+}
+if(data.status === "rejected") {
+statusText.className = "text-2xl font-bold mt-2 text-red-500";
+}
+if(data.status === "completed") {
+statusText.className = "text-2xl font-bold mt-2 text-gray-400";
+}
+
+}
+
+});
 
 }
 
