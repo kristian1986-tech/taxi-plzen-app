@@ -242,7 +242,26 @@ showArrivalAlert();
 if(data.status==="completed"){
 statusText.innerText="Dokončena";
 statusMessage.innerText="Děkujeme.";
+
 localStorage.removeItem("activeRideId");
+
+/* 🔥 după 3 secunde revine la formular */
+setTimeout(()=>{
+statusSection.classList.add("hidden");
+formSection.classList.remove("hidden");
+
+/* resetare formular */
+pickupInput.value="";
+destinationInput.value="";
+phoneInput.value="";
+priceEstimate.innerText="";
+
+calculatedDistance = 0;
+calculatedPrice = 0;
+calculatedETA = 0;
+arrivalPlayed = false;
+
+},3000);
 }
 
 });
