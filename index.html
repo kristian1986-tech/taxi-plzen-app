@@ -16,7 +16,7 @@
 
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
 
-<!-- 🔔 ALERT OVERLAY -->
+<!-- 🔔 ARRIVAL OVERLAY -->
 <div id="arrivalOverlay" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
   <div class="text-center">
     <h2 class="text-4xl font-bold text-green-400 mb-4">🚕 Řidič přijel</h2>
@@ -73,7 +73,10 @@ class="hidden mt-4 bg-green-600 px-6 py-3 rounded font-bold">
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp, doc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
+
+/* FIREBASE */
 
 const firebaseConfig = {
 apiKey: "AIzaSyCSapx5d9v_fxpPBzuOfnH66lvQoQ8H-6E",
@@ -86,6 +89,31 @@ appId: "1:872925880546:web:12da74898c90a0155b7ebb"
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const messaging = getMessaging(app);
+
+/* 🔔 PUSH PERMISSION */
+
+async function requestPushPermission(rideId){
+try{
+const permission = await Notification.requestPermission();
+if(permission === "granted"){
+
+const token = await getToken(messaging,{
+vapidKey: "BNjO8QUOa0ncoJsS_XsEwYeWzwYzskAkbPGaMlDv4WOgvWXKQmsEMhKluwF_yPYxYkBKZqpDx05ERWQp2DI7-Ck"
+});
+
+if(token){
+await updateDoc(doc(db,"rides",rideId),{
+pushToken: token
+});
+}
+}
+}catch(e){
+console.log("Push error:",e);
+}
+}
+
+/* GOOGLE ROUTE */
 
 const GOOGLE_API_KEY = "AIzaSyB7yhLHZNZDmNIg_tjGQCXA78TPPrN8pQE";
 
@@ -98,130 +126,125 @@ let calculatedPrice = 0;
 let calculatedETA = 0;
 let arrivalPlayed = false;
 
-/* ROUTE */
+window.calculateRoute = async function(){
 
-window.calculateRoute = async function() {
-
-const pickup = document.getElementById("pickup").value.trim();
-const destination = document.getElementById("destination").value.trim();
+const pickup = pickupInput.value.trim();
+const destination = destinationInput.value.trim();
 
 if(!pickup || !destination){
-alert("Vyplňte adresu odjezdu i cíle.");
+alert("Vyplňte adresu.");
 return;
 }
 
 const response = await fetch(
 "https://routes.googleapis.com/directions/v2:computeRoutes",
 {
-method: "POST",
-headers: {
-"Content-Type": "application/json",
-"X-Goog-Api-Key": GOOGLE_API_KEY,
-"X-Goog-FieldMask": "routes.distanceMeters,routes.duration"
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"X-Goog-Api-Key":GOOGLE_API_KEY,
+"X-Goog-FieldMask":"routes.distanceMeters,routes.duration"
 },
-body: JSON.stringify({
-origin: { address: pickup },
-destination: { address: destination },
-travelMode: "DRIVE"
+body:JSON.stringify({
+origin:{address:pickup},
+destination:{address:destination},
+travelMode:"DRIVE"
 })
 }
 );
 
 const data = await response.json();
 if(!data.routes?.length){
-alert("Nepodařilo se vypočítat trasu.");
+alert("Chyba trasy.");
 return;
 }
 
 const route = data.routes[0];
 
-calculatedDistance = route.distanceMeters / 1000;
+calculatedDistance = route.distanceMeters/1000;
 const durationSeconds = parseInt(route.duration.replace("s",""));
-calculatedETA = Math.ceil(durationSeconds / 60);
+calculatedETA = Math.ceil(durationSeconds/60);
 
-let total = basePrice + (calculatedDistance * pricePerKm);
-if(total < minimumPrice) total = minimumPrice;
+let total = basePrice + calculatedDistance*pricePerKm;
+if(total<minimumPrice) total=minimumPrice;
 
 calculatedPrice = Math.round(total);
 
-document.getElementById("priceEstimate").innerText =
-"Vzdálenost: " + calculatedDistance.toFixed(1) +
-" km | " + calculatedETA +
-" min | Cena: " + calculatedPrice + " Kč";
+priceEstimate.innerText =
+"Vzdálenost: "+calculatedDistance.toFixed(1)+
+" km | "+calculatedETA+
+" min | Cena: "+calculatedPrice+" Kč";
 };
 
-/* CREATE */
+/* CREATE RIDE */
 
 window.createRide = async function(){
 
-if(calculatedPrice === 0){
+if(calculatedPrice===0){
 alert("Nejprve vypočítejte cenu.");
 return;
 }
 
-const pickup = document.getElementById("pickup").value.trim();
-const destination = document.getElementById("destination").value.trim();
-let phone = document.getElementById("phone").value.trim().replace(/\s+/g,"");
+let phone = phoneInput.value.trim().replace(/\s+/g,"");
+const phoneRegex=/^\+?[0-9]{8,15}$/;
 
-const phoneRegex = /^\+?[0-9]{8,15}$/;
 if(!phoneRegex.test(phone)){
-alert("Zadejte platné telefonní číslo.");
+alert("Neplatné číslo.");
 return;
 }
 
 const docRef = await addDoc(collection(db,"rides"),{
-pickup,
-destination,
+pickup:pickupInput.value.trim(),
+destination:destinationInput.value.trim(),
 phone,
-distance: calculatedDistance,
-estimatedPrice: calculatedPrice,
-eta: calculatedETA,
+distance:calculatedDistance,
+estimatedPrice:calculatedPrice,
+eta:calculatedETA,
 status:"new",
-createdAt: serverTimestamp()
+createdAt:serverTimestamp()
 });
 
-localStorage.setItem("activeRideId", docRef.id);
+localStorage.setItem("activeRideId",docRef.id);
+
+await requestPushPermission(docRef.id);
+
 listenToStatus(docRef.id);
 
-document.getElementById("formSection").classList.add("hidden");
-document.getElementById("statusSection").classList.remove("hidden");
+formSection.classList.add("hidden");
+statusSection.classList.remove("hidden");
 };
 
-/* STATUS */
+/* STATUS LISTENER */
 
-function listenToStatus(rideId){
+function listenToStatus(id){
 
-const rideRef = doc(db,"rides",rideId);
+onSnapshot(doc(db,"rides",id),(snap)=>{
 
-onSnapshot(rideRef,(docSnap)=>{
+if(!snap.exists()) return;
 
-if(!docSnap.exists()) return;
-
-const data = docSnap.data();
-const statusText = document.getElementById("statusText");
-const statusMessage = document.getElementById("statusMessage");
-const receiptBtn = document.getElementById("receiptBtn");
+const data=snap.data();
 
 receiptBtn.classList.add("hidden");
 
 if(data.status==="new"){
 statusText.innerText="Nová";
-statusMessage.innerText="Čekáme na potvrzení řidiče.";
+statusMessage.innerText="Čekáme na potvrzení.";
 }
 
 if(data.status==="confirmed"){
 statusText.innerText="Potvrzena";
-statusMessage.innerText="Řidič dorazí přibližně za " + (data.eta || 5) + " minut.";
+statusMessage.innerText=
+"Řidič dorazí za "+(data.eta||5)+" minut.";
 }
 
 if(data.status==="arrived" && !arrivalPlayed){
-arrivalPlayed = true;
+arrivalPlayed=true;
 showArrivalAlert();
 }
 
 if(data.status==="completed"){
 statusText.innerText="Dokončena";
-statusMessage.innerText="Děkujeme za využití služby.";
+statusMessage.innerText="Děkujeme.";
 
 if(data.receiptNumber){
 receiptBtn.classList.remove("hidden");
@@ -234,32 +257,29 @@ localStorage.removeItem("activeRideId");
 });
 }
 
-/* ARRIVAL ALERT */
+/* ARRIVAL EFFECT */
 
 function showArrivalAlert(){
 
-document.getElementById("arrivalOverlay").classList.remove("hidden");
+arrivalOverlay.classList.remove("hidden");
 
-/* 🔔 SOUND */
-const audio = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
+const audio=new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
 audio.play().catch(()=>{});
 
-/* 📳 VIBRATION */
 if(navigator.vibrate){
 navigator.vibrate([300,200,300,200,600]);
 }
 }
 
-window.closeArrival = function(){
-document.getElementById("arrivalOverlay").classList.add("hidden");
+window.closeArrival=function(){
+arrivalOverlay.classList.add("hidden");
 };
 
 /* PDF */
 
 function generatePDF(data){
-
-const { jsPDF } = window.jspdf;
-const pdf = new jsPDF();
+const { jsPDF }=window.jspdf;
+const pdf=new jsPDF();
 
 pdf.setFontSize(18);
 pdf.text("ÚČTENKA",105,20,{align:"center"});
@@ -271,10 +291,10 @@ pdf.save("uctenka_"+data.receiptNumber+".pdf");
 
 /* RELOAD */
 
-const savedRide = localStorage.getItem("activeRideId");
+const savedRide=localStorage.getItem("activeRideId");
 if(savedRide){
-document.getElementById("formSection").classList.add("hidden");
-document.getElementById("statusSection").classList.remove("hidden");
+formSection.classList.add("hidden");
+statusSection.classList.remove("hidden");
 listenToStatus(savedRide);
 }
 
