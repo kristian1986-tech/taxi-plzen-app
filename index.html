@@ -87,14 +87,14 @@ const statusMessage = document.getElementById("statusMessage");
 const receiptBtn = document.getElementById("receiptBtn");
 const arrivalOverlay = document.getElementById("arrivalOverlay");
 
-/* FIREBASE */
+/* FIREBASE – CHEILE TALE REALE */
 const firebaseConfig = {
-apiKey: "PUNE_AICI_KEY_TA",
-authDomain: "PUNE_AICI",
-projectId: "PUNE_AICI",
-storageBucket: "PUNE_AICI",
-messagingSenderId: "PUNE_AICI",
-appId: "PUNE_AICI"
+apiKey: "AIzaSyCSapx5d9v_fxpPBzuOfnH66lvQoQ8H-6E",
+authDomain: "taxi-kristian.firebaseapp.com",
+projectId: "taxi-kristian",
+storageBucket: "taxi-kristian.firebasestorage.app",
+messagingSenderId: "872925880546",
+appId: "1:872925880546:web:12da74898c90a0155b7ebb"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -107,7 +107,7 @@ try{
 const permission = await Notification.requestPermission();
 if(permission === "granted"){
 const token = await getToken(messaging,{
-vapidKey: "PUNE_VAPID_KEY"
+vapidKey: "BNjO8QUOa0ncoJsS_XsEwYeWzwYzskAkbPGaMlDv4WOgvWXKQmsEMhKluwF_yPYxYkBKZqpDx05ERWQp2DI7-Ck"
 });
 if(token){
 await updateDoc(doc(db,"rides",rideId),{ pushToken: token });
@@ -116,8 +116,8 @@ await updateDoc(doc(db,"rides",rideId),{ pushToken: token });
 }catch(e){ console.log(e); }
 }
 
-/* GOOGLE */
-const GOOGLE_API_KEY = "PUNE_GOOGLE_KEY";
+/* GOOGLE – CHEIA TA (dacă e diferită, pune-o pe a ta) */
+const GOOGLE_API_KEY = "AIzaSyB7yhLHZNZDmNIg_tjGQCXA78TPPrN8pQE";
 
 const pricePerKm = 22;
 const basePrice = 50;
@@ -242,12 +242,6 @@ showArrivalAlert();
 if(data.status==="completed"){
 statusText.innerText="Dokončena";
 statusMessage.innerText="Děkujeme.";
-
-if(data.receiptNumber){
-receiptBtn.classList.remove("hidden");
-receiptBtn.onclick=()=>generatePDF(data);
-}
-
 localStorage.removeItem("activeRideId");
 }
 
@@ -267,17 +261,6 @@ navigator.vibrate([300,200,300,200,600]);
 window.closeArrival=function(){
 arrivalOverlay.classList.add("hidden");
 };
-
-/* PDF */
-function generatePDF(data){
-const { jsPDF }=window.jspdf;
-const pdf=new jsPDF();
-pdf.setFontSize(18);
-pdf.text("ÚČTENKA",105,20,{align:"center"});
-pdf.text("Číslo: "+data.receiptNumber,20,40);
-pdf.text("Cena: "+data.estimatedPrice+" Kč",20,55);
-pdf.save("uctenka_"+data.receiptNumber+".pdf");
-}
 
 /* RECONNECT */
 const savedRide = localStorage.getItem("activeRideId");
