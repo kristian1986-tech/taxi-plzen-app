@@ -16,7 +16,7 @@
 
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
 
-<!-- 🔔 ARRIVAL OVERLAY -->
+<!-- ARRIVAL OVERLAY -->
 <div id="arrivalOverlay" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
   <div class="text-center">
     <h2 class="text-4xl font-bold text-green-400 mb-4">🚕 Řidič přijel</h2>
@@ -76,8 +76,19 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore, collection, addDoc, serverTimestamp, doc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
 
-/* FIREBASE */
+/* ELEMENTS */
+const pickupInput = document.getElementById("pickup");
+const destinationInput = document.getElementById("destination");
+const phoneInput = document.getElementById("phone");
+const priceEstimate = document.getElementById("priceEstimate");
+const formSection = document.getElementById("formSection");
+const statusSection = document.getElementById("statusSection");
+const statusText = document.getElementById("statusText");
+const statusMessage = document.getElementById("statusMessage");
+const receiptBtn = document.getElementById("receiptBtn");
+const arrivalOverlay = document.getElementById("arrivalOverlay");
 
+/* FIREBASE */
 const firebaseConfig = {
 apiKey: "AIzaSyCSapx5d9v_fxpPBzuOfnH66lvQoQ8H-6E",
 authDomain: "taxi-kristian.firebaseapp.com",
@@ -91,17 +102,14 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const messaging = getMessaging(app);
 
-/* 🔔 PUSH PERMISSION */
-
+/* PUSH */
 async function requestPushPermission(rideId){
 try{
 const permission = await Notification.requestPermission();
 if(permission === "granted"){
-
 const token = await getToken(messaging,{
 vapidKey: "BNjO8QUOa0ncoJsS_XsEwYeWzwYzskAkbPGaMlDv4WOgvWXKQmsEMhKluwF_yPYxYkBKZqpDx05ERWQp2DI7-Ck"
 });
-
 if(token){
 await updateDoc(doc(db,"rides",rideId),{
 pushToken: token
@@ -109,12 +117,11 @@ pushToken: token
 }
 }
 }catch(e){
-console.log("Push error:",e);
+console.log(e);
 }
 }
 
-/* GOOGLE ROUTE */
-
+/* GOOGLE */
 const GOOGLE_API_KEY = "AIzaSyB7yhLHZNZDmNIg_tjGQCXA78TPPrN8pQE";
 
 const pricePerKm = 22;
@@ -126,6 +133,7 @@ let calculatedPrice = 0;
 let calculatedETA = 0;
 let arrivalPlayed = false;
 
+/* ROUTE */
 window.calculateRoute = async function(){
 
 const pickup = pickupInput.value.trim();
@@ -176,8 +184,7 @@ priceEstimate.innerText =
 " min | Cena: "+calculatedPrice+" Kč";
 };
 
-/* CREATE RIDE */
-
+/* CREATE */
 window.createRide = async function(){
 
 if(calculatedPrice===0){
@@ -205,17 +212,14 @@ createdAt:serverTimestamp()
 });
 
 localStorage.setItem("activeRideId",docRef.id);
-
 await requestPushPermission(docRef.id);
-
 listenToStatus(docRef.id);
 
 formSection.classList.add("hidden");
 statusSection.classList.remove("hidden");
 };
 
-/* STATUS LISTENER */
-
+/* STATUS */
 function listenToStatus(id){
 
 onSnapshot(doc(db,"rides",id),(snap)=>{
@@ -223,7 +227,6 @@ onSnapshot(doc(db,"rides",id),(snap)=>{
 if(!snap.exists()) return;
 
 const data=snap.data();
-
 receiptBtn.classList.add("hidden");
 
 if(data.status==="new"){
@@ -233,8 +236,7 @@ statusMessage.innerText="Čekáme na potvrzení.";
 
 if(data.status==="confirmed"){
 statusText.innerText="Potvrzena";
-statusMessage.innerText=
-"Řidič dorazí za "+(data.eta||5)+" minut.";
+statusMessage.innerText="Řidič dorazí za "+(data.eta||5)+" minut.";
 }
 
 if(data.status==="arrived" && !arrivalPlayed){
@@ -245,27 +247,17 @@ showArrivalAlert();
 if(data.status==="completed"){
 statusText.innerText="Dokončena";
 statusMessage.innerText="Děkujeme.";
-
-if(data.receiptNumber){
-receiptBtn.classList.remove("hidden");
-receiptBtn.onclick=()=>generatePDF(data);
-}
-
 localStorage.removeItem("activeRideId");
 }
 
 });
 }
 
-/* ARRIVAL EFFECT */
-
+/* ARRIVAL */
 function showArrivalAlert(){
-
 arrivalOverlay.classList.remove("hidden");
-
 const audio=new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
 audio.play().catch(()=>{});
-
 if(navigator.vibrate){
 navigator.vibrate([300,200,300,200,600]);
 }
@@ -274,29 +266,6 @@ navigator.vibrate([300,200,300,200,600]);
 window.closeArrival=function(){
 arrivalOverlay.classList.add("hidden");
 };
-
-/* PDF */
-
-function generatePDF(data){
-const { jsPDF }=window.jspdf;
-const pdf=new jsPDF();
-
-pdf.setFontSize(18);
-pdf.text("ÚČTENKA",105,20,{align:"center"});
-pdf.text("Číslo: "+data.receiptNumber,20,40);
-pdf.text("CELKEM: "+data.estimatedPrice+" Kč",20,60);
-
-pdf.save("uctenka_"+data.receiptNumber+".pdf");
-}
-
-/* RELOAD */
-
-const savedRide=localStorage.getItem("activeRideId");
-if(savedRide){
-formSection.classList.add("hidden");
-statusSection.classList.remove("hidden");
-listenToStatus(savedRide);
-}
 
 </script>
 </body>
