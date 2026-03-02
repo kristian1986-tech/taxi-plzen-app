@@ -7,17 +7,9 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-.fade-out {
-opacity: 0;
-transition: opacity 0.5s ease;
-}
-
-.fade-in {
-opacity: 1;
-transition: opacity 0.5s ease;
-}
+.fade-out { opacity: 0; transition: opacity 0.5s ease; }
+.fade-in { opacity: 1; transition: opacity 0.5s ease; }
 </style>
-
 </head>
 
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
@@ -61,6 +53,13 @@ class="hidden mt-6 inline-block bg-green-600 px-6 py-3 rounded font-bold">
 📞 Zavolat řidiče
 </a>
 
+<p id="cancelTimer" class="mt-3 text-yellow-400 font-bold hidden"></p>
+
+<button id="cancelBtn"
+class="hidden mt-4 bg-red-600 px-6 py-3 rounded font-bold">
+❌ Zrušit objednávku
+</button>
+
 </div>
 
 </div>
@@ -68,15 +67,15 @@ class="hidden mt-6 inline-block bg-green-600 px-6 py-3 rounded font-bold">
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp, doc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCSapx5d9v_fxpPBzuOfnH66lvQoQ8H-6E",
-  authDomain: "taxi-kristian.firebaseapp.com",
-  projectId: "taxi-kristian",
-  storageBucket: "taxi-kristian.firebasestorage.app",
-  messagingSenderId: "872925880546",
-  appId: "1:872925880546:web:12da74898c90a0155b7ebb"
+apiKey: "AIzaSyCSapx5d9v_fxpPBzuOfnH66lvQoQ8H-6E",
+authDomain: "taxi-kristian.firebaseapp.com",
+projectId: "taxi-kristian",
+storageBucket: "taxi-kristian.firebasestorage.app",
+messagingSenderId: "872925880546",
+appId: "1:872925880546:web:12da74898c90a0155b7ebb"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -84,6 +83,8 @@ const db = getFirestore(app);
 
 const formSection = document.getElementById("formSection");
 const statusSection = document.getElementById("statusSection");
+
+let countdownInterval = null;
 
 window.calculatePrice = function() {
 const distance = parseFloat(document.getElementById("distance").value);
@@ -101,43 +102,20 @@ document.getElementById("priceEstimate").innerText = "";
 
 window.createRide = async function() {
 
-// Blocare comandă dublă
-const existingRide = localStorage.getItem("activeRideId");
-if(existingRide) {
+if(localStorage.getItem("activeRideId")) {
 alert("Máte již aktivní objednávku.");
 return;
 }
 
 const pickup = document.getElementById("pickup").value.trim();
 const destination = document.getElementById("destination").value.trim();
-const phoneInput = document.getElementById("phone");
-let phone = phoneInput.value.trim();
+let phone = document.getElementById("phone").value.trim().replace(/\s+/g, "");
 const distance = parseFloat(document.getElementById("distance").value) || 0;
 
-phone = phone.replace(/\s+/g, "");
-
 const phoneRegex = /^\+?[0-9]{8,15}$/;
-
 if(!phoneRegex.test(phone)) {
-
-phoneInput.classList.add("border-red-500");
-phoneInput.classList.remove("border-gray-700");
-
-if(!document.getElementById("phoneError")) {
-const errorMsg = document.createElement("p");
-errorMsg.id = "phoneError";
-errorMsg.className = "text-red-400 text-sm mt-1";
-errorMsg.innerText = "Zadejte platné telefonní číslo (8–15 číslic)";
-phoneInput.parentNode.insertBefore(errorMsg, phoneInput.nextSibling);
-}
-
+alert("Zadejte platné telefonní číslo.");
 return;
-
-} else {
-phoneInput.classList.remove("border-red-500");
-phoneInput.classList.add("border-gray-700");
-const oldError = document.getElementById("phoneError");
-if(oldError) oldError.remove();
 }
 
 if(!pickup || !destination) {
@@ -145,9 +123,7 @@ alert("Vyplňte všechna pole");
 return;
 }
 
-const basePrice = 50;
-const pricePerKm = 30;
-const totalPrice = basePrice + (distance * pricePerKm);
+const totalPrice = 50 + (distance * 30);
 
 const docRef = await addDoc(collection(db, "rides"), {
 pickup,
@@ -173,19 +149,54 @@ const rideRef = doc(db, "rides", rideId);
 
 onSnapshot(rideRef, (docSnap) => {
 
-if (docSnap.exists()) {
+if (!docSnap.exists()) return;
 
 const data = docSnap.data();
 const statusText = document.getElementById("statusText");
 const statusMessage = document.getElementById("statusMessage");
 const callBtn = document.getElementById("callDriverBtn");
+const cancelBtn = document.getElementById("cancelBtn");
+const cancelTimer = document.getElementById("cancelTimer");
 
 callBtn.classList.add("hidden");
+cancelBtn.classList.add("hidden");
+cancelTimer.classList.add("hidden");
+
+if(countdownInterval) clearInterval(countdownInterval);
 
 if(data.status === "new") {
+
 statusText.innerText = "Nová (new)";
 statusText.className = "text-2xl font-bold mt-2 text-yellow-400";
 statusMessage.innerText = "Čekáme na potvrzení řidiče.";
+
+cancelBtn.classList.remove("hidden");
+cancelTimer.classList.remove("hidden");
+
+let secondsLeft = 15;
+cancelTimer.innerText = "Zrušit lze do: " + secondsLeft + " s";
+
+countdownInterval = setInterval(() => {
+secondsLeft--;
+cancelTimer.innerText = "Zrušit lze do: " + secondsLeft + " s";
+
+if(secondsLeft <= 0) {
+clearInterval(countdownInterval);
+cancelTimer.innerText = "Objednávku lze zrušit pouze telefonicky.";
+cancelBtn.disabled = true;
+cancelBtn.classList.add("opacity-50");
+}
+}, 1000);
+
+cancelBtn.onclick = () => {
+if(secondsLeft > 0) {
+updateDoc(rideRef, { status: "cancelled" });
+localStorage.removeItem("activeRideId");
+} else {
+alert("Objednávku lze zrušit pouze telefonicky.");
+}
+};
+
 }
 
 if(data.status === "confirmed") {
@@ -195,65 +206,43 @@ statusMessage.innerText = "Řidič dorazí přibližně za " + (data.eta || 5) +
 callBtn.classList.remove("hidden");
 }
 
+if(data.status === "cancelled") {
+statusText.innerText = "Zrušena (cancelled)";
+statusText.className = "text-2xl font-bold mt-2 text-purple-400";
+statusMessage.innerText = "Objednávka byla zrušena.";
+autoReset();
+}
+
 if(data.status === "rejected") {
 statusText.innerText = "Zamítnuta (rejected)";
 statusText.className = "text-2xl font-bold mt-2 text-red-500";
 statusMessage.innerText = "Řidič je momentálně nedostupný.";
-
-setTimeout(() => {
-localStorage.removeItem("activeRideId");
-
-statusSection.classList.add("fade-out");
-
-setTimeout(() => {
-statusSection.classList.add("hidden");
-statusSection.classList.remove("fade-out");
-
-formSection.classList.remove("hidden");
-formSection.classList.add("fade-in");
-
-resetForm();
-
-setTimeout(() => {
-formSection.classList.remove("fade-in");
-}, 500);
-
-}, 500);
-
-}, 2500);
+autoReset();
 }
 
 if(data.status === "completed") {
 statusText.innerText = "Dokončena (completed)";
 statusText.className = "text-2xl font-bold mt-2 text-gray-400";
 statusMessage.innerText = "Děkujeme za využití služby.";
+autoReset();
+}
 
+});
+}
+
+function autoReset() {
 setTimeout(() => {
 localStorage.removeItem("activeRideId");
-
 statusSection.classList.add("fade-out");
 
 setTimeout(() => {
 statusSection.classList.add("hidden");
 statusSection.classList.remove("fade-out");
-
 formSection.classList.remove("hidden");
-formSection.classList.add("fade-in");
-
 resetForm();
-
-setTimeout(() => {
-formSection.classList.remove("fade-in");
-}, 500);
-
 }, 500);
 
 }, 2500);
-}
-
-}
-
-});
 }
 
 function resetForm() {
