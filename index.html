@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Taxi Plzeň</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 .fade-out { opacity: 0; transition: opacity 0.5s ease; }
@@ -47,6 +48,12 @@ Objednat jízdu
 <p class="text-lg">Stav objednávky:</p>
 <p id="statusText" class="text-2xl font-bold mt-2"></p>
 <p id="statusMessage" class="mt-4 text-gray-300"></p>
+
+<button id="receiptBtn"
+class="hidden mt-4 bg-green-600 px-6 py-3 rounded font-bold">
+📄 Stáhnout účtenku
+</button>
+
 </div>
 
 </div>
@@ -54,7 +61,7 @@ Objednat jízdu
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyCSapx5d9v_fxpPBzuOfnH66lvQoQ8H-6E",
@@ -94,7 +101,7 @@ method: "POST",
 headers: {
 "Content-Type": "application/json",
 "X-Goog-Api-Key": GOOGLE_API_KEY,
-"X-Goog-FieldMask": "routes.distanceMeters,routes.duration"
+"X-Goog-FieldMask": "routes.distanceMeters"
 },
 body: JSON.stringify({
 origin: { address: pickup },
@@ -121,7 +128,6 @@ calculatedPrice = Math.round(total);
 
 document.getElementById("priceEstimate").innerText =
 "Vzdálenost: " + calculatedDistance.toFixed(1) + " km | Cena: " + calculatedPrice + " Kč";
-
 };
 
 window.createRide = async function() {
@@ -141,7 +147,7 @@ alert("Zadejte platné telefonní číslo.");
 return;
 }
 
-await addDoc(collection(db, "rides"), {
+const docRef = await addDoc(collection(db, "rides"), {
 pickup,
 destination,
 phone,
@@ -151,9 +157,87 @@ status: "new",
 createdAt: serverTimestamp()
 });
 
-alert("Objednávka byla odeslána.");
-location.reload();
+localStorage.setItem("activeRideId", docRef.id);
+
+listenToStatus(docRef.id);
+
+document.getElementById("formSection").classList.add("hidden");
+document.getElementById("statusSection").classList.remove("hidden");
 };
+
+function listenToStatus(rideId){
+
+const rideRef = doc(db,"rides",rideId);
+
+onSnapshot(rideRef,(docSnap)=>{
+
+if(!docSnap.exists()) return;
+
+const data = docSnap.data();
+const statusText = document.getElementById("statusText");
+const statusMessage = document.getElementById("statusMessage");
+const receiptBtn = document.getElementById("receiptBtn");
+
+receiptBtn.classList.add("hidden");
+
+if(data.status==="new"){
+statusText.innerText="Nová (new)";
+statusMessage.innerText="Čekáme na potvrzení řidiče.";
+}
+
+if(data.status==="confirmed"){
+statusText.innerText="Potvrzena (confirmed)";
+statusMessage.innerText="Řidič je na cestě.";
+}
+
+if(data.status==="completed"){
+statusText.innerText="Dokončena (completed)";
+statusMessage.innerText="Děkujeme za využití služby.";
+
+if(data.receiptNumber){
+receiptBtn.classList.remove("hidden");
+receiptBtn.onclick=()=>generatePDF(data);
+}
+
+localStorage.removeItem("activeRideId");
+}
+
+});
+}
+
+function generatePDF(data){
+
+const { jsPDF } = window.jspdf;
+const doc = new jsPDF();
+
+doc.setFontSize(16);
+doc.text("Účtenka", 20, 20);
+
+doc.setFontSize(12);
+doc.text("Číslo: " + data.receiptNumber, 20, 35);
+doc.text("Datum: " + new Date(data.receiptDate.seconds * 1000).toLocaleDateString(), 20, 45);
+
+doc.text("Firma: Nicolae Cristian", 20, 60);
+doc.text("IČO: 06928391", 20, 70);
+doc.text("Adresa: Komenskeho 1075/77, Plzen", 20, 80);
+doc.text("Telefon: +420 777 842 870", 20, 90);
+doc.text("Neplátce DPH", 20, 100);
+
+doc.text("Trasa:", 20, 115);
+doc.text(data.pickup + " → " + data.destination, 20, 125);
+
+doc.text("Vzdálenost: " + data.distance.toFixed(1) + " km", 20, 140);
+doc.text("Cena: " + data.estimatedPrice + " Kč", 20, 150);
+
+doc.save("uctenka_" + data.receiptNumber + ".pdf");
+}
+
+const savedRide = localStorage.getItem("activeRideId");
+if(savedRide){
+document.getElementById("formSection").classList.add("hidden");
+document.getElementById("statusSection").classList.remove("hidden");
+listenToStatus(savedRide);
+}
 
 </script>
 
