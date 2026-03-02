@@ -65,8 +65,9 @@ class="hidden mt-4 bg-red-600 px-6 py-3 rounded font-bold w-full">
 ❌ Zrušit jízdu
 </button>
 
+<!-- 🔥 BUTON VERDE FIX -->
 <button id="callBtn"
-class="hidden mt-3 bg-blue-600 px-6 py-3 rounded font-bold w-full">
+class="hidden mt-3 bg-green-600 px-6 py-3 rounded font-bold w-full">
 📞 Volat řidiče
 </button>
 
@@ -112,6 +113,9 @@ appId: "1:872925880546:web:12da74898c90a0155b7ebb"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const messaging = getMessaging(app);
+
+/* NUMAR FIX SOFER — SCHIMBI AICI DACA VREI */
+const DRIVER_PHONE = "+420777842870";
 
 async function requestPushPermission(rideId){
 try{
@@ -252,20 +256,16 @@ if(data.status==="confirmed"){
 statusText.innerText="Potvrzena";
 statusMessage.innerText="Řidič dorazí za "+(data.eta||5)+" minut.";
 
-if(data.driverPhone){
 callBtn.classList.remove("hidden");
-callBtn.onclick = ()=> window.location.href="tel:"+data.driverPhone;
-}
+callBtn.onclick = ()=> window.location.href="tel:"+DRIVER_PHONE;
 }
 
 if(data.status==="arrived"){
 statusText.innerText="Řidič přijel";
 statusMessage.innerText="Řidič je na místě.";
 
-if(data.driverPhone){
 callBtn.classList.remove("hidden");
-callBtn.onclick = ()=> window.location.href="tel:"+data.driverPhone;
-}
+callBtn.onclick = ()=> window.location.href="tel:"+DRIVER_PHONE;
 }
 
 if(data.status==="completed"){
