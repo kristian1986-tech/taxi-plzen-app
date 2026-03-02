@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Taxi Plzeň</title>
 <script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+.fade-out {
+opacity: 0;
+transition: opacity 0.5s ease;
+}
+
+.fade-in {
+opacity: 1;
+transition: opacity 0.5s ease;
+}
+</style>
+
 </head>
 
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
@@ -88,7 +101,7 @@ document.getElementById("priceEstimate").innerText = "";
 
 window.createRide = async function() {
 
-// 🔒 Blocare comandă dublă
+// Blocare comandă dublă
 const existingRide = localStorage.getItem("activeRideId");
 if(existingRide) {
 alert("Máte již aktivní objednávku.");
@@ -101,10 +114,8 @@ const phoneInput = document.getElementById("phone");
 let phone = phoneInput.value.trim();
 const distance = parseFloat(document.getElementById("distance").value) || 0;
 
-// eliminăm spații
 phone = phone.replace(/\s+/g, "");
 
-// validare internațională (8–15 cifre)
 const phoneRegex = /^\+?[0-9]{8,15}$/;
 
 if(!phoneRegex.test(phone)) {
@@ -125,7 +136,6 @@ return;
 } else {
 phoneInput.classList.remove("border-red-500");
 phoneInput.classList.add("border-gray-700");
-
 const oldError = document.getElementById("phoneError");
 if(oldError) oldError.remove();
 }
@@ -189,14 +199,56 @@ if(data.status === "rejected") {
 statusText.innerText = "Zamítnuta (rejected)";
 statusText.className = "text-2xl font-bold mt-2 text-red-500";
 statusMessage.innerText = "Řidič je momentálně nedostupný.";
+
+setTimeout(() => {
 localStorage.removeItem("activeRideId");
+
+statusSection.classList.add("fade-out");
+
+setTimeout(() => {
+statusSection.classList.add("hidden");
+statusSection.classList.remove("fade-out");
+
+formSection.classList.remove("hidden");
+formSection.classList.add("fade-in");
+
+resetForm();
+
+setTimeout(() => {
+formSection.classList.remove("fade-in");
+}, 500);
+
+}, 500);
+
+}, 2500);
 }
 
 if(data.status === "completed") {
 statusText.innerText = "Dokončena (completed)";
 statusText.className = "text-2xl font-bold mt-2 text-gray-400";
 statusMessage.innerText = "Děkujeme za využití služby.";
+
+setTimeout(() => {
 localStorage.removeItem("activeRideId");
+
+statusSection.classList.add("fade-out");
+
+setTimeout(() => {
+statusSection.classList.add("hidden");
+statusSection.classList.remove("fade-out");
+
+formSection.classList.remove("hidden");
+formSection.classList.add("fade-in");
+
+resetForm();
+
+setTimeout(() => {
+formSection.classList.remove("fade-in");
+}, 500);
+
+}, 500);
+
+}, 2500);
 }
 
 }
@@ -204,7 +256,14 @@ localStorage.removeItem("activeRideId");
 });
 }
 
-// verifică dacă există comandă activă la deschidere
+function resetForm() {
+document.getElementById("pickup").value = "";
+document.getElementById("destination").value = "";
+document.getElementById("distance").value = "";
+document.getElementById("phone").value = "";
+document.getElementById("priceEstimate").innerText = "";
+}
+
 const savedRide = localStorage.getItem("activeRideId");
 if(savedRide) {
 formSection.classList.add("hidden");
