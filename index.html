@@ -14,7 +14,7 @@
 </style>
 </head>
 
-<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+<body class="bg-gray-900 text-white min-h-screen py-10">
 
 <div id="arrivalOverlay" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
   <div class="text-center">
@@ -26,20 +26,20 @@
   </div>
 </div>
 
-<div class="w-full max-w-md p-6">
+<div class="w-full max-w-md mx-auto p-6 bg-gray-800 rounded-xl shadow-xl">
 
 <h1 class="text-3xl font-bold mb-6 text-center">Taxi Plzeň</h1>
 
 <div id="formSection" class="space-y-4">
 
 <input id="pickup" type="text" placeholder="Odkud jedete?"
-class="w-full p-3 rounded bg-gray-800 border border-gray-700">
+class="w-full p-3 rounded bg-gray-900 border border-gray-700">
 
 <input id="destination" type="text" placeholder="Kam jedete?"
-class="w-full p-3 rounded bg-gray-800 border border-gray-700">
+class="w-full p-3 rounded bg-gray-900 border border-gray-700">
 
 <input id="phone" type="tel" placeholder="Telefon"
-class="w-full p-3 rounded bg-gray-800 border border-gray-700">
+class="w-full p-3 rounded bg-gray-900 border border-gray-700">
 
 <p id="priceEstimate" class="text-green-400 font-bold text-lg"></p>
 
@@ -60,8 +60,18 @@ Objednat jízdu
 <p id="statusText" class="text-2xl font-bold mt-2"></p>
 <p id="statusMessage" class="mt-4 text-gray-300"></p>
 
+<button id="cancelBtn"
+class="hidden mt-4 bg-red-600 px-6 py-3 rounded font-bold w-full">
+❌ Zrušit jízdu
+</button>
+
+<button id="callBtn"
+class="hidden mt-3 bg-blue-600 px-6 py-3 rounded font-bold w-full">
+📞 Volat řidiče
+</button>
+
 <button id="receiptBtn"
-class="hidden mt-4 bg-green-600 px-6 py-3 rounded font-bold">
+class="hidden mt-3 bg-green-600 px-6 py-3 rounded font-bold w-full">
 📄 Stáhnout účtenku
 </button>
 
@@ -85,9 +95,11 @@ const statusSection = document.getElementById("statusSection");
 const statusText = document.getElementById("statusText");
 const statusMessage = document.getElementById("statusMessage");
 const receiptBtn = document.getElementById("receiptBtn");
+const cancelBtn = document.getElementById("cancelBtn");
+const callBtn = document.getElementById("callBtn");
 const arrivalOverlay = document.getElementById("arrivalOverlay");
 
-/* FIREBASE – CHEILE TALE REALE */
+/* FIREBASE */
 const firebaseConfig = {
 apiKey: "AIzaSyCSapx5d9v_fxpPBzuOfnH66lvQoQ8H-6E",
 authDomain: "taxi-kristian.firebaseapp.com",
@@ -101,7 +113,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const messaging = getMessaging(app);
 
-/* PUSH */
 async function requestPushPermission(rideId){
 try{
 const permission = await Notification.requestPermission();
@@ -113,10 +124,9 @@ if(token){
 await updateDoc(doc(db,"rides",rideId),{ pushToken: token });
 }
 }
-}catch(e){ console.log(e); }
+}catch(e){}
 }
 
-/* GOOGLE – CHEIA TA (dacă e diferită, pune-o pe a ta) */
 const GOOGLE_API_KEY = "AIzaSyB7yhLHZNZDmNIg_tjGQCXA78TPPrN8pQE";
 
 const pricePerKm = 22;
@@ -128,7 +138,6 @@ let calculatedPrice = 0;
 let calculatedETA = 0;
 let arrivalPlayed = false;
 
-/* ROUTE */
 window.calculateRoute = async function(){
 
 const pickup = pickupInput.value.trim();
@@ -178,7 +187,6 @@ priceEstimate.innerText =
 " min | Cena: "+calculatedPrice+" Kč";
 };
 
-/* CREATE */
 window.createRide = async function(){
 
 if(calculatedPrice===0){
@@ -214,7 +222,6 @@ statusSection.classList.remove("hidden");
 listenToStatus(docRef.id);
 };
 
-/* STATUS */
 function listenToStatus(id){
 
 onSnapshot(doc(db,"rides",id),(snap)=>{
@@ -222,21 +229,43 @@ onSnapshot(doc(db,"rides",id),(snap)=>{
 if(!snap.exists()) return;
 
 const data=snap.data();
+
 receiptBtn.classList.add("hidden");
+cancelBtn.classList.add("hidden");
+callBtn.classList.add("hidden");
 
 if(data.status==="new"){
 statusText.innerText="Nová";
 statusMessage.innerText="Čekáme na potvrzení.";
+
+cancelBtn.classList.remove("hidden");
+
+cancelBtn.onclick = async ()=>{
+await updateDoc(doc(db,"rides",id),{ status:"cancelled" });
+localStorage.removeItem("activeRideId");
+statusSection.classList.add("hidden");
+formSection.classList.remove("hidden");
+};
 }
 
 if(data.status==="confirmed"){
 statusText.innerText="Potvrzena";
 statusMessage.innerText="Řidič dorazí za "+(data.eta||5)+" minut.";
+
+if(data.driverPhone){
+callBtn.classList.remove("hidden");
+callBtn.onclick = ()=> window.location.href="tel:"+data.driverPhone;
+}
 }
 
-if(data.status==="arrived" && !arrivalPlayed){
-arrivalPlayed=true;
-showArrivalAlert();
+if(data.status==="arrived"){
+statusText.innerText="Řidič přijel";
+statusMessage.innerText="Řidič je na místě.";
+
+if(data.driverPhone){
+callBtn.classList.remove("hidden");
+callBtn.onclick = ()=> window.location.href="tel:"+data.driverPhone;
+}
 }
 
 if(data.status==="completed"){
@@ -245,29 +274,23 @@ statusMessage.innerText="Děkujeme.";
 
 localStorage.removeItem("activeRideId");
 
-/* 🔥 după 3 secunde revine la formular */
 setTimeout(()=>{
 statusSection.classList.add("hidden");
 formSection.classList.remove("hidden");
-
-/* resetare formular */
 pickupInput.value="";
 destinationInput.value="";
 phoneInput.value="";
 priceEstimate.innerText="";
-
-calculatedDistance = 0;
-calculatedPrice = 0;
-calculatedETA = 0;
-arrivalPlayed = false;
-
+calculatedDistance=0;
+calculatedPrice=0;
+calculatedETA=0;
+arrivalPlayed=false;
 },3000);
 }
 
 });
 }
 
-/* ARRIVAL */
 function showArrivalAlert(){
 arrivalOverlay.classList.remove("hidden");
 const audio=new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
@@ -281,7 +304,6 @@ window.closeArrival=function(){
 arrivalOverlay.classList.add("hidden");
 };
 
-/* RECONNECT */
 const savedRide = localStorage.getItem("activeRideId");
 if(savedRide){
 formSection.classList.add("hidden");
