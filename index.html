@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Taxi Plzeň</title>
+
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -63,6 +64,8 @@ class="hidden mt-4 bg-green-600 px-6 py-3 rounded font-bold">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+/* -------------------- FIREBASE -------------------- */
+
 const firebaseConfig = {
 apiKey: "AIzaSyCSapx5d9v_fxpPBzuOfnH66lvQoQ8H-6E",
 authDomain: "taxi-kristian.firebaseapp.com",
@@ -75,7 +78,9 @@ appId: "1:872925880546:web:12da74898c90a0155b7ebb"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const GOOGLE_API_KEY = "AIzaSyCKv_QOjfni8LcTKN22mel7WE7czQK2QfM";
+/* -------------------- GOOGLE -------------------- */
+
+const GOOGLE_API_KEY = "YOUR_REAL_KEY_HERE";
 
 const pricePerKm = 25;
 const basePrice = 50;
@@ -83,6 +88,7 @@ const minimumPrice = 100;
 
 let calculatedDistance = 0;
 let calculatedPrice = 0;
+let calculatedETA = 0;
 
 /* -------------------- ROUTE -------------------- */
 
@@ -91,7 +97,7 @@ window.calculateRoute = async function() {
 const pickup = document.getElementById("pickup").value.trim();
 const destination = document.getElementById("destination").value.trim();
 
-if(!pickup || !destination) {
+if(!pickup || !destination){
 alert("Vyplňte adresu odjezdu i cíle.");
 return;
 }
@@ -103,7 +109,7 @@ method: "POST",
 headers: {
 "Content-Type": "application/json",
 "X-Goog-Api-Key": GOOGLE_API_KEY,
-"X-Goog-FieldMask": "routes.distanceMeters"
+"X-Goog-FieldMask": "routes.distanceMeters,routes.duration"
 },
 body: JSON.stringify({
 origin: { address: pickup },
@@ -115,13 +121,18 @@ travelMode: "DRIVE"
 
 const data = await response.json();
 
-if(!data.routes || !data.routes.length) {
+if(!data.routes || !data.routes.length){
 alert("Nepodařilo se vypočítat trasu.");
 return;
 }
 
-const distanceMeters = data.routes[0].distanceMeters;
-calculatedDistance = distanceMeters / 1000;
+const route = data.routes[0];
+
+calculatedDistance = route.distanceMeters / 1000;
+
+/* duration vine ca "1234s" */
+const durationSeconds = parseInt(route.duration.replace("s",""));
+calculatedETA = Math.ceil(durationSeconds / 60);
 
 let total = basePrice + (calculatedDistance * pricePerKm);
 if(total < minimumPrice) total = minimumPrice;
@@ -129,35 +140,38 @@ if(total < minimumPrice) total = minimumPrice;
 calculatedPrice = Math.round(total);
 
 document.getElementById("priceEstimate").innerText =
-"Vzdálenost: " + calculatedDistance.toFixed(1) + " km | Cena: " + calculatedPrice + " Kč";
+"Vzdálenost: " + calculatedDistance.toFixed(1) +
+" km | " + calculatedETA +
+" min | Cena: " + calculatedPrice + " Kč";
 };
 
 /* -------------------- CREATE RIDE -------------------- */
 
-window.createRide = async function() {
+window.createRide = async function(){
 
-if(calculatedPrice === 0) {
+if(calculatedPrice === 0){
 alert("Nejprve vypočítejte cenu.");
 return;
 }
 
 const pickup = document.getElementById("pickup").value.trim();
 const destination = document.getElementById("destination").value.trim();
-let phone = document.getElementById("phone").value.trim().replace(/\s+/g, "");
+let phone = document.getElementById("phone").value.trim().replace(/\s+/g,"");
 
 const phoneRegex = /^\+?[0-9]{8,15}$/;
-if(!phoneRegex.test(phone)) {
+if(!phoneRegex.test(phone)){
 alert("Zadejte platné telefonní číslo.");
 return;
 }
 
-const docRef = await addDoc(collection(db, "rides"), {
+const docRef = await addDoc(collection(db,"rides"),{
 pickup,
 destination,
 phone,
 distance: calculatedDistance,
 estimatedPrice: calculatedPrice,
-status: "new",
+eta: calculatedETA,
+status:"new",
 createdAt: serverTimestamp()
 });
 
@@ -192,7 +206,8 @@ statusMessage.innerText="Čekáme na potvrzení řidiče.";
 
 if(data.status==="confirmed"){
 statusText.innerText="Potvrzena (confirmed)";
-statusMessage.innerText="Řidič je na cestě.";
+statusMessage.innerText=
+"Řidič dorazí přibližně za " + (data.eta || 5) + " minut.";
 }
 
 if(data.status==="completed"){
@@ -210,7 +225,7 @@ localStorage.removeItem("activeRideId");
 });
 }
 
-/* -------------------- PREMIUM PDF -------------------- */
+/* -------------------- PDF -------------------- */
 
 async function generatePDF(data){
 
@@ -221,61 +236,32 @@ const receiptDate = data.receiptDate?.seconds
 ? new Date(data.receiptDate.seconds * 1000)
 : new Date();
 
-/* 🔹 LOGO REAL (extern PNG) */
-const logoUrl = "https://upload.wikimedia.org/wikipedia/commons/6/6e/Taxi_icon.png";
-
-const img = await fetch(logoUrl);
-const blob = await img.blob();
-const reader = new FileReader();
-
-reader.onloadend = function() {
-
-pdf.addImage(reader.result, "PNG", 80, 10, 50, 20);
-
 pdf.setFontSize(18);
-pdf.text("ÚČTENKA", 105, 40, { align: "center" });
+pdf.text("ÚČTENKA",105,20,{align:"center"});
 
 pdf.setFontSize(11);
-pdf.text("Číslo: " + data.receiptNumber, 20, 55);
-pdf.text("Datum: " + receiptDate.toLocaleDateString(), 150, 55);
+pdf.text("Číslo: "+data.receiptNumber,20,40);
+pdf.text("Datum: "+receiptDate.toLocaleDateString(),150,40);
 
-pdf.line(20, 60, 190, 60);
+pdf.line(20,45,190,45);
 
-pdf.setFontSize(12);
-pdf.text("Dodavatel:", 20, 75);
-pdf.setFontSize(11);
-pdf.text("Nicolae Cristian", 20, 82);
-pdf.text("IČO: 06928391", 20, 89);
-pdf.text("Komenskeho 1075/77, Plzeň", 20, 96);
-pdf.text("Tel: +420 777 842 870", 20, 103);
-pdf.text("Neplátce DPH", 20, 110);
+pdf.text("Nicolae Cristian",20,60);
+pdf.text("IČO: 06928391",20,67);
+pdf.text("Komenskeho 1075/77, Plzeň",20,74);
+pdf.text("Tel: +420 777 842 870",20,81);
+pdf.text("Neplátce DPH",20,88);
 
-pdf.setFontSize(12);
-pdf.text("Zákazník:", 120, 75);
-pdf.setFontSize(11);
-pdf.text("Telefon: " + data.phone, 120, 82);
+pdf.line(20,95,190,95);
 
-pdf.line(20, 120, 190, 120);
+pdf.text("Trasa:",20,110);
+pdf.text(data.pickup+" → "+data.destination,20,118);
 
-pdf.setFontSize(12);
-pdf.text("Trasa:", 20, 135);
-pdf.setFontSize(11);
-pdf.text(data.pickup + " → " + data.destination, 20, 142);
-
-pdf.text("Vzdálenost: " + data.distance.toFixed(1) + " km", 20, 155);
+pdf.text("Vzdálenost: "+data.distance.toFixed(1)+" km",20,130);
 
 pdf.setFontSize(16);
-pdf.text("CELKEM: " + data.estimatedPrice + " Kč", 20, 170);
+pdf.text("CELKEM: "+data.estimatedPrice+" Kč",20,145);
 
-pdf.line(20, 178, 190, 178);
-
-pdf.setFontSize(9);
-pdf.text("Děkujeme za využití našich služeb.", 105, 190, { align: "center" });
-
-pdf.save("uctenka_" + data.receiptNumber + ".pdf");
-};
-
-reader.readAsDataURL(blob);
+pdf.save("uctenka_"+data.receiptNumber+".pdf");
 }
 
 /* -------------------- RELOAD -------------------- */
@@ -288,6 +274,5 @@ listenToStatus(savedRide);
 }
 
 </script>
-
 </body>
 </html>
