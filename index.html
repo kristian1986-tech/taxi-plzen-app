@@ -88,6 +88,13 @@ document.getElementById("priceEstimate").innerText = "";
 
 window.createRide = async function() {
 
+// 🔒 Blocare comandă dublă
+const existingRide = localStorage.getItem("activeRideId");
+if(existingRide) {
+alert("Máte již aktivní objednávku.");
+return;
+}
+
 const pickup = document.getElementById("pickup").value.trim();
 const destination = document.getElementById("destination").value.trim();
 const phoneInput = document.getElementById("phone");
@@ -97,7 +104,7 @@ const distance = parseFloat(document.getElementById("distance").value) || 0;
 // eliminăm spații
 phone = phone.replace(/\s+/g, "");
 
-// validare internațională (8–15 cifre, optional +)
+// validare internațională (8–15 cifre)
 const phoneRegex = /^\+?[0-9]{8,15}$/;
 
 if(!phoneRegex.test(phone)) {
@@ -109,14 +116,13 @@ if(!document.getElementById("phoneError")) {
 const errorMsg = document.createElement("p");
 errorMsg.id = "phoneError";
 errorMsg.className = "text-red-400 text-sm mt-1";
-errorMsg.innerText = "Zadejte platné telefonní číslo (8–15 číslic, např. +420777123456)";
+errorMsg.innerText = "Zadejte platné telefonní číslo (8–15 číslic)";
 phoneInput.parentNode.insertBefore(errorMsg, phoneInput.nextSibling);
 }
 
 return;
 
 } else {
-
 phoneInput.classList.remove("border-red-500");
 phoneInput.classList.add("border-gray-700");
 
