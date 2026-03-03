@@ -440,13 +440,28 @@ formSection.classList.add("hidden");
 statusSection.classList.remove("hidden");
 listenToStatus(savedRide);
 }
-
+  
+window.toggleInfo = function(){
+  const panel = document.getElementById("infoPanel");
+  panel.classList.toggle("hidden");
+};
+  
   </script>
 
-<!-- 🔹 MODERN LEGAL FOOTER -->
-<footer class="mt-28 px-6 pb-10">
+<!-- INFO BUTTON -->
+<button onclick="toggleInfo()" 
+class="fixed bottom-6 right-6 w-12 h-12 bg-gray-800 border border-gray-600 
+rounded-full text-white text-xl shadow-lg backdrop-blur-md hover:bg-gray-700 transition z-50">
+  i
+</button>
 
-  <div class="max-w-md mx-auto text-center space-y-4">
+  <!-- INFO PANEL -->
+<div id="infoPanel" 
+class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end justify-center z-40">
+
+  <div class="w-full max-w-md bg-gray-900 rounded-t-3xl p-6 text-center space-y-4 animate-slideUp">
+
+    <div class="w-12 h-1 bg-gray-600 rounded-full mx-auto mb-4"></div>
 
     <p class="text-sm text-gray-400 tracking-wide">
       Provozovatel
@@ -477,13 +492,17 @@ listenToStatus(savedRide);
       </a>
     </div>
 
-    <p class="text-xs text-gray-600 pt-6">
+    <p class="text-xs text-gray-600 pt-4">
       Služba přepravy osob dle zákona č. 111/1994 Sb.
     </p>
 
-  </div>
+    <button onclick="toggleInfo()" 
+    class="mt-4 text-sm text-gray-400 hover:text-white transition">
+      Zavřít
+    </button>
 
-</footer>
+  </div>
+</div>
 
 </body>
 </html>
