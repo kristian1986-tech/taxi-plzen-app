@@ -240,6 +240,21 @@ phoneError.classList.remove("hidden");
 return;
 }
 
+/* 🔒 VERIFICARE CURSA ACTIVĂ DUPĂ TELEFON */
+const activeQuery = query(
+  collection(db,"rides"),
+  where("phone","==",phone),
+  where("status","in",["new","confirmed","arrived"])
+);
+
+const activeSnapshot = await getDocs(activeQuery);
+
+if(!activeSnapshot.empty){
+  generalError.innerText="Máte již aktivní objednávku.";
+  generalError.classList.remove("hidden");
+  return;
+}
+
 const docRef = await addDoc(collection(db,"rides"),{
 pickup:pickupInput.value.trim(),
 destination:destinationInput.value.trim(),
