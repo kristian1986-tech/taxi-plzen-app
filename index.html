@@ -445,6 +445,12 @@ window.toggleInfo = function(){
   const panel = document.getElementById("infoPanel");
   panel.classList.toggle("hidden");
 };
+
+document.getElementById("infoPanel").addEventListener("click", function(e){
+  if(e.target.id === "infoPanel"){
+    this.classList.add("hidden");
+  }
+});
   
   </script>
 
