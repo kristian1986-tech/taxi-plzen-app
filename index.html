@@ -379,6 +379,26 @@ pdf.setFont("helvetica","normal");
 pdf.text("Dekuji za vyuziti nasi taxi sluzby.",105,175,{align:"center"});
 
 pdf.save("uctenka_"+(data.receiptNumber||"taxi")+".pdf");
+  
+  /* 🔥 RESET DUPĂ DESCĂRCARE */
+setTimeout(()=>{
+
+statusSection.classList.add("hidden");
+formSection.classList.remove("hidden");
+
+pickupInput.value="";
+destinationInput.value="";
+phoneInput.value="";
+priceEstimate.innerText="";
+
+calculatedDistance=0;
+calculatedPrice=0;
+calculatedETA=0;
+arrivalPlayed=false;
+
+receiptBtn.classList.add("hidden");
+
+},500);
 
 };
 }
