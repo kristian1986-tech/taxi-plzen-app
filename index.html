@@ -278,11 +278,25 @@ statusMessage.innerText="Čekáme na potvrzení.";
 
 cancelBtn.classList.remove("hidden");
 
-cancelBtn.onclick = async ()=>{
+  cancelBtn.onclick = async ()=>{
+
 await updateDoc(doc(db,"rides",id),{ status:"cancelled" });
+
 localStorage.removeItem("activeRideId");
+
 statusSection.classList.add("hidden");
 formSection.classList.remove("hidden");
+
+/* 🔥 RESET COMPLET */
+pickupInput.value="";
+destinationInput.value="";
+phoneInput.value="";
+priceEstimate.innerText="";
+calculatedDistance=0;
+calculatedPrice=0;
+calculatedETA=0;
+arrivalPlayed=false;
+
 };
 }
 
