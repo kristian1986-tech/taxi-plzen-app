@@ -8,10 +8,30 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-<style>
+  <style>
 .fade-out { opacity: 0; transition: opacity 0.5s ease; }
 .fade-in { opacity: 1; transition: opacity 0.5s ease; }
+
+/* 🔥 SLIDE UP ANIMATION */
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.35s ease-out forwards;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.25s ease-in forwards;
+}
 </style>
+  
 </head>
 
 <body class="bg-gray-900 text-white min-h-screen">
@@ -443,7 +463,19 @@ listenToStatus(savedRide);
   
 window.toggleInfo = function(){
   const panel = document.getElementById("infoPanel");
-  panel.classList.toggle("hidden");
+  const sheet = panel.querySelector("div");
+
+  if(panel.classList.contains("hidden")){
+    panel.classList.remove("hidden");
+    sheet.classList.remove("animate-slideDown");
+    sheet.classList.add("animate-slideUp");
+  } else {
+    sheet.classList.remove("animate-slideUp");
+    sheet.classList.add("animate-slideDown");
+    setTimeout(()=>{
+      panel.classList.add("hidden");
+    },250);
+  }
 };
 
 document.getElementById("infoPanel").addEventListener("click", function(e){
