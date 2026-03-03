@@ -318,22 +318,45 @@ callBtn.onclick = ()=> window.location.href="tel:"+DRIVER_PHONE;
 
 if(data.status==="completed"){
 statusText.innerText="Dokončena";
-statusMessage.innerText="Děkujeme.";
+statusMessage.innerText="Jízda byla úspěšně dokončena.";
 
 localStorage.removeItem("activeRideId");
 
-setTimeout(()=>{
-statusSection.classList.add("hidden");
-formSection.classList.remove("hidden");
-pickupInput.value="";
-destinationInput.value="";
-phoneInput.value="";
-priceEstimate.innerText="";
-calculatedDistance=0;
-calculatedPrice=0;
-calculatedETA=0;
-arrivalPlayed=false;
-},3000);
+/* 🔥 ARATĂ BUTONUL DE CHITANȚĂ */
+receiptBtn.classList.remove("hidden");
+
+receiptBtn.onclick = function(){
+
+const { jsPDF } = window.jspdf;
+const pdf = new jsPDF();
+
+const date = new Date(data.receiptDate?.seconds * 1000 || Date.now());
+
+pdf.setFontSize(18);
+pdf.text("Taxi Plzeň",105,20,{align:"center"});
+
+pdf.setFontSize(12);
+pdf.text("Účtenka",105,30,{align:"center"});
+
+pdf.line(20,35,190,35);
+
+pdf.text("Číslo: "+(data.receiptNumber || "-"),20,50);
+pdf.text("Datum: "+date.toLocaleString("cs-CZ"),20,60);
+
+pdf.line(20,70,190,70);
+
+pdf.text("Odkud: "+data.pickup,20,85);
+pdf.text("Kam: "+data.destination,20,95);
+pdf.text("Telefon: "+(data.phone || "-"),20,105);
+
+pdf.line(20,115,190,115);
+
+pdf.setFontSize(14);
+pdf.text("Celkem: "+(data.estimatedPrice || 0)+" Kč",20,130);
+
+pdf.save("uctenka_"+(data.receiptNumber || "taxi")+".pdf");
+
+};
 }
 
 });
