@@ -40,30 +40,32 @@
   animation: fadeOutSplash 0.6s ease forwards;
 }
 
+    @keyframes fadeInLogo {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fadeInLogo {
+  animation: fadeInLogo 0.8s ease-out;
+}
+
 </style>
   
 </head>
 
 <body class="bg-gray-900 text-white min-h-screen">
   
-  <!-- SPLASH SCREEN -->
+<!-- SPLASH SCREEN -->
 <div id="splashScreen" class="fixed inset-0 bg-black flex items-center justify-center z-[999]">
 
-  <div class="text-center animate-pulse">
+  <div class="text-center">
 
-    <p class="text-sm tracking-[0.4em] text-lime-400 uppercase mb-2">
-      přeprava osob
-    </p>
-
-    <h1 class="text-5xl font-extrabold text-lime-400">
-      COBRA
-    </h1>
-
-    <div class="flex justify-center mt-3">
-      <div class="w-40 h-1 bg-lime-400 rounded-full"></div>
-    </div>
+    <img src="cobra-logo.png" 
+         class="w-64 mx-auto animate-fadeInLogo">
 
   </div>
+
+</div>  
 
 </div>
 
