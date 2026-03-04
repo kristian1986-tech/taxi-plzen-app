@@ -404,6 +404,11 @@ callBtn.classList.remove("hidden");
 callBtn.onclick = ()=> window.location.href="tel:"+DRIVER_PHONE;
 }
 
+if(data.status==="in_progress"){
+statusText.innerText="Jízda probíhá";
+statusMessage.innerText="Cesta právě probíhá.";
+}
+
 if(data.status==="completed"){
 
 statusText.innerText="Dokončena";
