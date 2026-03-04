@@ -13,8 +13,11 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function(payload) {
-  self.registration.showNotification(payload.notification.title, {
-    body: payload.notification.body,
-    icon: "https://cdn-icons-png.flaticon.com/512/684/684908.png"
-  });
+ self.registration.showNotification(payload.notification.title, {
+  body: payload.notification.body,
+  icon: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+  sound: "/notification.mp3",
+  vibrate: [300,100,300,100,300],
+  requireInteraction: true
+});
 });
