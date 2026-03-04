@@ -496,6 +496,31 @@ receiptBtn.classList.add("hidden");
 };
 }
 
+if(data.status==="rejected"){
+
+statusText.innerText="Odmítnuto";
+statusMessage.innerText="Řidič odmítl jízdu. Zkuste objednat znovu.";
+
+localStorage.removeItem("activeRideId");
+
+setTimeout(()=>{
+statusSection.classList.add("hidden");
+formSection.classList.remove("hidden");
+
+pickupInput.value="";
+destinationInput.value="";
+phoneInput.value="";
+priceEstimate.innerText="";
+
+calculatedDistance=0;
+calculatedPrice=0;
+calculatedETA=0;
+arrivalPlayed=false;
+
+},2000);
+
+}
+  
 });
 }
 
