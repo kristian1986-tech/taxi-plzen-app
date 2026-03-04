@@ -388,9 +388,8 @@ arrivalPlayed=false;
 };
 }
 
-if(data.status==="confirmed"){
-statusText.innerText="Potvrzena";
-statusMessage.innerText="Řidič dorazí za "+(data.eta||5)+" minut.";
+statusText.innerText="Řidič je na cestě";
+statusMessage.innerText="Příjezd přibližně za "+(data.eta||5)+" minut.";
 
 callBtn.classList.remove("hidden");
 callBtn.onclick = ()=> window.location.href="tel:"+DRIVER_PHONE;
