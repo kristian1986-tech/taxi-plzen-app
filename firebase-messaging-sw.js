@@ -16,7 +16,7 @@ messaging.onBackgroundMessage(function(payload) {
  self.registration.showNotification(payload.notification.title, {
   body: payload.notification.body,
   icon: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
-  sound: "/notification.mp3",
+  sound: "/notification.ogg",
   vibrate: [300,100,300,100,300],
   requireInteraction: true
 });
