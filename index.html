@@ -374,7 +374,21 @@ onSnapshot(doc(db,"rides",id),(snap)=>{
 if(!snap.exists()) return;
 
 const data=snap.data();
+  
+if(data.driverLat && data.driverLng){
 
+driverMarker.setPosition({
+lat:data.driverLat,
+lng:data.driverLng
+});
+
+map.panTo({
+lat:data.driverLat,
+lng:data.driverLng
+});
+
+}
+  
 receiptBtn.classList.add("hidden");
 cancelBtn.classList.add("hidden");
 callBtn.classList.add("hidden");
