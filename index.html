@@ -196,6 +196,25 @@ appId: "1:872925880546:web:12da74898c90a0155b7ebb"
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+async function checkSavedRide(){
+
+const savedRide = localStorage.getItem("activeRideId");
+
+if(!savedRide) return;
+
+const rideRef = doc(db,"rides",savedRide);
+const rideSnap = await getDoc(rideRef);
+
+if(!rideSnap.exists()){
+
+localStorage.removeItem("activeRideId");
+location.reload();
+return;
+
+}
+
+}
+checkSavedRide();
 const messaging = getMessaging(app);
 
 const DRIVER_PHONE = "+420777842870";
