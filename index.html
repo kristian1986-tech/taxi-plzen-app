@@ -261,6 +261,7 @@ center:{lat:49.7384,lng:13.3736}
 });
 
 driverMarker = new google.maps.Marker({
+position:{lat:49.7384,lng:13.3736},
 map:map,
 icon:"https://maps.google.com/mapfiles/kml/shapes/cabs.png"
 });
@@ -396,10 +397,19 @@ const data=snap.data();
   
 if(data.driverLat && data.driverLng){
 
+if(data.driverLat && data.driverLng){
+
 driverMarker.setPosition({
 lat:data.driverLat,
 lng:data.driverLng
 });
+
+map.panTo({
+lat:data.driverLat,
+lng:data.driverLng
+});
+
+}
 
 map.panTo({
 lat:data.driverLat,
