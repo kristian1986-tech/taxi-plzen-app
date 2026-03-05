@@ -230,7 +230,24 @@ let calculatedDistance = 0;
 let calculatedPrice = 0;
 let calculatedETA = 0;
 let arrivalPlayed = false;
+  
+let map;
+let driverMarker;
 
+function initMap(){
+
+map = new google.maps.Map(document.getElementById("map"),{
+zoom:14,
+center:{lat:49.7384,lng:13.3736}
+});
+
+driverMarker = new google.maps.Marker({
+map:map,
+icon:"https://maps.google.com/mapfiles/kml/shapes/cabs.png"
+});
+
+}
+  
 /* ROUTE */
 window.calculateRoute = async function(){
 
