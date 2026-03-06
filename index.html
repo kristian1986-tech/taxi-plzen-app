@@ -282,13 +282,12 @@ strokeWeight:6
 
 }
   
-async function drawRoute(origin,destination){
+function drawRoute(origin,destination){
 
-directionsService.route(
-{
-origin: origin,
-destination: destination,
-travelMode: google.maps.TravelMode.DRIVING
+directionsService.route({
+origin:{ query: origin },
+destination:{ query: destination },
+travelMode:"DRIVING"
 },
 (result,status)=>{
 
@@ -296,8 +295,9 @@ if(status==="OK"){
 directionsRenderer.setDirections(result);
 }
 
+});
+
 }
-);
 
 }  
   
