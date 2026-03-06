@@ -659,7 +659,6 @@ document.getElementById("infoPanel").addEventListener("click", function(e){
   // SPLASH AUTO HIDE
 window.addEventListener("load", () => {
   
-  initMap();   // pornește mapa
 
   const splash = document.getElementById("splashScreen");
 
@@ -733,8 +732,8 @@ class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end justify-
   </div>
 </div>
 
-<script
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7yhLHZNZDmNIg_tjGQCXA78TPPrN8pQE">
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7yhLHZNZDmNIg_tjGQCXA78TPPrN8pQE&callback=initMap">
 </script>
 
 </body>
