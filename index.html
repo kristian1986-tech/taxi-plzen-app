@@ -397,15 +397,15 @@ const data=snap.data();
   
 if(data.driverLat && data.driverLng){
 
-driverMarker.setPosition({
-lat:data.driverLat,
-lng:data.driverLng
-});
+const newPosition = {
+lat: data.driverLat,
+lng: data.driverLng
+};
 
-map.panTo({
-lat:data.driverLat,
-lng:data.driverLng
-});
+driverMarker.setPosition(newPosition);
+
+/* camera urmărește mașina */
+map.panTo(newPosition);
 
 }
 
