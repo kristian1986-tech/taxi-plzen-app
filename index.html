@@ -282,6 +282,25 @@ strokeWeight:6
 
 }
   
+async function drawRoute(origin,destination){
+
+directionsService.route(
+{
+origin: origin,
+destination: destination,
+travelMode: google.maps.TravelMode.DRIVING
+},
+(result,status)=>{
+
+if(status==="OK"){
+directionsRenderer.setDirections(result);
+}
+
+}
+);
+
+}  
+  
 /* ROUTE */
 window.calculateRoute = async function(){
 
@@ -344,6 +363,7 @@ priceEstimate.innerText =
 "Vzdálenost: "+calculatedDistance.toFixed(1)+
 " km | "+calculatedETA+
 " min | Cena: "+calculatedPrice+" Kč";
+  drawRoute(pickup,destination);
 };
 
 /* CREATE */
