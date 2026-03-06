@@ -285,13 +285,13 @@ strokeWeight:6
 function drawRoute(origin,destination){
 
 directionsService.route({
-origin:{ query: origin },
-destination:{ query: destination },
-travelMode:"DRIVING"
+origin: origin,
+destination: destination,
+travelMode: google.maps.TravelMode.DRIVING
 },
 (result,status)=>{
 
-if(status==="OK"){
+if(status === "OK"){
 directionsRenderer.setDirections(result);
 }
 
