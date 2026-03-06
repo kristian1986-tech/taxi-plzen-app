@@ -397,8 +397,6 @@ const data=snap.data();
   
 if(data.driverLat && data.driverLng){
 
-if(data.driverLat && data.driverLng){
-
 driverMarker.setPosition({
 lat:data.driverLat,
 lng:data.driverLng
@@ -631,6 +629,8 @@ document.getElementById("infoPanel").addEventListener("click", function(e){
 
   // SPLASH AUTO HIDE
 window.addEventListener("load", () => {
+
+initMap();
   const splash = document.getElementById("splashScreen");
 
   setTimeout(() => {
@@ -703,8 +703,7 @@ class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end justify-
   </div>
 </div>
 
-<script async
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7yhLHZNZDmNIg_tjGQCXA78TPPrN8pQE&callback=initMap">
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7yhLHZNZDmNIg_tjGQCXA78TPPrN8pQE">
 </script>
 
 </body>
