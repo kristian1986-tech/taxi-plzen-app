@@ -253,6 +253,8 @@ let arrivalPlayed = false;
   
 let map;
 let driverMarker;
+let directionsService;
+let directionsRenderer;
 
 window.initMap = function(){
 
@@ -263,10 +265,18 @@ center:{lat:49.7384,lng:13.3736}
 
 driverMarker = new google.maps.Marker({
 position:{lat:49.7384,lng:13.3736},
-map:map,
-icon:{
-url:"https://cdn-icons-png.flaticon.com/512/3448/3448339.png",
-scaledSize:new google.maps.Size(50,50)
+map:map
+});
+
+/* ruta */
+directionsService = new google.maps.DirectionsService();
+
+directionsRenderer = new google.maps.DirectionsRenderer({
+map: map,
+suppressMarkers: false,
+polylineOptions:{
+strokeColor:"#3b82f6",
+strokeWeight:6
 }
 });
 
