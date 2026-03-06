@@ -264,8 +264,9 @@ center:{lat:49.7384,lng:13.3736}
 });
 
 driverMarker = new google.maps.Marker({
-position:{lat:49.7384,lng:13.3736},
-map:map
+  position: { lat: 49.7384, lng: 13.3736 },
+  map: map,
+  icon: "https://maps.google.com/mapfiles/kml/shapes/cabs.png"
 });
 
 /* ruta */
@@ -279,25 +280,25 @@ strokeColor:"#3b82f6",
 strokeWeight:6
 }
 });
-
-}
   
-function drawRoute(origin,destination){
+function drawRoute(origin, destination) {
 
-directionsService.route({
-origin: origin,
-destination: destination,
-travelMode: google.maps.TravelMode.DRIVING
-},
-(result,status)=>{
+  directionsService.route({
+    origin: origin,
+    destination: destination,
+    travelMode: google.maps.TravelMode.DRIVING
+  }, function(result, status) {
 
-if(status === "OK"){
-directionsRenderer.setDirections(result);
-}
+    console.log("Directions status:", status);
 
-});
+    if (status === google.maps.DirectionsStatus.OK) {
+      directionsRenderer.setDirections(result);
+    } else {
+      console.error("Directions failed:", status);
+    }
 
-}
+  });
+
 
   
 /* ROUTE */
