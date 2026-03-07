@@ -430,7 +430,7 @@ if(!snap.exists()) return;
 
 const data=snap.data();
   
-if(data.driverLat && data.driverLng){
+if(data.driverLat && data.driverLng && driverMarker && map){
 
 const newPosition = {
 lat: data.driverLat,
