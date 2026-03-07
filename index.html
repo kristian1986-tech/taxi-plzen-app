@@ -441,9 +441,12 @@ lng: data.driverLng
 };
 
 driverMarker.setPosition(newPosition);
-
-/* camera urmărește mașina */
 map.panTo(newPosition);
+
+/* traseu live către client */
+if(data.pickup){
+drawRoute(newPosition, data.pickup);
+}
 
 }
 
