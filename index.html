@@ -484,11 +484,28 @@ arrivalPlayed=false;
 }
 
 if(data.status==="confirmed"){
+
 statusText.innerText="Řidič je na cestě";
 statusMessage.innerText="Příjezd přibližně za "+(data.eta||5)+" minut.";
+  
+const driverRef = doc(db,"drivers",data.driverId);
+const driverSnap = await getDoc(driverRef);
+
+if(driverSnap.exists()){
+
+const driver = driverSnap.data();
+
+statusMessage.innerHTML = `
+Řidič: ${driver.name}<br>
+Auto: ${driver.car}<br>
+SPZ: ${driver.plate}<br>
+`;
+
+}
 
 callBtn.classList.remove("hidden");
-callBtn.onclick = ()=> window.location.href="tel:"+DRIVER_PHONE;
+callBtn.onclick = ()=> window.location.href="tel:"+data.phone;
+
 }
 
 if(data.status==="arrived"){
