@@ -427,7 +427,7 @@ listenToStatus(docRef.id);
 
 function listenToStatus(id){
 
-onSnapshot(doc(db,"rides",id),(snap)=>{
+onSnapshot(doc(db,"rides",id), async (snap)=>{
 
 if(!snap.exists()) return;
 
