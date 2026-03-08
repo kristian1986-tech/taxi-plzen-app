@@ -495,6 +495,7 @@ const driverSnap = await getDoc(driverRef);
 if(driverSnap.exists()){
 
 const driver = driverSnap.data();
+currentDriver = driver;
 
 statusMessage.innerHTML = `
 Řidič: ${driver.name}<br>
@@ -516,7 +517,7 @@ statusText.innerText="Řidič přijel";
 statusMessage.innerText="Řidič je na místě.";
 
 callBtn.classList.remove("hidden");
-callBtn.onclick = ()=> window.location.href="tel:"+DRIVER_PHONE;
+callBtn.onclick = ()=> window.location.href="tel:"+currentDriver.phone;
 }
 
 if(data.status==="in_progress"){
