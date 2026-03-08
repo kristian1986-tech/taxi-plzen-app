@@ -252,12 +252,13 @@ let arrivalPlayed = false;
   
 let map;
 let driverMarker;
+let driversMarkers = [];
 let directionsService;
 let directionsRenderer;
 let currentDriver = null;
 
 window.initMap = function(){
-
+  
 map = new google.maps.Map(document.getElementById("map"),{
 zoom:14,
 center:{lat:49.7384,lng:13.3736}
@@ -283,8 +284,45 @@ strokeColor:"#3b82f6",
 strokeWeight:6
 }
 });
+
+showOnlineDrivers();
   
 };
+
+function showOnlineDrivers(){
+
+onSnapshot(collection(db,"drivers"),snapshot=>{
+
+driversMarkers.forEach(marker=>marker.setMap(null));
+driversMarkers = [];
+
+snapshot.forEach(docSnap=>{
+
+const driver = docSnap.data();
+
+if(driver.status === "online" && driver.lat && driver.lng){
+
+const marker = new google.maps.Marker({
+position:{
+lat: driver.lat,
+lng: driver.lng
+},
+map: map,
+icon:{
+url:"https://maps.google.com/mapfiles/kml/shapes/cabs.png",
+scaledSize:new google.maps.Size(28,28)
+}
+});
+
+driversMarkers.push(marker);
+
+}
+
+});
+
+});
+
+}
   
 function drawRoute(origin, destination) {
 
