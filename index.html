@@ -454,6 +454,7 @@ eta:calculatedETA,
 status:"new",
 createdAt:serverTimestamp()
 });
+sendRideNotification();
 
 localStorage.setItem("activeRideId",docRef.id);
 await requestPushPermission(docRef.id);
@@ -753,6 +754,37 @@ document.head.appendChild(script);
 }
 
 window.addEventListener("load", loadGoogleMaps);
+
+async function sendRideNotification(){
+
+const drivers = await getDocs(collection(db,"drivers"));
+
+drivers.forEach(async driver=>{
+
+const data = driver.data();
+
+if(data.pushToken){
+
+await fetch("https://fcm.googleapis.com/fcm/send",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Authorization":"key=YOUR_SERVER_KEY"
+},
+body:JSON.stringify({
+to:data.pushToken,
+notification:{
+title:"🚕 Nová jízda",
+body:"Máte novou objednávku"
+}
+})
+});
+
+}
+
+});
+
+}
   
   </script>
 
