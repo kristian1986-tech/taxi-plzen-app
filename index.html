@@ -446,6 +446,8 @@ if(!activeSnapshot.empty){
 
 const docRef = await addDoc(collection(db,"rides"),{
 pickup:pickupInput.value.trim(),
+pickupLat: pickupLocation.lat,
+pickupLng: pickupLocation.lng,
 destination:destinationInput.value.trim(),
 phone,
 distance:calculatedDistance,
