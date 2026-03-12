@@ -395,6 +395,10 @@ return;
 }
 
 const route = data.routes[0];
+
+pickupLocation = route.legs[0].startLocation.latLng;
+destinationLocation = route.legs[0].endLocation.latLng;
+
 calculatedDistance = route.distanceMeters/1000;
 const durationSeconds = parseInt(route.duration.replace("s",""));
 calculatedETA = Math.ceil(durationSeconds/60);
