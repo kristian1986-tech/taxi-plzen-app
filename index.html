@@ -396,8 +396,10 @@ return;
 
 const route = data.routes[0];
 
-pickupLocation = route.viewport.low;
-destinationLocation = route.viewport.high;
+pickupLocation = {
+lat: map.getCenter().lat(),
+lng: map.getCenter().lng()
+};
 
 calculatedDistance = route.distanceMeters/1000;
 const durationSeconds = parseInt(route.duration.replace("s",""));
