@@ -428,7 +428,9 @@ priceEstimate.innerText =
 " km | "+calculatedETA+
 " min | Cena: "+calculatedPrice+" Kč";
 
+if(map && directionsService){
 drawRoute(pickup,destination);
+}
 
 /* 🔵 COORDONATE PICKUP PENTRU SOFER */
 const geoResponse = await fetch(
