@@ -465,6 +465,12 @@ if(!activeSnapshot.empty){
   return;
 }
 
+if(!pickupLocation){
+generalError.innerText="Nejprve vypočítejte trasu.";
+generalError.classList.remove("hidden");
+return;
+}
+
 const docRef = await addDoc(collection(db,"rides"),{
 pickup:pickupInput.value.trim(),
 pickupLat: pickupLocation.lat,
