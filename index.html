@@ -465,7 +465,7 @@ if(!activeSnapshot.empty){
   return;
 }
 
-if(!pickupLocation){
+if(calculatedDistance === 0){
 generalError.innerText="Nejprve vypočítejte trasu.";
 generalError.classList.remove("hidden");
 return;
