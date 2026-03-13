@@ -427,8 +427,24 @@ priceEstimate.innerText =
 "Vzdálenost: "+calculatedDistance.toFixed(1)+
 " km | "+calculatedETA+
 " min | Cena: "+calculatedPrice+" Kč";
-  drawRoute(pickup,destination);
+
+drawRoute(pickup,destination);
+
+/* 🔵 COORDONATE PICKUP PENTRU SOFER */
+const geocoder = new google.maps.Geocoder();
+
+geocoder.geocode({ address: pickup }, function(results, status){
+
+if(status === "OK"){
+
+pickupLocation = {
+lat: results[0].geometry.location.lat(),
+lng: results[0].geometry.location.lng()
 };
+
+}
+
+});
 
 /* CREATE */
 window.createRide = async function(){
