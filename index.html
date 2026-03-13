@@ -398,12 +398,23 @@ const route = data.routes[0];
 
 calculatedDistance = route.distanceMeters / 1000;
 
+const geoResponse = await fetch(
+"https://maps.googleapis.com/maps/api/geocode/json?address="
++ encodeURIComponent(pickup) +
+"&key=" + GOOGLE_API_KEY
+);
+
+const geoData = await geoResponse.json();
+
+if(geoData.results.length){
+
 pickupLocation = {
-lat: map.getCenter().lat(),
-lng: map.getCenter().lng()
+lat: geoData.results[0].geometry.location.lat,
+lng: geoData.results[0].geometry.location.lng
 };
 
-calculatedDistance = route.distanceMeters/1000;
+}
+
 const durationSeconds = parseInt(route.duration.replace("s",""));
 calculatedETA = Math.ceil(durationSeconds/60);
 
