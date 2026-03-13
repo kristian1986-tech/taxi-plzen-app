@@ -428,27 +428,8 @@ priceEstimate.innerText =
 " km | "+calculatedETA+
 " min | Cena: "+calculatedPrice+" Kč";
 
-if(map && directionsService){
 drawRoute(pickup,destination);
-}
 
-/* 🔵 COORDONATE PICKUP PENTRU SOFER */
-const geoResponse = await fetch(
-"https://maps.googleapis.com/maps/api/geocode/json?address="
-+ encodeURIComponent(pickup) +
-"&key=" + GOOGLE_API_KEY
-);
-
-const geoData = await geoResponse.json();
-
-if(geoData.results.length){
-
-pickupLocation = {
-lat: geoData.results[0].geometry.location.lat,
-lng: geoData.results[0].geometry.location.lng
-};
-
-}
 
 /* CREATE */
 window.createRide = async function(){
