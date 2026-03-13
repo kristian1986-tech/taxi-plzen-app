@@ -431,20 +431,22 @@ priceEstimate.innerText =
 drawRoute(pickup,destination);
 
 /* 🔵 COORDONATE PICKUP PENTRU SOFER */
-const geocoder = new google.maps.Geocoder();
+const geoResponse = await fetch(
+"https://maps.googleapis.com/maps/api/geocode/json?address="
++ encodeURIComponent(pickup) +
+"&key=" + GOOGLE_API_KEY
+);
 
-geocoder.geocode({ address: pickup }, function(results, status){
+const geoData = await geoResponse.json();
 
-if(status === "OK"){
+if(geoData.results.length){
 
 pickupLocation = {
-lat: results[0].geometry.location.lat(),
-lng: results[0].geometry.location.lng()
+lat: geoData.results[0].geometry.location.lat,
+lng: geoData.results[0].geometry.location.lng
 };
 
 }
-
-});
 
 /* CREATE */
 window.createRide = async function(){
