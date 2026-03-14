@@ -345,13 +345,6 @@ lat: route.legs[0].startLocation.latLng.latitude,
 lng: route.legs[0].startLocation.latLng.longitude
 }; 
   
-if(geoData.results.length){  
-  
-pickupLocation = {  
-lat: geoData.results[0].geometry.location.lat,  
-lng: geoData.results[0].geometry.location.lng  
-};  
-  
 }  
   
 const durationSeconds = parseInt(route.duration.replace("s",""));  
