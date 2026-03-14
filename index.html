@@ -340,11 +340,12 @@ const route = data.routes[0];
   
 calculatedDistance = route.distanceMeters / 1000;  
   
+if(route.legs && route.legs.length){
 pickupLocation = {
 lat: route.legs[0].startLocation.latLng.lat,
 lng: route.legs[0].startLocation.latLng.lng
-}; 
-  
+};
+}
   
 const durationSeconds = parseInt(route.duration.replace("s",""));  
 calculatedETA = Math.ceil(durationSeconds/60);  
