@@ -354,7 +354,7 @@ let total = basePrice + calculatedDistance*pricePerKm;
 if(total<minimumPrice) total=minimumPrice;  
   
 calculatedPrice = Math.round(total);  
-  
+  generalError.classList.add("hidden");
 priceEstimate.innerText =  
 "Vzdálenost: "+calculatedDistance.toFixed(1)+  
 " km | "+calculatedETA+  
