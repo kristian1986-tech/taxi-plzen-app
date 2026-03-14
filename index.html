@@ -340,13 +340,10 @@ const route = data.routes[0];
   
 calculatedDistance = route.distanceMeters / 1000;  
   
-const geoResponse = await fetch(  
-"https://maps.googleapis.com/maps/api/geocode/json?address="  
-+ encodeURIComponent(pickup) +  
-"&key=" + GOOGLE_API_KEY  
-);  
-  
-const geoData = await geoResponse.json();  
+pickupLocation = {
+lat: route.legs[0].startLocation.latLng.latitude,
+lng: route.legs[0].startLocation.latLng.longitude
+}; 
   
 if(geoData.results.length){  
   
