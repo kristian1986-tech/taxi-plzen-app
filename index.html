@@ -342,8 +342,8 @@ calculatedDistance = route.distanceMeters / 1000;
   
 if(route.legs && route.legs.length){
 pickupLocation = {
-lat: route.legs[0].startLocation.latLng.lat,
-lng: route.legs[0].startLocation.latLng.lng
+lat: route.legs[0].startLocation.latitude,
+lng: route.legs[0].startLocation.latLng.longitude
 };
 }
   
