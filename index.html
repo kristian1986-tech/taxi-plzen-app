@@ -415,8 +415,8 @@ return;
   
 const docRef = await addDoc(collection(db,"rides"),{  
 pickup:pickupInput.value.trim(),  
-pickupLat: pickupLocation?.lat,
-pickupLng: pickupLocation?.lng,
+pickupLat: pickupLocation?.lat || 49.7623,
+pickupLng: pickupLocation?.lng || 13.3776,
 destination:destinationInput.value.trim(),  
 phone,  
 distance:calculatedDistance,  
