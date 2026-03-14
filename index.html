@@ -338,7 +338,7 @@ return;
   
 const route = data.routes[0];  
   
-calculatedDistance = route.distanceMeters / 1000;  
+calculatedDistance = Number(route.distanceMeters) / 1000;
   
 if(route.legs && route.legs.length){
 pickupLocation = {
@@ -397,7 +397,7 @@ if(!activeSnapshot.empty){
   return;  
 }  
   
-if(calculatedDistance === 0){  
+if(calculatedDistance){  
 generalError.innerText="Nejprve vypočítejte trasu.";  
 generalError.classList.remove("hidden");  
 return;  
