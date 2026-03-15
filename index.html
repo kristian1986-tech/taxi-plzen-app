@@ -319,7 +319,7 @@ method:"POST",
 headers:{  
 "Content-Type":"application/json",  
 "X-Goog-Api-Key":GOOGLE_API_KEY,  
-"X-Goog-FieldMask":"routes.distanceMeters,routes.duration"  
+"X-Goog-FieldMask":"routes.distanceMeters,routes.duration,routes.legs.startLocation" 
 },  
 body:JSON.stringify({  
 origin:{address:pickup},  
@@ -337,25 +337,13 @@ return;
 }  
   
 const route = data.routes[0];  
+
+pickupLocation = {
+lat: route.legs[0].startLocation.latLng.latitude,
+lng: route.legs[0].startLocation.latLng.longitude
+};
   
 calculatedDistance = route.distanceMeters / 1000;  
-  
-const geoResponse = await fetch(  
-"https://maps.googleapis.com/maps/api/geocode/json?address="  
-+ encodeURIComponent(pickup) +  
-"&key=" + GOOGLE_API_KEY  
-);  
-  
-const geoData = await geoResponse.json();  
-  
-if(geoData.results.length){  
-  
-pickupLocation = {  
-lat: geoData.results[0].geometry.location.lat,  
-lng: geoData.results[0].geometry.location.lng  
-};  
-  
-}  
   
 const durationSeconds = parseInt(route.duration.replace("s",""));  
 calculatedETA = Math.ceil(durationSeconds/60);  
