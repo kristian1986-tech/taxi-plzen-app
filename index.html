@@ -404,10 +404,8 @@ return;
 
 const docRef = await addDoc(collection(db,"rides"),{
 pickup:pickupInput.value.trim(),
-pickupLat: pickupLocation ?
-pickupLocation.lat : null,
-pickupLng: pickupLocation ?
-pickupLocation.lng : null,
+pickupLat: pickupLocation ? pickupLocation.lat : null,
+pickupLng: pickupLocation ? pickupLocation.lng : null,
 destination:destinationInput.value.trim(),
 phone,
 distance:calculatedDistance,
@@ -744,6 +742,5 @@ Zavřít
 </button>
 
   </div>    
-</div>  
-</body>    
+</div>  </body>    
 </html> 
