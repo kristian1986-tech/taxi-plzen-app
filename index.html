@@ -440,7 +440,7 @@ if(data.driverLat && data.driverLng && driverMarker && map){
   
 const now = Date.now();
 
-if(data.driverUpdatedAt && now - data.driverUpdatedAt > 60000){
+if(data.driverUpdatedAt && now - data.driverUpdatedAt > 180000){
 
 await updateDoc(doc(db,"rides",id),{
 status:"new",
