@@ -717,7 +717,9 @@ document.head.appendChild(script);
   
 window.addEventListener("load", loadGoogleMaps);  
   
-  
+if ("serviceWorker" in navigator) {
+navigator.serviceWorker.register("/sw.js");
+}
     
   </script>  <!-- INFO BUTTON -->  <button onclick="toggleInfo()"   
 class="fixed bottom-6 right-6 w-12 h-12   
