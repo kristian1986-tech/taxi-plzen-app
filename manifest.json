@@ -2,7 +2,6 @@
 "name": "COBRA Taxi Plzeň",
 "short_name": "COBRA Taxi",
 "start_url": "/taxi-plzen-app/",
-
 "display": "standalone",
 "background_color": "#111827",
 "theme_color": "#111827",
