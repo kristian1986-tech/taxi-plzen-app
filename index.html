@@ -438,6 +438,20 @@ const data=snap.data();
     
 if(data.driverLat && data.driverLng && driverMarker && map){  
   
+const now = Date.now();
+
+if(data.driverUpdatedAt && now - data.driverUpdatedAt > 60000){
+
+await updateDoc(doc(db,"rides",id),{
+status:"new",
+driverId:null
+});
+
+statusText.innerText="Hledáme jiného řidiče";
+statusMessage.innerText="Původní řidič se odpojil.";
+
+  }  
+
 const newPosition = {  
 lat: data.driverLat,  
 lng: data.driverLng  
