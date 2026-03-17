@@ -7,7 +7,12 @@
 <meta name="theme-color" content="#111827">
   
    <title>Taxi Plzeň</title> 
-<script src="https://cdn.tailwindcss.com"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>    <style>  
+  
+<script src="https://cdn.tailwindcss.com"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>   
+  
+  <style>  
+    
 .fade-out { opacity: 0; transition: opacity 0.5s ease; }  
 .fade-in { opacity: 1; transition: opacity 0.5s ease; }  
   
@@ -48,37 +53,78 @@
   animation: fadeInLogo 0.8s ease-out;  
 }  
   
-</style>  </head>  <body class="bg-gray-900 text-white min-h-screen">  <!-- SPLASH SCREEN -->  <div id="splashScreen" class="fixed inset-0 bg-black flex items-center justify-center z-[999]">    <div class="text-center">  <img src="cobra-logo.png"   
+</style>  
+
+</head> 
+  
+<body class="bg-gray-900 text-white min-h-screen"> 
+  <!-- SPLASH SCREEN --> 
+<div id="splashScreen" class="fixed inset-0 bg-black flex items-center justify-center z-[999]">  
+<div class="text-center">  <img src="cobra-logo.png"   
      class="w-96 mx-auto animate-fadeInLogo">
 
 </div> 
-</div>  <div id="arrivalOverlay" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">  
+  
+</div>  
+  
+<div id="arrivalOverlay" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">  
   <div class="text-center">  
     <h2 class="text-4xl font-bold text-green-400 mb-4">🚕 Řidič přijel</h2>  
     <p class="text-xl">Řidič je na místě. Prosím vyjděte ven.</p>  
     <button onclick="closeArrival()" class="mt-6 bg-green-600 px-6 py-3 rounded font-bold">  
       OK  
     </button>  
-  </div>  
-</div>  <div class="w-full max-w-md mx-auto p-6 mt-10 bg-gray-800 rounded-xl shadow-xl">  <!-- COBRA HEADER -->  <div class="text-center mb-8 select-none">    <p class="text-xs tracking-[0.3em] text-lime-400 uppercase">  
+</div>  
+  
+</div>  
+
+<div id="ratingBox" class="hidden w-full max-w-md mx-auto mt-4 bg-gray-800 p-4 rounded-xl text-center">
+
+<p class="mb-2">Ohodnoťte jízdu:</p>
+
+<div class="flex justify-center gap-2">
+<button onclick="rateRide(1)">⭐</button>
+<button onclick="rateRide(2)">⭐⭐</button>
+<button onclick="rateRide(3)">⭐⭐⭐</button>
+<button onclick="rateRide(4)">⭐⭐⭐⭐</button>
+<button onclick="rateRide(5)">⭐⭐⭐⭐⭐</button>
+</div>
+
+</div>
+  
+  <div class="w-full max-w-md mx-auto p-6 mt-10 bg-gray-800 rounded-xl shadow-xl">  <!-- COBRA HEADER -->  <div class="text-center mb-8 select-none">    <p class="text-xs tracking-[0.3em] text-lime-400 uppercase">  
     přeprava osob  
   </p>    <h1 class="text-4xl font-extrabold tracking-wide text-lime-400">  
     COBRA  
   </h1>    <!-- linii viteză -->    <div class="flex justify-center mt-2">  
-    <div class="w-36 h-1 bg-lime-400 rounded-full opacity-90"></div>  
-  </div>    <div class="flex justify-center mt-1">  
-    <div class="w-52 h-0.5 bg-lime-400 rounded-full opacity-70"></div>  
-  </div>  </div>  <div id="formSection" class="space-y-4">  <input id="pickup" type="text" placeholder="Odkud jedete?"  
+    <div class="w-36 h-1 bg-lime-400 rounded-full opacity-90">
+  </div>  
+    
+  </div>  
+    
+    <div class="flex justify-center mt-1">  
+    <div class="w-52 h-0.5 bg-lime-400 rounded-full opacity-70">
+      
+  </div>  
+      
+  </div> 
+    
+  </div>  <div id="formSection" class="space-y-4">  
+  <input id="pickup" type="text" placeholder="Odkud jedete?"  
 class="w-full p-3 rounded bg-gray-900 border border-gray-700">
 
-<p id="pickupError" class="text-red-500 text-sm hidden"></p>  <input id="destination" type="text" placeholder="Kam jedete?"  
+<p id="pickupError" class="text-red-500 text-sm hidden"></p>  
+    <input id="destination" type="text" placeholder="Kam jedete?"  
 class="w-full p-3 rounded bg-gray-900 border border-gray-700">
 
-<p id="destinationError" class="text-red-500 text-sm hidden"></p>  <input id="phone" type="tel" placeholder="Telefon"  
+<p id="destinationError" class="text-red-500 text-sm hidden"></p>  
+   <input id="phone" type="tel" placeholder="Telefon"  
 class="w-full p-3 rounded bg-gray-900 border border-gray-700">
 
-<p id="phoneError" class="text-red-500 text-sm hidden"></p>  <p id="priceEstimate" class="text-green-400 font-bold text-lg"></p>  
-<p id="generalError" class="text-red-500 font-semibold hidden"></p>  <button onclick="calculateRoute()"  
+<p id="phoneError" class="text-red-500 text-sm hidden"></p> 
+    <p id="priceEstimate" class="text-green-400 font-bold text-lg"></p>  
+<p id="generalError" class="text-red-500 font-semibold hidden"></p>  
+    <button onclick="calculateRoute()"  
 class="w-full bg-blue-500 text-white font-bold py-3 rounded mt-2">
 Vypočítat cenu
 </button>
@@ -547,7 +593,7 @@ if(data.status==="completed"){
 statusText.innerText="Dokončena";  
 statusMessage.innerText="Děkujeme za využití taxi služby.";  
   
-localStorage.removeItem("activeRideId");  
+document.getElementById("ratingBox").classList.remove("hidden");  
   
 /* 🔥 ARATĂ BUTONUL */  
 receiptBtn.classList.remove("hidden");  
@@ -736,8 +782,48 @@ window.addEventListener("load", loadGoogleMaps);
 if ("serviceWorker" in navigator) {
 navigator.serviceWorker.register("/sw.js");
 }
-    
-  </script>  <!-- INFO BUTTON -->  <button onclick="toggleInfo()"   
+
+window.rateRide = async function(stars){
+
+const rideId = localStorage.getItem("activeRideId");
+if(!rideId) return;
+
+const rideRef = doc(db,"rides",rideId);
+const rideSnap = await getDoc(rideRef);
+
+if(!rideSnap.exists()) return;
+
+const ride = rideSnap.data();
+
+await updateDoc(rideRef,{
+rating: stars
+});
+
+const driverRef = doc(db,"drivers",ride.driverId);
+const driverSnap = await getDoc(driverRef);
+
+let avg = driverSnap.data().ratingAvg || 0;
+let total = driverSnap.data().totalRatings || 0;
+
+const newAvg = ((avg * total) + stars) / (total + 1);
+
+await updateDoc(driverRef,{
+ratingAvg: newAvg,
+totalRatings: total + 1
+});
+
+alert("Děkujeme!");
+
+document.getElementById("ratingBox").classList.add("hidden");
+
+/* ACUM ștergi ride */
+localStorage.removeItem("activeRideId");
+
+}
+
+  </script> 
+  
+  <!-- INFO BUTTON -->  <button onclick="toggleInfo()"   
 class="fixed bottom-6 right-6 w-12 h-12   
 bg-white/10 backdrop-blur-md border border-white/20   
 rounded-full text-white text-xl   
