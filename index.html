@@ -78,20 +78,6 @@
   
 </div>  
 
-<div id="ratingBox" class="hidden w-full max-w-md mx-auto mt-4 bg-gray-800 p-4 rounded-xl text-center">
-
-<p class="mb-2">Ohodnoťte jízdu:</p>
-
-<div class="flex justify-center gap-2">
-<button onclick="rateRide(1)">⭐</button>
-<button onclick="rateRide(2)">⭐⭐</button>
-<button onclick="rateRide(3)">⭐⭐⭐</button>
-<button onclick="rateRide(4)">⭐⭐⭐⭐</button>
-<button onclick="rateRide(5)">⭐⭐⭐⭐⭐</button>
-</div>
-
-</div>
-  
   <div class="w-full max-w-md mx-auto p-6 mt-10 bg-gray-800 rounded-xl shadow-xl">  <!-- COBRA HEADER -->  <div class="text-center mb-8 select-none">    <p class="text-xs tracking-[0.3em] text-lime-400 uppercase">  
     přeprava osob  
   </p>    <h1 class="text-4xl font-extrabold tracking-wide text-lime-400">  
@@ -151,6 +137,20 @@ class="hidden mt-3 bg-green-600 px-6 py-3 rounded font-bold w-full">
 class="hidden mt-3 bg-green-600 px-6 py-3 rounded font-bold w-full">
 📄 Stáhnout účtenku
 </button>
+
+<div id="ratingBox" class="hidden mt-4 bg-gray-800 p-4 rounded-xl text-center">
+
+<p class="mb-2">Ohodnoťte jízdu:</p>
+
+<div class="flex justify-center gap-2 text-2xl text-yellow-400">
+<button onclick="rateRide(1)">⭐</button>
+<button onclick="rateRide(2)">⭐⭐</button>
+<button onclick="rateRide(3)">⭐⭐⭐</button>
+<button onclick="rateRide(4)">⭐⭐⭐⭐</button>
+<button onclick="rateRide(5)">⭐⭐⭐⭐⭐</button>
+</div>
+
+</div>
 
 </div>  </div>  <div id="map" class="w-full max-w-md mx-auto h-72 mt-4 rounded-xl"></div>  <script type="module">  
   
