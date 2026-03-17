@@ -52,6 +52,21 @@
 .animate-fadeInLogo {  
   animation: fadeInLogo 0.8s ease-out;  
 }  
+
+  @keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.showThanks {
+  animation: fadeSlideUp 0.4s ease forwards;
+}
   
 </style>  
 
@@ -143,7 +158,9 @@ class="hidden mt-3 bg-green-600 px-6 py-3 rounded font-bold w-full">
 📄 Stáhnout účtenku
 </button>
 
-<div id="ratingBox" class="hidden mt-4 bg-gray-800 p-4 rounded-xl text-center">
+<div id="ratingBox" 
+  
+class="hidden mt-4 bg-gray-800 p-4 rounded-xl text-center">
 
 <p class="mb-2">Ohodnoťte jízdu:</p>
 
@@ -153,6 +170,11 @@ class="hidden mt-3 bg-green-600 px-6 py-3 rounded font-bold w-full">
 <button onclick="rateRide(3)">⭐⭐⭐</button>
 <button onclick="rateRide(4)">⭐⭐⭐⭐</button>
 <button onclick="rateRide(5)">⭐⭐⭐⭐⭐</button>
+</div>
+
+<div id="thankYouMsg" 
+class="hidden text-center mt-4 text-green-400 text-lg font-semibold">
+Děkujeme za hodnocení 🙏
 </div>
 
 </div>
@@ -817,7 +839,14 @@ ratingAvg: newAvg,
 totalRatings: total + 1
 });
 
-alert("Děkujeme!");
+const msg = document.getElementById("thankYouMsg");
+
+msg.classList.remove("hidden");
+msg.classList.add("showThanks");
+
+setTimeout(()=>{
+  msg.classList.add("hidden");
+},2000);
 
 document.getElementById("ratingBox").classList.add("hidden");
 
