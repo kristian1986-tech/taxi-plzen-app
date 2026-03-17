@@ -844,16 +844,17 @@ const msg = document.getElementById("thankYouMsg");
 msg.classList.remove("hidden");
 msg.classList.add("showThanks");
 
+/* 🔥 așteptăm 2 secunde */
 setTimeout(()=>{
+
+  document.getElementById("ratingBox").classList.add("hidden");
   msg.classList.add("hidden");
+
+  /* ACUM ștergi ride */
+  localStorage.removeItem("activeRideId");
+
 },2000);
-
-document.getElementById("ratingBox").classList.add("hidden");
-
-/* ACUM ștergi ride */
-localStorage.removeItem("activeRideId");
-
-}
+  
 
   </script> 
   
