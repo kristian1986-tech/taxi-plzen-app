@@ -916,6 +916,30 @@ document.getElementById("installBtn").addEventListener("click", async () => {
   }
 
 });
+
+function isAppInstalled() {
+
+  // Android / Chrome
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    return true;
+  }
+
+  // iOS Safari
+  if (window.navigator.standalone === true) {
+    return true;
+  }
+
+  return false;
+}
+
+// 🔥 la load
+window.addEventListener("load", () => {
+
+  if (isAppInstalled()) {
+    document.getElementById("installBtn").style.display = "none";
+  }
+
+});
   
   </script> 
   
