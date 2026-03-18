@@ -649,13 +649,13 @@ const date = new Date(data.receiptDate?.seconds * 1000 || Date.now());
 // HEADER  
 pdf.setFontSize(20);  
 pdf.setFont("helvetica","bold");  
-pdf.text("TAXI PLZEN",105,20,{align:"center"});  
+pdf.text("COBRA PLZEN",105,20,{align:"center"});  
   
 pdf.setFontSize(10);  
 pdf.setFont("helvetica","normal");  
-pdf.text("Taxi sluzba Plzen",105,28,{align:"center"});  
-pdf.text("Telefon: +420 XXX XXX XXX",105,34,{align:"center"});  
-pdf.text("Email: info@taxiplzen.cz",105,40,{align:"center"});  
+pdf.text("COBRA-přeprava osob Plzen",105,28,{align:"center"});  
+pdf.text("Telefon: +420 777 842 870",105,34,{align:"center"});  
+pdf.text("Email: Nicolaecristian100@yahoo.com",105,40,{align:"center"});  
   
 pdf.line(20,45,190,45);  
   
@@ -689,7 +689,7 @@ pdf.line(20,160,190,160);
   
 pdf.setFontSize(9);  
 pdf.setFont("helvetica","normal");  
-pdf.text("Dekuji za vyuziti nasi taxi sluzby.",105,175,{align:"center"});  
+pdf.text("Dekuji za vyuziti nase  sluzby.",105,175,{align:"center"});  
   
 pdf.save("uctenka_"+(data.receiptNumber||"taxi")+".pdf");  
     
