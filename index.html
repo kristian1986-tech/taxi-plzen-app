@@ -504,6 +504,8 @@ generalError.innerText="Nejprve vypočítejte trasu.";
 generalError.classList.remove("hidden");  
 return;  
 }  
+
+const receiptId = "COBRA-" + Date.now();
   
 const docRef = await addDoc(collection(db,"rides"),{  
 pickup:pickupInput.value.trim(),  
@@ -514,7 +516,8 @@ phone,
 distance:calculatedDistance,  
 estimatedPrice:calculatedPrice,  
 eta:calculatedETA,  
-status:"new",  
+status:"new", 
+receiptId: receiptId,
 createdAt:serverTimestamp()  
 });  
   
