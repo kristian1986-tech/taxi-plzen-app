@@ -682,9 +682,7 @@ pdf.text("UCTENKA #"+receiptNumber,105,55,{align:"center"});
 pdf.setFont("helvetica","normal");  
 pdf.setFontSize(11);  
   
-pdf.text("Datum:
-"+date.toLocaleDateString()+" 
-"+date.toLocaleTimeString(),20,78);  
+pdf.text("Datum:"+date.toLocaleDateString()+" "+date.toLocaleTimeString(),20,78);  
   
 pdf.line(20,85,190,85);  
   
