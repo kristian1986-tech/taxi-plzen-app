@@ -291,6 +291,8 @@ let driversMarkers = [];
 let directionsService;  
 let directionsRenderer;  
 let currentDriver = null;  
+let qrGenerated = false;
+let deferredPrompt;
   
 window.initMap = function(){  
     
@@ -869,7 +871,9 @@ setTimeout(()=>{
   
 }
 
+  
 let deferredPrompt;
+let qrGenerated = false;
 
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
@@ -887,21 +891,30 @@ document.getElementById("installBtn").addEventListener("click", async () => {
     const { outcome } = await deferredPrompt.userChoice;
 
     if (outcome === "accepted") {
-      console.log("App installed");
+      console.log("Installed");
     }
 
     deferredPrompt = null;
 
   } else {
 
-    // 🔥 fallback QR
-    document.getElementById("qrBox").classList.remove("hidden");
+    const qrBox = document.getElementById("qrBox");
+    const qrContainer = document.getElementById("qrcode");
 
-    new QRCode(document.getElementById("qrcode"), {
-      text: window.location.href,
-      width: 160,
-      height: 160
-    });
+    qrBox.classList.remove("hidden");
+
+    if (!qrGenerated) {
+
+      qrContainer.innerHTML = "";
+
+      new QRCode(qrContainer, {
+        text: window.location.href,
+        width: 160,
+        height: 160
+      });
+
+      qrGenerated = true;
+    }
 
   }
 
