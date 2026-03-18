@@ -10,8 +10,9 @@
   
 <script src="https://cdn.tailwindcss.com"></script> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>   
-  
-  <style>  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script> 
+
+<style>  
     
 .fade-out { opacity: 0; transition: opacity 0.5s ease; }  
 .fade-in { opacity: 1; transition: opacity 0.5s ease; }  
@@ -140,10 +141,21 @@ class="w-full bg-yellow-500 text-black font-bold py-3 rounded mt-4">
 Objednat jízdu
 </button>
 
+<button id="installBtn" 
+  class="w-full bg-green-600 text-white font-bold py-3 rounded mt-3 hidden">
+📲 Instalovat aplikaci
+</button>
+
+<div id="qrBox" class="hidden mt-4 text-center">
+  <p class="text-sm text-gray-400 mb-2">Naskenujte pro instalaci</p>
+  <div id="qrcode" class="flex justify-center"></div>
+</div>
+
 </div>  <div id="statusSection" class="hidden text-center mt-6">  
 <p class="text-lg">Stav objednávky:</p>  
 <p id="statusText" class="text-2xl font-bold mt-2"></p>  
-<p id="statusMessage" class="mt-4 text-gray-300"></p>  <button id="cancelBtn"  
+<p id="statusMessage" class="mt-4 text-gray-300"></p> 
+  <button id="cancelBtn"  
 class="hidden mt-4 bg-red-600 px-6 py-3 rounded font-bold w-full">
 ❌ Zrušit jízdu
 </button>
@@ -856,6 +868,44 @@ setTimeout(()=>{
 },2000);
   
 }
+
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  document.getElementById("installBtn").classList.remove("hidden");
+});
+
+document.getElementById("installBtn").addEventListener("click", async () => {
+
+  if (deferredPrompt) {
+
+    deferredPrompt.prompt();
+
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === "accepted") {
+      console.log("App installed");
+    }
+
+    deferredPrompt = null;
+
+  } else {
+
+    // 🔥 fallback QR
+    document.getElementById("qrBox").classList.remove("hidden");
+
+    new QRCode(document.getElementById("qrcode"), {
+      text: window.location.href,
+      width: 160,
+      height: 160
+    });
+
+  }
+
+});
   
   </script> 
   
