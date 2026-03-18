@@ -676,12 +676,13 @@ pdf.line(20,45,190,45);
 // TITLE  
 pdf.setFontSize(14);  
 pdf.setFont("helvetica","bold");  
-pdf.text("UCTENKA",105,55,{align:"center"});  
+const receiptNumber = ride.receiptId || ("OLD-" + ride.id.slice(-6));
+pdf.text("UCTENKA #"+receiptNumber,105,55,{align:"center"}); 
   
 pdf.setFont("helvetica","normal");  
 pdf.setFontSize(11);  
   
-pdf.text("Cislo: "+(data.receiptNumber || "-"),20,70);  
+pdf.text("Cislo: "+receiptNumber,20,75); 
 pdf.text("Datum: "+date.toLocaleDateString()+" "+date.toLocaleTimeString(),20,78);  
   
 pdf.line(20,85,190,85);  
