@@ -140,12 +140,16 @@
   </div> 
     
   </div>  <div id="formSection" class="space-y-4">  
-  <input id="pickup" type="text"
+<input id="pickup" 
+  oninput="autoCalculate()"
+  type="text"
     placeholder="Odkud jedete?  (ulice, č., mesto)"
 class="w-full p-3 rounded bg-gray-900 border border-gray-700">
 
 <p id="pickupError" class="text-red-500 text-sm hidden"></p>  
-    <input id="destination" type="text"
+<input id="destination"
+oninput="autoCalculate()"
+ type="text"
       placeholder="Kam jedete?  (ulice, č., mesto)" 
 class="w-full p-3 rounded bg-gray-900 border border-gray-700">
 
@@ -303,6 +307,7 @@ const pricePerKm = 22;
 const basePrice = 50;  
 const minimumPrice = 100;  
   
+let autoCalcTimeout;  
 let calculatedDistance = 0;  
 let calculatedPrice = 0;  
 let calculatedETA = 0;  
@@ -1272,13 +1277,14 @@ async function detectLocation(){
 
       if(data.results && data.results.length > 0){
 
-        const address = data.results[0].formatted_address;
+  const address = data.results[0].formatted_address;
 
-        document.getElementById("pickup").value = address;
+  document.getElementById("pickup").value = address;
+  autoCalculate();
 
-      } else {
-        document.getElementById("pickup").value = lat + ", " + lng;
-      }
+   } else {
+   document.getElementById("pickup").value = lat + ", " + lng;
+ }
 
     }catch(e){
       console.log("Geocode error", e);
@@ -1290,6 +1296,25 @@ async function detectLocation(){
   });
 
 }
+
+
+function autoCalculate(){
+
+  clearTimeout(autoCalcTimeout);
+
+  autoCalcTimeout = setTimeout(() => {
+
+    const pickup = pickupInput.value.trim();
+    const destination = destinationInput.value.trim();
+
+    if(pickup.length > 5 && destination.length > 5){
+      calculateRoute();
+    }
+
+  }, 600); // delay mic (evită spam API)
+
+}
+  
   
 
 setTimeout(() => {
