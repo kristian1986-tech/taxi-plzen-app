@@ -1033,7 +1033,7 @@ rides.sort((a,b)=>{
 rides.forEach(ride=>{
 
   const div = document.createElement("div");
-  div.className="bg-gray-800 p-2 rounded text-sm";
+  div.className="bg-gray-800 p-4 rounded-2xl text-sm shadow-lg border border-gray-700 active:scale-[0.98] transition";
 
 const dateObj = ride.createdAt?.seconds
   ? new Date(ride.createdAt.seconds * 1000)
@@ -1046,27 +1046,47 @@ const formattedDate = dateObj
   
   
   div.innerHTML = `
-  <div class="space-y-1">
+  <div class="space-y-2">
 
-    <p class="font-medium text-white">
-      ${ride.pickup} → ${ride.destination}
-    </p>
+    <!-- ROUTE -->
+    <div class="flex items-center justify-between">
+      <p class="font-medium text-white text-sm">
+        ${ride.pickup} → ${ride.destination}
+      </p>
 
+      <span class="text-[10px] bg-green-600/20 text-green-400 px-2 py-1 rounded-full">
+        ✔ dokončeno
+      </span>
+    </div>
+
+    <!-- DATE -->
     <p class="text-gray-400 text-xs">
       🗓️ ${formattedDate}
     </p>
 
-    <p class="text-sm text-green-400 font-semibold">
+    <!-- PRICE -->
+    <p class="text-green-400 font-bold text-sm">
       💰 ${ride.estimatedPrice || 0} Kč
     </p>
 
-    <button class="mt-2 bg-green-600 px-3 py-2 rounded text-xs w-full font-semibold">
-      📄 Stáhnout účtenku
-    </button>
+    <!-- ACTIONS -->
+    <div class="flex gap-2 mt-2">
+
+      <button class="receiptBtn flex-1 bg-green-600 py-2 rounded-lg text-xs font-semibold active:scale-95 transition">
+        📄 Účtenka
+      </button>
+
+      <button class="repeatBtn flex-1 bg-blue-600 py-2 rounded-lg text-xs font-semibold active:scale-95 transition">
+        🔁 Znovu
+      </button>
+
+    </div>
 
   </div>
 `;
-  
+
+  const receiptBtn = div.querySelector(".receiptBtn");
+const repeatBtn = div.querySelector(".repeatBtn");
 
   // PDF
   const btn = div.querySelector("button");
@@ -1125,6 +1145,22 @@ const formattedDate = dateObj
     pdf.save("uctenka_"+receiptNumber+".pdf");
 
   };
+
+  repeatBtn.onclick = () => {
+
+  document.getElementById("pickup").value = ride.pickup;
+  document.getElementById("destination").value = ride.destination;
+
+  // 🔥 închide panel
+  toggleInfo();
+
+  // 🔥 scroll sus (smooth)
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+};
 
   list.appendChild(div);
 
