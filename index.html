@@ -1037,7 +1037,8 @@ rides.sort((a,b)=>{
 rides.forEach(ride=>{
 
   const div = document.createElement("div");
-  div.className="bg-gray-800 p-4 rounded-2xl text-sm shadow-lg border border-gray-700 active:scale-[0.98] transition";
+
+  div.className="bg-gray-800 p-4 rounded-2xl text-sm shadow-lg border border-gray-700 active:scale-[0.98] transition cursor-pointer";
 
 const dateObj = ride.createdAt?.seconds
   ? new Date(ride.createdAt.seconds * 1000)
@@ -1171,9 +1172,39 @@ const repeatBtn = div.querySelector(".repeatBtn");
   }, 300);
 
 };
+  
 
-  list.appendChild(div);
+ list.appendChild(div);
+  
 
+div.addEventListener("click", (e) => {
+
+  // ❌ NU declanșa dacă apasă pe butoane
+  if(e.target.closest("button")) return;
+
+  // 🔥 autofill
+  document.getElementById("pickup").value = ride.pickup;
+  document.getElementById("destination").value = ride.destination;
+  document.getElementById("phone").value = ride.phone || "";
+
+  toggleInfo();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+  setTimeout(() => {
+    calculateRoute();
+
+    setTimeout(() => {
+      createRide();
+    }, 600);
+
+  }, 300);
+
+});
+  
 });
 
 }
