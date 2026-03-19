@@ -1041,12 +1041,19 @@ window.toggleClientHistory = async function(){
     return;
   }
 
-  const phone = document.getElementById("phoneInput").value.trim();
+  const rideId = localStorage.getItem("activeRideId");
 
-  if(!phone){
-    alert("Zadejte telefon");
+  if(!rideId){
+    alert("Žádná jízda");
     return;
   }
+
+  const rideRef = doc(db,"rides",rideId);
+  const rideSnap = await getDoc(rideRef);
+
+  if(!rideSnap.exists()) return;
+
+  const phone = rideSnap.data().phone;
 
   panel.classList.remove("hidden");
 
