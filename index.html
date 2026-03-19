@@ -995,6 +995,64 @@ document.getElementById("installClose").addEventListener("click", () => {
   document.getElementById("installPopup").classList.add("hidden");
 });
   
+
+async function loadClientHistory(phone){
+
+  const q = query(
+    collection(db,"rides"),
+    where("phone","==",phone)
+  );
+
+  const snap = await getDocs(q);
+
+  const list = document.getElementById("clientHistoryPanel");
+  list.innerHTML = "";
+
+  if(snap.empty){
+    list.innerHTML = "<p class='text-gray-400'>Žádné jízdy</p>";
+    return;
+  }
+
+  snap.forEach(docSnap=>{
+    const ride = docSnap.data();
+
+    const div = document.createElement("div");
+    div.className="bg-gray-800 p-2 rounded text-sm";
+
+    div.innerHTML = `
+      <p><strong>${ride.pickup}</strong> → ${ride.destination}</p>
+      <p>${ride.estimatedPrice || 0} Kč</p>
+    `;
+
+    list.appendChild(div);
+  });
+
+}
+  
+  
+window.toggleClientHistory = async function(){
+
+  const panel = document.getElementById("clientHistoryPanel");
+
+  const isVisible = !panel.classList.contains("hidden");
+
+  if(isVisible){
+    panel.classList.add("hidden");
+    return;
+  }
+
+  const phone = document.getElementById("phoneInput").value.trim();
+
+  if(!phone){
+    alert("Zadejte telefon");
+    return;
+  }
+
+  panel.classList.remove("hidden");
+
+  loadClientHistory(phone);
+}
+
   
   </script> 
 
@@ -1038,6 +1096,15 @@ class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end justify-
      +420 777 842 870  
   </a>  
 </div>  
+
+<hr class="border-gray-600 my-3">
+
+<button onclick="toggleClientHistory()" 
+class="w-full bg-gray-700 py-2 rounded text-sm">
+📄 Historie jízd
+</button>
+
+<div id="clientHistoryPanel" class="hidden mt-3 space-y-2 max-h-60 overflow-y-auto"></div>
 
 <p class="text-xs text-gray-600 pt-4">  
   Služba přepravy osob dle zákona č. 111/1994 Sb.  
