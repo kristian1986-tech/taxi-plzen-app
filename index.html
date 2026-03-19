@@ -1260,17 +1260,10 @@ async function detectLocation(){
 
   if(!navigator.geolocation) return;
 
-  navigator.geolocation.getCurrentPosition(async (position)=>{
+  // 🔥 arată instant text
+  pickupInput.value = "📍 Zjišťuji polohu...";
 
-}, (error)=>{
-  pickupInput.value = "Nepodařilo se zjistit polohu";
-}, {
-  enableHighAccuracy: true,
-  timeout: 5000,
-  maximumAge: 0
-});
-  
- pickupInput.value = "📍 Zjišťuji polohu...";
+  navigator.geolocation.getCurrentPosition(async (position)=>{
 
     const lat = position.coords.latitude;
     const lng = position.coords.longitude;
@@ -1278,35 +1271,41 @@ async function detectLocation(){
     try{
 
       const res = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCp4Rx2gO_4a8uTsBMP9JBrWQ_dge41wGg`
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=KEY_TAU_GEOCODING`
       );
 
       const data = await res.json();
 
-      console.log("Geocode:", data);
-
       if(data.results && data.results.length > 0){
 
-  const address = data.results[0].formatted_address;
+        const address = data.results[0].formatted_address;
 
-  pickupInput.value = address;
-autoCalculate();
+        pickupInput.value = address;
 
-   } else {
-   document.getElementById("pickup").value = lat + ", " + lng;
- }
+      } else {
+
+        pickupInput.value = lat + ", " + lng;
+
+      }
 
     }catch(e){
-      console.log("Geocode error", e);
 
-      // fallback
-      document.getElementById("pickup").value = lat + ", " + lng;
+      pickupInput.value = lat + ", " + lng;
+
     }
 
+  }, (error)=>{
+
+    pickupInput.value = "Nepodařilo se zjistit polohu";
+
+  }, {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
   });
 
 }
-
+  
 
 function autoCalculate(){
 
