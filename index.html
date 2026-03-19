@@ -1246,40 +1246,29 @@ window.toggleClientHistory = async function(){
 }
 
 
-async function detectLocation(){
+function detectLocation(){
 
   if(!navigator.geolocation){
+    alert("Nu exista geolocation");
     return;
   }
 
-  navigator.geolocation.getCurrentPosition(async (position)=>{
+  navigator.geolocation.getCurrentPosition(
+    (position)=>{
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
 
-    const lat = position.coords.latitude;
-    const lng = position.coords.longitude;
+      alert("GPS OK: " + lat + ", " + lng);
 
-    try{
-
-      const res = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`
-      );
-
-      const data = await res.json();
-
-      if(data.results && data.results.length > 0){
-        const address = data.results[0].formatted_address;
-
-        document.getElementById("pickup").value = address;
-      }
-
-    }catch(e){
-      console.log("GPS error", e);
+      document.getElementById("pickup").value = lat + ", " + lng;
+    },
+    (error)=>{
+      alert("Eroare locatie: " + error.message);
     }
-
-  }, (err)=>{
-    console.log("Location denied");
-  });
+  );
 
 }
+  
 
 setTimeout(() => {
   detectLocation();
