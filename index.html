@@ -1238,15 +1238,21 @@ window.toggleClientHistory = async function(){
   </script> 
 
   
-  <!-- INFO BUTTON -->  <button onclick="toggleInfo()"   
-class="fixed bottom-6 right-6 w-12 h-12   
-bg-white/10 backdrop-blur-md border border-white/20   
-rounded-full text-white text-xl   
-shadow-xl hover:bg-white/20 transition z-50">
-i
-</button>
+  <!-- INFO BUTTON -->  
+  
+  <button onclick="toggleInfo()"   
+class="fixed bottom-6 right-6 w-14 h-14   
+bg-lime-500 text-black text-xl font-bold  
+rounded-full shadow-2xl  
+flex items-center justify-center  
+hover:scale-110 active:scale-95 transition z-50">
+ℹ️
+  </button>
+  
 
-  <!-- INFO PANEL -->  <div id="infoPanel"   
+  <!-- INFO PANEL -->  
+  
+  <div id="infoPanel"   
 class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end justify-center z-40">    <div class="w-full max-w-md bg-gray-900 rounded-t-3xl p-6 text-center space-y-4 animate-slideUp">  <div class="w-12 h-1 bg-gray-600 rounded-full mx-auto mb-4"></div>  
 
 <p class="text-sm text-gray-400 tracking-wide">  
