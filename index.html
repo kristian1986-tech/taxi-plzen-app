@@ -1146,19 +1146,25 @@ const repeatBtn = div.querySelector(".repeatBtn");
 
   };
 
-  repeatBtn.onclick = () => {
+  repeatBtn.onclick = async () => {
 
   document.getElementById("pickup").value = ride.pickup;
   document.getElementById("destination").value = ride.destination;
 
-  // 🔥 închide panel
+  // 🔥 telefon
+  document.getElementById("phone").value = ride.phone || "";
+
   toggleInfo();
 
-  // 🔥 scroll sus (smooth)
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
+
+  // 🔥 mic delay ca să se actualizeze inputurile
+  setTimeout(() => {
+    calculateRoute();
+  }, 300);
 
 };
 
