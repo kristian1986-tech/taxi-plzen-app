@@ -1262,6 +1262,16 @@ async function detectLocation(){
 
   navigator.geolocation.getCurrentPosition(async (position)=>{
 
+}, (error)=>{
+  pickupInput.value = "Nepodařilo se zjistit polohu";
+}, {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+});
+  
+ pickupInput.value = "📍 Zjišťuji polohu...";
+
     const lat = position.coords.latitude;
     const lng = position.coords.longitude;
 
