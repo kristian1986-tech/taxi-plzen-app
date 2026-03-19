@@ -1279,8 +1279,8 @@ async function detectLocation(){
 
   const address = data.results[0].formatted_address;
 
-  document.getElementById("pickup").value = address;
-  autoCalculate();
+  pickupInput.value = address;
+autoCalculate();
 
    } else {
    document.getElementById("pickup").value = lat + ", " + lng;
@@ -1307,11 +1307,16 @@ function autoCalculate(){
     const pickup = pickupInput.value.trim();
     const destination = destinationInput.value.trim();
 
+    // 🔥 trebuie ambele completate
     if(pickup.length > 5 && destination.length > 5){
+
+      console.log("AUTO CALCULATE TRIGGERED");
+
       calculateRoute();
+
     }
 
-  }, 600); // delay mic (evită spam API)
+  }, 700);
 
 }
   
@@ -1320,8 +1325,12 @@ function autoCalculate(){
 setTimeout(() => {
   detectLocation();
 }, 2000);
+
+destinationInput.addEventListener("change", autoCalculate);
   
-  </script> 
+  
+
+</script> 
 
   
   <!-- INFO BUTTON -->  
