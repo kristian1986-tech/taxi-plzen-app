@@ -520,7 +520,7 @@ status:"new",
 receiptId: receiptId,
 createdAt:serverTimestamp()  
 });  
-localStorage.setItem("clientPhone", phone);  
+localStorage.setItem("clientPhone", phoneInput.value.trim());  
   
 localStorage.setItem("activeRideId",docRef.id);  
 await requestPushPermission(docRef.id);  
@@ -804,7 +804,11 @@ document.getElementById("infoPanel").addEventListener("click", function(e){
   // SPLASH AUTO HIDE  
 window.addEventListener("load", () => {  
     
-  
+const savedPhone = localStorage.getItem("clientPhone");
+if(savedPhone){
+  document.getElementById("phone").value = savedPhone;
+}
+
   const splash = document.getElementById("splashScreen");  
   
   setTimeout(() => {  
