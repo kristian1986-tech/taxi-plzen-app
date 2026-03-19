@@ -1015,83 +1015,95 @@ async function loadClientHistory(phone){
     return;
   }
 
-  snap.forEach(docSnap=>{
-    const ride = docSnap.data();
+const rides = [];
 
-    const div = document.createElement("div");
-    div.className="bg-gray-800 p-2 rounded text-sm";
-
-    div.innerHTML = `
-  <p><strong>${ride.pickup}</strong> → ${ride.destination}</p>
-  <p>${ride.estimatedPrice || 0} Kč</p>
-  <button class="mt-2 bg-green-600 px-3 py-1 rounded text-xs w-full">
-    📄 Stáhnout účtenku
-  </button>
-`;
-  
-const btn = div.querySelector("button");
-
-btn.onclick = () => {
-
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF();
-
-  const date = ride.createdAt?.seconds
-    ? new Date(ride.createdAt.seconds * 1000)
-    : new Date();
-
-  const receiptNumber = ride.receiptId || ("OLD-" + docSnap.id.slice(-6));
-
-  // HEADER
-  pdf.setFontSize(20);
-  pdf.setFont("helvetica","bold");
-  pdf.text("COBRA",105,20,{align:"center"});
-
-  pdf.setFontSize(10);
-  pdf.setFont("helvetica","normal");
-  pdf.text("preprava osob Plzen",105,28,{align:"center"});
-  pdf.text("Telefon: +420 777 842 870",105,34,{align:"center"});
-  pdf.text("Email: Nicolaecristian100@yahoo.com",105,40,{align:"center"});
-
-  pdf.line(20,45,190,45);
-
-  // TITLE
-  pdf.setFontSize(14);
-  pdf.setFont("helvetica","bold");
-  pdf.text("UCTENKA #"+receiptNumber,105,55,{align:"center"});
-
-  pdf.setFont("helvetica","normal");
-  pdf.setFontSize(11);
-
-  pdf.text("Datum: "+date.toLocaleDateString()+" "+date.toLocaleTimeString(),20,75);
-
-  pdf.line(20,85,190,85);
-
-  // DATA
-  pdf.text("Odkud: "+ride.pickup,20,100);
-  pdf.text("Kam: "+ride.destination,20,110);
-  pdf.text("Telefon: "+(ride.phone || "-"),20,120);
-
-  pdf.line(20,130,190,130);
-
-  // TOTAL
-  pdf.setFontSize(14);
-  pdf.setFont("helvetica","bold");
-  pdf.text("Celkem:",20,150);
-  pdf.text((ride.estimatedPrice || 0)+" KC",150,150);
-
-  pdf.line(20,160,190,160);
-
-  pdf.setFontSize(9);
-  pdf.setFont("helvetica","normal");
-  pdf.text("Dekuji za vyuziti nase sluzby.",105,175,{align:"center"});
-
-  pdf.save("uctenka_"+receiptNumber+".pdf");
-
-};
-  
-    list.appendChild(div);
+snap.forEach(docSnap=>{
+  rides.push({
+    id: docSnap.id,
+    ...docSnap.data()
   });
+});
+
+// 🔥 SORTARE (cele mai noi sus)
+rides.sort((a,b)=>{
+  return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+});
+
+// 🔥 afișare
+rides.forEach(ride=>{
+
+  const div = document.createElement("div");
+  div.className="bg-gray-800 p-2 rounded text-sm";
+
+  div.innerHTML = `
+    <p><strong>${ride.pickup}</strong> → ${ride.destination}</p>
+    <p>${ride.estimatedPrice || 0} Kč</p>
+    <button class="mt-2 bg-green-600 px-3 py-1 rounded text-xs w-full">
+      📄 Stáhnout účtenku
+    </button>
+  `;
+
+  // PDF
+  const btn = div.querySelector("button");
+
+  btn.onclick = () => {
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+
+    const date = ride.createdAt?.seconds
+      ? new Date(ride.createdAt.seconds * 1000)
+      : new Date();
+
+    const receiptNumber = ride.receiptId || ("OLD-" + ride.id.slice(-6));
+
+    pdf.setFontSize(20);
+    pdf.setFont("helvetica","bold");
+    pdf.text("COBRA",105,20,{align:"center"});
+
+    pdf.setFontSize(10);
+    pdf.setFont("helvetica","normal");
+    pdf.text("preprava osob Plzen",105,28,{align:"center"});
+    pdf.text("Telefon: +420 777 842 870",105,34,{align:"center"});
+    pdf.text("Email: Nicolaecristian100@yahoo.com",105,40,{align:"center"});
+
+    pdf.line(20,45,190,45);
+
+    pdf.setFontSize(14);
+    pdf.setFont("helvetica","bold");
+    pdf.text("UCTENKA #"+receiptNumber,105,55,{align:"center"});
+
+    pdf.setFont("helvetica","normal");
+    pdf.setFontSize(11);
+
+    pdf.text("Datum: "+date.toLocaleString("cs-CZ"),20,75);
+
+    pdf.line(20,85,190,85);
+
+    pdf.text("Odkud: "+ride.pickup,20,100);
+    pdf.text("Kam: "+ride.destination,20,110);
+    pdf.text("Telefon: "+(ride.phone || "-"),20,120);
+
+    pdf.line(20,130,190,130);
+
+    pdf.setFontSize(14);
+    pdf.setFont("helvetica","bold");
+    pdf.text("Celkem:",20,150);
+    pdf.text((ride.estimatedPrice || 0)+" KC",150,150);
+
+    pdf.line(20,160,190,160);
+
+    pdf.setFontSize(9);
+    pdf.setFont("helvetica","normal");
+    pdf.text("Dekuji za vyuziti nase sluzby.",105,175,{align:"center"});
+
+    pdf.save("uctenka_"+receiptNumber+".pdf");
+
+  };
+
+  list.appendChild(div);
+
+});
 
 }
   
