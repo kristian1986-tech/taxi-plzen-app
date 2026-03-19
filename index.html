@@ -77,6 +77,16 @@
 .animate-fadeIn {
   animation: fadeIn 0.3s ease;
 }
+
+@keyframes pulseSoft {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+.pulse-btn {
+  animation: pulseSoft 1.8s infinite;
+}
   
 </style>  
 
@@ -1245,7 +1255,7 @@ class="fixed bottom-6 right-6 w-14 h-14
 bg-lime-500 text-black text-xl font-bold  
 rounded-full shadow-2xl  
 flex items-center justify-center  
-hover:scale-110 active:scale-95 transition z-50">
+hover:scale-110 active:scale-95 transition z-50 pulse-btn">
 ℹ️
   </button>
   
