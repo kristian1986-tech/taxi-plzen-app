@@ -962,8 +962,6 @@ function isAppInstalled() {
 
 // 🔥 la load
 window.addEventListener("load", () => {
-
-detectLocation();
   
 if (isAppInstalled()) {
 document.getElementById("installBtn").style.display = "none";
@@ -1282,7 +1280,10 @@ async function detectLocation(){
   });
 
 }
-  
+
+setTimeout(() => {
+  detectLocation();
+}, 2000);
   
   </script> 
 
