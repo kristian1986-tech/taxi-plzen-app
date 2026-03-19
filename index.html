@@ -1246,26 +1246,43 @@ window.toggleClientHistory = async function(){
 }
 
 
-function detectLocation(){
+async function detectLocation(){
 
-  if(!navigator.geolocation){
-    alert("Nu exista geolocation");
-    return;
-  }
+  if(!navigator.geolocation) return;
 
-  navigator.geolocation.getCurrentPosition(
-    (position)=>{
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
+  navigator.geolocation.getCurrentPosition(async (position)=>{
 
-      alert("GPS OK: " + lat + ", " + lng);
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
 
+    try{
+
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`
+      );
+
+      const data = await res.json();
+
+      console.log("Geocode:", data);
+
+      if(data.results && data.results.length > 0){
+
+        const address = data.results[0].formatted_address;
+
+        document.getElementById("pickup").value = address;
+
+      } else {
+        document.getElementById("pickup").value = lat + ", " + lng;
+      }
+
+    }catch(e){
+      console.log("Geocode error", e);
+
+      // fallback
       document.getElementById("pickup").value = lat + ", " + lng;
-    },
-    (error)=>{
-      alert("Eroare locatie: " + error.message);
     }
-  );
+
+  });
 
 }
   
