@@ -1035,13 +1035,38 @@ rides.forEach(ride=>{
   const div = document.createElement("div");
   div.className="bg-gray-800 p-2 rounded text-sm";
 
+const dateObj = ride.createdAt?.seconds
+  ? new Date(ride.createdAt.seconds * 1000)
+  : null;
+
+const formattedDate = dateObj
+  ? dateObj.toLocaleDateString("cs-CZ") + " • " +
+    dateObj.toLocaleTimeString("cs-CZ",{hour:"2-digit",minute:"2-digit"})
+  : "-";
+  
+  
   div.innerHTML = `
-    <p><strong>${ride.pickup}</strong> → ${ride.destination}</p>
-    <p>${ride.estimatedPrice || 0} Kč</p>
-    <button class="mt-2 bg-green-600 px-3 py-1 rounded text-xs w-full">
+  <div class="space-y-1">
+
+    <p class="font-medium text-white">
+      ${ride.pickup} → ${ride.destination}
+    </p>
+
+    <p class="text-gray-400 text-xs">
+      🗓️ ${formattedDate}
+    </p>
+
+    <p class="text-sm text-green-400 font-semibold">
+      💰 ${ride.estimatedPrice || 0} Kč
+    </p>
+
+    <button class="mt-2 bg-green-600 px-3 py-2 rounded text-xs w-full font-semibold">
       📄 Stáhnout účtenku
     </button>
-  `;
+
+  </div>
+`;
+  
 
   // PDF
   const btn = div.querySelector("button");
