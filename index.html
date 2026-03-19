@@ -848,9 +848,10 @@ document.head.appendChild(script);
   
 window.addEventListener("load", loadGoogleMaps);  
   
-if ("serviceWorker" in navigator) {
-navigator.serviceWorker.register("/sw.js");
-}
+// DISABLED TEMP
+// if ("serviceWorker" in navigator) {
+//   navigator.serviceWorker.register("/sw.js");
+// }
 
 window.rateRide = async function(stars){
 
