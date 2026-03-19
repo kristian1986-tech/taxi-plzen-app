@@ -520,7 +520,7 @@ status:"new",
 receiptId: receiptId,
 createdAt:serverTimestamp()  
 });  
-  
+localStorage.setItem("clientPhone", phone);  
   
 localStorage.setItem("activeRideId",docRef.id);  
 await requestPushPermission(docRef.id);  
@@ -1041,19 +1041,13 @@ window.toggleClientHistory = async function(){
     return;
   }
 
-  const rideId = localStorage.getItem("activeRideId");
+  // 🔥 luăm telefon din localStorage
+  const phone = localStorage.getItem("clientPhone");
 
-  if(!rideId){
-    alert("Žádná jízda");
+  if(!phone){
+    alert("Zadejte telefon nejprve");
     return;
   }
-
-  const rideRef = doc(db,"rides",rideId);
-  const rideSnap = await getDoc(rideRef);
-
-  if(!rideSnap.exists()) return;
-
-  const phone = rideSnap.data().phone;
 
   panel.classList.remove("hidden");
 
