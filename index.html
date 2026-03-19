@@ -963,9 +963,12 @@ function isAppInstalled() {
 // 🔥 la load
 window.addEventListener("load", () => {
 
-  if (isAppInstalled()) {
-    document.getElementById("installBtn").style.display = "none";
+detectLocation();
+  
+if (isAppInstalled()) {
+document.getElementById("installBtn").style.display = "none";
   }
+
 
 });
 
@@ -1244,6 +1247,42 @@ window.toggleClientHistory = async function(){
   loadClientHistory(phone);
 }
 
+
+async function detectLocation(){
+
+  if(!navigator.geolocation){
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(async (position)=>{
+
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
+
+    try{
+
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`
+      );
+
+      const data = await res.json();
+
+      if(data.results && data.results.length > 0){
+        const address = data.results[0].formatted_address;
+
+        document.getElementById("pickup").value = address;
+      }
+
+    }catch(e){
+      console.log("GPS error", e);
+    }
+
+  }, (err)=>{
+    console.log("Location denied");
+  });
+
+}
+  
   
   </script> 
 
