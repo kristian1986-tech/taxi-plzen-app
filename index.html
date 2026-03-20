@@ -5,6 +5,11 @@
 .fade-in { opacity: 1; transition: opacity 0.5s ease; }
 
 /* 🔥 SLIDE UP ANIMATION */
+
+.loading {
+  animation: pulseSoft 1.2s infinite;
+}
+  
 @keyframes slideUp {
 from { transform: translateY(100%); }
 to { transform: translateY(0); }
@@ -1249,7 +1254,7 @@ const pickup = pickupInput.value.trim();
 const destination = destinationInput.value.trim();
 
 // 🔥 resetăm prețul dacă user modifică
-priceEstimate.innerText = "Počítám...";
+priceEstimate.innerHTML = "⏳ Počítám cenu...";
 
 if(pickup.length > 5 && destination.length > 5){
 calculateRoute();
