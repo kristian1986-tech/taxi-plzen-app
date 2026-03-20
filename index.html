@@ -827,10 +827,8 @@ this.classList.add("hidden");
 window.addEventListener("load", () => {
 
 const savedPhone = localStorage.getItem("clientPhone");
-if(savedPhone && !sessionStorage.getItem("welcomed")){
+if(savedPhone){
 document.getElementById("phone").value = savedPhone;
-alert("Vítejte zpět 👋");
-sessionStorage.setItem("welcomed","1");
 }
 
 const splash = document.getElementById("splashScreen");
