@@ -1355,10 +1355,14 @@ window.setHome = function(){
 const saved = localStorage.getItem("homeAddress");
 
 if(saved){
+
+const change = confirm("Použít uloženou adresu?\n\nOK = použít\nZrušit = změnit");
+
+if(change){
 document.getElementById("destination").value = saved;
 autoCalculate();
 } else {
-const addr = prompt("Zadejte adresu domů:");
+const addr = prompt("Zadejte novou adresu domů:");
 if(addr){
 localStorage.setItem("homeAddress", addr);
 document.getElementById("destination").value = addr;
@@ -1366,17 +1370,32 @@ autoCalculate();
 }
 }
 
+} else {
+
+const addr = prompt("Zadejte adresu domů:");
+if(addr){
+localStorage.setItem("homeAddress", addr);
+document.getElementById("destination").value = addr;
+autoCalculate();
 }
+
+}
+}
+
 
 window.setWork = function(){
 
 const saved = localStorage.getItem("workAddress");
 
 if(saved){
+
+const change = confirm("Použít uloženou adresu?\n\nOK = použít\nZrušit = změnit");
+
+if(change){
 document.getElementById("destination").value = saved;
 autoCalculate();
 } else {
-const addr = prompt("Zadejte adresu práce:");
+const addr = prompt("Zadejte novou adresu práce:");
 if(addr){
 localStorage.setItem("workAddress", addr);
 document.getElementById("destination").value = addr;
@@ -1384,9 +1403,21 @@ autoCalculate();
 }
 }
 
+} else {
+
+const addr = prompt("Zadejte adresu práce:");
+if(addr){
+localStorage.setItem("workAddress", addr);
+document.getElementById("destination").value = addr;
+autoCalculate();
+}
+
+}
 }
    
+   
 </script>  
+  
   
   <!-- INFO BUTTON --> 
   
