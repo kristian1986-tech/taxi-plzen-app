@@ -165,6 +165,19 @@ oninput="autoCalculate()"
  type="text"    
  placeholder="Kam jedete?  (ulice, č., mesto)"  
 class="w-full p-4 rounded-2xl bg-gray-900/80 border border-gray-700 focus:border-lime-400 focus:ring-2 focus:ring-lime-400/30 outline-none transition text-white placeholder-gray-400">
+
+<div class="flex gap-2 mt-2">
+<button onclick="setHome()" 
+    class="flex-1 bg-gray-700 py-2 rounded-xl text-sm active:scale-95 transition">
+    🏠 Domů
+  </button>
+
+  <button onclick="setWork()" 
+    class="flex-1 bg-gray-700 py-2 rounded-xl text-sm active:scale-95 transition">
+    💼 Práce
+  </button>
+</div>
+
 <p id="destinationError" class="text-red-500 text-sm hidden"></p>      
   
   <div class="flex items-center gap-2">
@@ -1333,6 +1346,43 @@ detectLocation();
 
 destinationInput.addEventListener("change", autoCalculate);
 
+
+window.setHome = function(){
+
+const saved = localStorage.getItem("homeAddress");
+
+if(saved){
+document.getElementById("destination").value = saved;
+autoCalculate();
+} else {
+const addr = prompt("Zadejte adresu domů:");
+if(addr){
+localStorage.setItem("homeAddress", addr);
+document.getElementById("destination").value = addr;
+autoCalculate();
+}
+}
+
+}
+
+window.setWork = function(){
+
+const saved = localStorage.getItem("workAddress");
+
+if(saved){
+document.getElementById("destination").value = saved;
+autoCalculate();
+} else {
+const addr = prompt("Zadejte adresu práce:");
+if(addr){
+localStorage.setItem("workAddress", addr);
+document.getElementById("destination").value = addr;
+autoCalculate();
+}
+}
+
+}
+   
 </script>  
   
   <!-- INFO BUTTON --> 
