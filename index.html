@@ -1446,37 +1446,54 @@ actionUse();
 
 
 function useHome(){
+
 const saved = localStorage.getItem("homeAddress");
+
 if(saved){
 destinationInput.value = saved;
 autoCalculate();
+} else {
+editHome(); // 🔥 dacă nu există → deschide edit
 }
+
 }
 
 function editHome(){
+
 const addr = prompt("Zadejte adresu domů:");
+
 if(addr){
 localStorage.setItem("homeAddress", addr);
 destinationInput.value = addr;
 autoCalculate();
 }
+
 }
 
+
 function useWork(){
+
 const saved = localStorage.getItem("workAddress");
+
 if(saved){
 destinationInput.value = saved;
 autoCalculate();
+} else {
+editWork(); // 🔥 dacă nu există → deschide edit
 }
+
 }
 
 function editWork(){
+
 const addr = prompt("Zadejte adresu práce:");
+
 if(addr){
 localStorage.setItem("workAddress", addr);
 destinationInput.value = addr;
 autoCalculate();
 }
+
 }
 
    
