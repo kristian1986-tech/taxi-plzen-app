@@ -579,7 +579,11 @@ if(driverSnap.exists()){
 const driver = driverSnap.data();
 currentDriver = driver;
 
-statusMessage.innerHTML =   Řidič: ${driver.name}<br>   Auto: ${driver.car}<br>   SPZ: ${driver.plate}<br>  ;
+statusMessage.innerHTML = `
+Řidič: ${driver.name}<br>
+Auto: ${driver.car}<br>
+SPZ: ${driver.plate}<br>
+`;
 
 callBtn.classList.remove("hidden");
 callBtn.onclick = ()=> window.location.href="tel:"+driver.phone;
