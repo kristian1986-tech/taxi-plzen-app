@@ -165,8 +165,9 @@ oninput="autoCalculate()"
  type="text"    
  placeholder="Kam jedete?  (ulice, č., mesto)"  
 class="w-full p-4 rounded-2xl bg-gray-900/80 border border-gray-700 focus:border-lime-400 focus:ring-2 focus:ring-lime-400/30 outline-none transition text-white placeholder-gray-400">
-
-<div class="flex gap-2 mt-2">
+<p id="destinationError" class="text-red-500 text-sm hidden"></p>      
+ 
+    <div class="flex gap-2 mt-2">
 <button onclick="setHome()" 
     class="flex-1 bg-gray-700 py-2 rounded-xl text-sm active:scale-95 transition">
     🏠 Domů
@@ -176,10 +177,7 @@ class="w-full p-4 rounded-2xl bg-gray-900/80 border border-gray-700 focus:border
     class="flex-1 bg-gray-700 py-2 rounded-xl text-sm active:scale-95 transition">
     💼 Práce
   </button>
-</div>
-
-<p id="destinationError" class="text-red-500 text-sm hidden"></p>      
-  
+  </div>
   <div class="flex items-center gap-2">
 <input id="phone"
     type="tel"
@@ -255,6 +253,7 @@ import { getFirestore, collection, addDoc, serverTimestamp, doc, onSnapshot, que
 import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";  /* ELEMENTS */
 const pickupInput = document.getElementById("pickup");
 const destinationInput = document.getElementById("destination");
+console.log(pickupInput, destinationInput);
 const phoneInput = document.getElementById("phone");
 pickupInput.addEventListener("input", autoCalculate);
 destinationInput.addEventListener("input", autoCalculate);
@@ -1344,7 +1343,9 @@ setTimeout(() => {
 detectLocation();
 }, 2000);
 
+if(destinationInput){
 destinationInput.addEventListener("change", autoCalculate);
+}
 
 
 window.setHome = function(){
