@@ -168,15 +168,24 @@ class="w-full p-4 rounded-2xl bg-gray-900/80 border border-gray-700 focus:border
 <p id="destinationError" class="text-red-500 text-sm hidden"></p>      
  
     <div class="flex gap-2 mt-2">
-<button onclick="setHome()" 
-    class="flex-1 bg-gray-700 py-2 rounded-xl text-sm active:scale-95 transition">
-    🏠 Domů
-  </button>
+<button 
+onmousedown="handlePress(useHome, editHome)"
+onmouseup="cancelPress(useHome)"
+ontouchstart="handlePress(useHome, editHome)"
+ontouchend="cancelPress(useHome)"
+class="flex-1 bg-gray-700 py-2 rounded-xl text-sm active:scale-95 transition">
+🏠 Domů
+</button>
 
-  <button onclick="setWork()" 
-    class="flex-1 bg-gray-700 py-2 rounded-xl text-sm active:scale-95 transition">
-    💼 Práce
-  </button>
+<button 
+onmousedown="handlePress(useWork, editWork)"
+onmouseup="cancelPress(useWork)"
+ontouchstart="handlePress(useWork, editWork)"
+ontouchend="cancelPress(useWork)"
+class="flex-1 bg-gray-700 py-2 rounded-xl text-sm active:scale-95 transition">
+💼 Práce
+</button>
+
   </div>
   <div class="flex items-center gap-2">
 <input id="phone"
@@ -1414,7 +1423,62 @@ autoCalculate();
 
 }
 }
-   
+
+
+let pressTimer;
+
+function handlePress(actionUse, actionEdit){
+
+clearTimeout(pressTimer);
+
+pressTimer = setTimeout(() => {
+actionEdit();
+}, 800); // 0.8 sec = edit
+
+}
+
+function cancelPress(actionUse){
+
+clearTimeout(pressTimer);
+actionUse();
+
+}
+
+
+function useHome(){
+const saved = localStorage.getItem("homeAddress");
+if(saved){
+destinationInput.value = saved;
+autoCalculate();
+}
+}
+
+function editHome(){
+const addr = prompt("Zadejte adresu domů:");
+if(addr){
+localStorage.setItem("homeAddress", addr);
+destinationInput.value = addr;
+autoCalculate();
+}
+}
+
+function useWork(){
+const saved = localStorage.getItem("workAddress");
+if(saved){
+destinationInput.value = saved;
+autoCalculate();
+}
+}
+
+function editWork(){
+const addr = prompt("Zadejte adresu práce:");
+if(addr){
+localStorage.setItem("workAddress", addr);
+destinationInput.value = addr;
+autoCalculate();
+}
+}
+
    
 </script>  
   
