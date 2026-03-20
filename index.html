@@ -99,7 +99,20 @@ animation: fadeIn 0.3s ease;
 animation: pulseSoft 1.8s infinite;
 }
 
-</style>    </head>   <body class="bg-gray-900 text-white min-h-screen">
+#welcomeMsg {
+opacity: 0;
+transition: opacity 0.4s ease;
+}
+
+#welcomeMsg.show {
+opacity: 1;
+}
+
+</style>   
+  
+</head>  
+
+<body class="bg-gray-900 text-white min-h-screen">
 
     <!-- SPLASH SCREEN -->  
   
@@ -835,10 +848,17 @@ if(savedPhone){
 document.getElementById("phone").value = savedPhone;
 
 const msg = document.getElementById("welcomeMsg");
+
 msg.classList.remove("hidden");
+msg.classList.add("show");
+
+setTimeout(()=>{
+msg.classList.remove("show");
 
 setTimeout(()=>{
 msg.classList.add("hidden");
+},400);
+
 },4000);
 }
 
