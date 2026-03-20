@@ -168,8 +168,6 @@ import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.7.
 const pickupInput = document.getElementById("pickup");
 const destinationInput = document.getElementById("destination");
 const phoneInput = document.getElementById("phone");
-pickupInput.addEventListener("input", autoCalculate);
-destinationInput.addEventListener("input", autoCalculate);
 
 const pickupError = document.getElementById("pickupError");
 const destinationError = document.getElementById("destinationError");
@@ -430,12 +428,6 @@ resetErrors();
 
 if(calculatedPrice===0){
 generalError.innerText="Nejprve vypočítejte cenu.";
-generalError.classList.remove("hidden");
-return;
-}
-
-if(!pickupInput.value || !destinationInput.value){
-generalError.innerText = "Nejprve vypočítejte trasu.";
 generalError.classList.remove("hidden");
 return;
 }
@@ -717,7 +709,6 @@ arrivalPlayed=false;
 }
 
 function showArrivalAlert(){
-
 arrivalOverlay.classList.remove("hidden");
 const audio=new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
 audio.play().catch(()=>{});
@@ -738,7 +729,6 @@ listenToStatus(savedRide);
 }
 
 window.toggleInfo = function(){
-
 const panel = document.getElementById("infoPanel");
 const sheet = panel.querySelector("div");
 
@@ -1243,11 +1233,13 @@ autoCalcTimeout = setTimeout(() => {
 const pickup = pickupInput.value.trim();  
 const destination = destinationInput.value.trim();  
 
-// 🔥 resetăm prețul dacă user modifică  
-priceEstimate.innerText = "Počítám...";  
-
+// 🔥 trebuie ambele completate  
 if(pickup.length > 5 && destination.length > 5){  
+
+  console.log("AUTO CALCULATE TRIGGERED");  
+
   calculateRoute();  
+
 }
 
 }, 700);
@@ -1319,10 +1311,4 @@ Zavřít
   </button>  
 </div>
 
- </div>
-  
-</div>
-  
-</body>
-  
-</html>
+  </div>  </div>  </body>    </html>    
