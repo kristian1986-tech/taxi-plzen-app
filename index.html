@@ -495,6 +495,12 @@ generalError.innerText="Nejprve vypočítejte cenu.";
 generalError.classList.remove("hidden");  
 return;  
 }  
+
+if(!pickupInput.value || !destinationInput.value){
+  generalError.innerText = "Nejprve vypočítejte trasu.";
+  generalError.classList.remove("hidden");
+  return;
+}
   
 let phone = phoneInput.value.trim().replace(/\s+/g,"");  
 const phoneRegex=/^\+?[0-9]{8,15}$/;  
@@ -780,6 +786,7 @@ arrivalPlayed=false;
 }  
   
 function showArrivalAlert(){  
+  
 arrivalOverlay.classList.remove("hidden");  
 const audio=new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");  
 audio.play().catch(()=>{});  
@@ -800,6 +807,7 @@ listenToStatus(savedRide);
 }  
     
 window.toggleInfo = function(){  
+  
   const panel = document.getElementById("infoPanel");  
   const sheet = panel.querySelector("div");  
   
@@ -1318,13 +1326,11 @@ function autoCalculate(){
     const pickup = pickupInput.value.trim();
     const destination = destinationInput.value.trim();
 
-    // 🔥 trebuie ambele completate
+    // 🔥 resetăm prețul dacă user modifică
+    priceEstimate.innerText = "Počítám...";
+
     if(pickup.length > 5 && destination.length > 5){
-
-      console.log("AUTO CALCULATE TRIGGERED");
-
       calculateRoute();
-
     }
 
   }, 700);
