@@ -97,32 +97,55 @@ animation: pulseSoft 1.8s infinite;
   <div class="text-center mb-8 select-none">      
   <p class="text-xs tracking-[0.3em] text-lime-400 uppercase">      
 přeprava osob    </p>    <h1 class="text-4xl font-extrabold tracking-wide text-lime-400">      
-    COBRA      
-  </h1>    <!-- linii viteză -->    <div class="flex justify-center mt-2">      
+    COBRA  
+  
+  </h1>   
+   
+        <!-- linii viteză -->  
+    
+    <div class="flex justify-center mt-2">      
     <div class="w-36 h-1 bg-lime-400 rounded-full opacity-90">    
   </div>      </div>    <div class="flex justify-center mt-1">      
 <div class="w-52 h-0.5 bg-lime-400 rounded-full opacity-70">    </div>      </div>     </div>  <div id="formSection" class="space-y-4">      
-<input id="pickup"     
+
+  <input id="pickup"   
+    
   oninput="autoCalculate()"    
   type="text"    
     placeholder="Odkud jedete?  (ulice, č., mesto)"    
-class="w-full p-3 rounded bg-gray-900 border border-gray-700">  <p id="pickupError" class="text-red-500 text-sm hidden"></p>      
-<input id="destination"    
+  class="w-full p-4 rounded-2xl bg-gray-900/80 border border-gray-700 focus:border-lime-400 focus:ring-2 focus:ring-lime-400/30 outline-none transition text-white placeholder-gray-400"  
+  <p id="pickupError" class="text-red-500 text-sm hidden"></p>      
+
+  <input id="destination"  
+    
 oninput="autoCalculate()"    
  type="text"    
-      placeholder="Kam jedete?  (ulice, č., mesto)"     
-class="w-full p-3 rounded bg-gray-900 border border-gray-700">  <p id="destinationError" class="text-red-500 text-sm hidden"></p>      
-   <input id="phone" type="tel" placeholder="Telefon"      
-class="w-full p-3 rounded bg-gray-900 border border-gray-700">  <p id="phoneError" class="text-red-500 text-sm hidden"></p>     
-    <p id="priceEstimate" class="text-green-400 font-bold text-lg"></p>      
+ placeholder="Kam jedete?  (ulice, č., mesto)"  
+class="w-full p-4 rounded-2xl bg-gray-900/80 border border-gray-700 focus:border-lime-400 focus:ring-2 focus:ring-lime-400/30 outline-none transition text-white placeholder-gray-400"  
+<p id="destinationError" class="text-red-500 text-sm hidden"></p>      
+  
+    <input id="phone"
+    
+type="tel" placeholder="Telefon"  
+class="w-full p-4 rounded-2xl bg-gray-900/80 border border-gray-700 focus:border-lime-400 focus:ring-2 focus:ring-lime-400/30 outline-none transition text-white placeholder-gray-400"
+<p id="phoneError" class="text-red-500 text-sm hidden"></p>     
+    
+  <p id="priceEstimate"
+    
+class="text-green-400 font-bold text-lg"></p>      
 <p id="generalError" class="text-red-500 font-semibold hidden"></p>      
-    <button onclick="calculateRoute()"      
+   
+<button onclick="calculateRoute()"    
 class="w-full bg-blue-500 text-white font-bold py-3 rounded mt-2">    
 Vypočítat cenu    
-</button>  <button onclick="createRide()"      
+</button>  
+  
+<button onclick="createRide()"     
 class="w-full bg-yellow-500 text-black font-bold py-3 rounded mt-4">  
 Objednat jízdu  
-</button>  <button id="installBtn"     
+</button>
+  
+<button id="installBtn"  
 class="w-full bg-green-600 text-white font-bold py-3 rounded mt-3">
 📲 Instalovat aplikaci
 </button>
@@ -134,13 +157,18 @@ class="w-full bg-green-600 text-white font-bold py-3 rounded mt-3">
 <p class="text-lg">Stav objednávky:</p>      
 <p id="statusText" class="text-2xl font-bold mt-2"></p>      
 <p id="statusMessage" class="mt-4 text-gray-300"></p>     
-  <button id="cancelBtn"      
+ 
+<button id="cancelBtn"      
 class="hidden mt-4 bg-red-600 px-6 py-3 rounded font-bold w-full">    
 ❌ Zrušit jízdu    
-</button>  <button id="callBtn"      
+</button> 
+  
+<button id="callBtn"      
 class="hidden mt-3 bg-green-600 px-6 py-3 rounded font-bold w-full">  
 📞 Volat řidiče  
-</button>  <button id="receiptBtn"      
+</button>  
+  
+<button id="receiptBtn"      
 class="hidden mt-3 bg-green-600 px-6 py-3 rounded font-bold w-full">
 📄 Stáhnout účtenku
 </button>
@@ -154,7 +182,13 @@ class="hidden mt-3 bg-green-600 px-6 py-3 rounded font-bold w-full">
 </div>  <div id="thankYouMsg"     
 class="hidden text-center mt-4 text-green-400 text-lg font-semibold">    
 Děkujeme za hodnocení 🙏    
-</div>  </div>  </div>  </div>  <div id="map" class="w-full max-w-md mx-auto h-72 mt-4 rounded-xl"></div>  <script type="module">    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";  
+</div>  </div>  </div>  </div>  <div id="map" class="w-full max-w-md mx-auto h-72 mt-4 rounded-xl"></div>
+
+  
+ <script type="module"> 
+
+    
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";  
 import { getFirestore, collection, addDoc, serverTimestamp, doc, onSnapshot, query, where, getDocs,getDoc,updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";  
 import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";  /* ELEMENTS */
 const pickupInput = document.getElementById("pickup");
