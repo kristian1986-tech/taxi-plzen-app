@@ -174,9 +174,6 @@ window.onerror = function(msg, url, line, col, error){
   alert("Eroare: " + msg);
 };
 
-window.addEventListener("unhandledrejection", function(e){
-  alert("Promise error: " + e.reason);
-});
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp, doc, onSnapshot, query, where, getDocs,getDoc,updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
