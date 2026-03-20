@@ -441,7 +441,7 @@ return;
 }
 
 let phone = phoneInput.value.trim().replace(/\s+/g,"");
-const phoneRegex=/^+?[0-9]{8,15}$/;
+const phoneRegex=/^\+?[0-9]{8,15}$/;
 
 if(!phoneRegex.test(phone)){
 phoneError.innerText="Neplatné telefonní číslo.";
