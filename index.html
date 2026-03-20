@@ -144,7 +144,7 @@
   oninput="autoCalculate()"
   type="text"
     placeholder="Odkud jedete?  (ulice, č., mesto)"
-class="w-full p-3 rounded bg-gray-900 border border-gray-700">
+class="w-full p-3 rounded-xl bg-gray-900 border border-gray-700 focus:border-lime-400 focus:ring-2 focus:ring-lime-400 outline-none transition"
 
 <p id="pickupError" class="text-red-500 text-sm hidden"></p>  
 <input id="destination"
@@ -158,7 +158,15 @@ class="w-full p-3 rounded bg-gray-900 border border-gray-700">
 class="w-full p-3 rounded bg-gray-900 border border-gray-700">
 
 <p id="phoneError" class="text-red-500 text-sm hidden"></p> 
-    <p id="priceEstimate" class="text-green-400 font-bold text-lg"></p>  
+
+<div id="priceBox" class="hidden bg-green-600/20 border border-green-500 rounded-xl p-4 text-center animate-fadeIn">
+
+  <p class="text-sm text-gray-300">Odhad ceny</p>
+
+  <p id="priceEstimate" class="text-2xl font-bold text-green-400 mt-1"></p>
+
+</div>
+    
 <p id="generalError" class="text-red-500 font-semibold hidden"></p>  
     <button onclick="calculateRoute()"  
 class="w-full bg-blue-500 text-white font-bold py-3 rounded mt-2">
@@ -166,7 +174,7 @@ Vypočítat cenu
 </button>
 
 <button onclick="createRide()"  
-class="w-full bg-yellow-500 text-black font-bold py-3 rounded mt-4">
+class="w-full bg-lime-400 text-black font-bold py-4 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition"
 Objednat jízdu
 </button>
 
@@ -484,6 +492,8 @@ priceEstimate.innerText =
 " min | Cena: "+calculatedPrice+" Kč";  
   drawRoute(pickup,destination);  
 };  
+
+document.getElementById("priceBox").classList.remove("hidden");
   
 /* CREATE */  
 window.createRide = async function(){  
