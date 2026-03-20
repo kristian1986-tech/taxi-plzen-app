@@ -1,200 +1,164 @@
-<!DOCTYPE html>  <html lang="cs">    <head>    <base href="/">  <meta charset="UTF-8">    
-<meta name="viewport" content="width=device-width, initial-scale=1.0">      <link rel="manifest" href="manifest.json">  
-<meta name="theme-color" content="#111827">     <title>COBRA-přeprava osob Plzeň</title>   <script src="https://cdn.tailwindcss.com"></script>   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>   <style>    
-      
-.fade-out { opacity: 0; transition: opacity 0.5s ease; }    
-.fade-in { opacity: 1; transition: opacity 0.5s ease; }    
-    
-/* 🔥 SLIDE UP ANIMATION */    
-@keyframes slideUp {    
-  from { transform: translateY(100%); }    
-  to { transform: translateY(0); }    
-}    
-    
-@keyframes slideDown {    
-  from { transform: translateY(0); }    
-  to { transform: translateY(100%); }    
-}    
-    
-.animate-slideUp {    
-  animation: slideUp 0.35s ease-out forwards;    
-}    
-    
-.animate-slideDown {    
-  animation: slideDown 0.25s ease-in forwards;    
-}    
-    
-    @keyframes fadeOutSplash {    
-  from { opacity: 1; }    
-  to { opacity: 0; }    
-}    
-    
-.fadeOutSplash {    
-  animation: fadeOutSplash 0.6s ease forwards;    
-}    
-    
-    @keyframes fadeInLogo {    
-  from { opacity: 0; transform: scale(0.95); }    
-  to { opacity: 1; transform: scale(1); }    
-}    
-    
-.animate-fadeInLogo {    
-  animation: fadeInLogo 0.8s ease-out;    
-}    
-  
-  @keyframes fadeSlideUp {  
-  from {  
-    opacity: 0;  
-    transform: translateY(15px);  
-  }  
-  to {  
-    opacity: 1;  
-    transform: translateY(0);  
-  }  
-}  
-  
-.showThanks {  
-  animation: fadeSlideUp 0.4s ease forwards;  
-}  
-  
-@keyframes fadeIn {  
-  from { opacity: 0; transform: scale(0.9); }  
-  to { opacity: 1; transform: scale(1); }  
-}  
-  
-.animate-fadeIn {  
-  animation: fadeIn 0.3s ease;  
-}  
-  
-@keyframes pulseSoft {  
-  0% { transform: scale(1); }  
-  50% { transform: scale(1.08); }  
-  100% { transform: scale(1); }  
-}  
-  
-.pulse-btn {  
-  animation: pulseSoft 1.8s infinite;  
-}  
-    
-    
-</style>    </head>   <body class="bg-gray-900 text-white min-h-screen">   
-  <!-- SPLASH SCREEN -->   
-<div id="splashScreen" class="fixed inset-0 bg-black flex items-center justify-center z-[9999]">    
-<div class="text-center">  <img src="cobra-logo.png"     
-     class="w-96 mx-auto animate-fadeInLogo">  </div>   </div>    <div id="arrivalOverlay" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">    
-  <div class="text-center">    
-    <h2 class="text-4xl font-bold text-green-400 mb-4">🚕 Řidič přijel</h2>    
-    <p class="text-xl">Řidič je na místě. Prosím vyjděte ven.</p>    
-    <button onclick="closeArrival()" class="mt-6 bg-green-600 px-6 py-3 rounded font-bold">    
-      OK    
-    </button>    
-</div>    </div> 
+<!DOCTYPE html>  <html lang="cs">    <head>    <base href="/">  <meta charset="UTF-8">      <meta name="viewport" content="width=device-width, initial-scale=1.0">      <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111827">     <title>COBRA-přeprava osob Plzeň</title>   <script src="https://cdn.tailwindcss.com"></script>   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>   <style>
 
-<div class="w-full max-w-md mx-auto p-6 mt-10 
-bg-gradient-to-br from-gray-800 to-gray-900 
-rounded-3xl shadow-2xl border border-gray-700 backdrop-blur">
-      
-      <!-- COBRA HEADER -->   
-  
-<div class="text-center mb-8 select-none">    
-  <p class="text-xs tracking-[0.3em] text-lime-400 uppercase">    
-přeprava osob
+.fade-out { opacity: 0; transition: opacity 0.5s ease; }
+.fade-in { opacity: 1; transition: opacity 0.5s ease; }
 
-  </p>    <h1 class="text-4xl font-extrabold tracking-wide text-lime-400">    
-    COBRA    
-  </h1>    <!-- linii viteză -->    <div class="flex justify-center mt-2">    
-    <div class="w-36 h-1 bg-lime-400 rounded-full opacity-90">  
-  </div>      </div>    <div class="flex justify-center mt-1">    
-<div class="w-52 h-0.5 bg-lime-400 rounded-full opacity-70">
+/* 🔥 SLIDE UP ANIMATION */
+@keyframes slideUp {
+from { transform: translateY(100%); }
+to { transform: translateY(0); }
+}
 
-  </div>      </div>     </div>  <div id="formSection" class="space-y-4">    
-<input id="pickup"   
-  oninput="autoCalculate()"  
-  type="text"  
-    placeholder="Odkud jedete?  (ulice, č., mesto)"  
-class="w-full p-4 rounded-2xl bg-gray-900/80 
-border border-gray-700 
-focus:border-lime-400 focus:ring-2 focus:ring-lime-400/30 
-outline-none transition text-white placeholder-gray-400"
-        <p id="pickupError" class="text-red-500 text-sm hidden"></p>    
+@keyframes slideDown {
+from { transform: translateY(0); }
+to { transform: translateY(100%); }
+}
 
-<input id="destination"  
-      
-oninput="autoCalculate()"  
- type="text"  
-      placeholder="Kam jedete?  (ulice, č., mesto)"   
-      class="w-full p-4 rounded-2xl bg-gray-900/80 
-border border-gray-700 
-focus:border-lime-400 focus:ring-2 focus:ring-lime-400/30 
-outline-none transition text-white placeholder-gray-400"
-      <p id="destinationError" class="text-red-500 text-sm hidden"></p>    
+.animate-slideUp {
+animation: slideUp 0.35s ease-out forwards;
+}
 
-        <input id="phone"
-              
-type="tel" placeholder="Telefon"    
-class="w-full p-4 rounded-2xl bg-gray-900/80 
-border border-gray-700 
-focus:border-lime-400 focus:ring-2 focus:ring-lime-400/30 
-outline-none transition text-white placeholder-gray-400"
-              
-<p id="phoneError" class="text-red-500 text-sm hidden"></p>   
+.animate-slideDown {
+animation: slideDown 0.25s ease-in forwards;
+}
 
-        <p id="priceEstimate"
-              
-      class="text-green-400 font-bold text-lg"></p>
-        
-<p id="generalError" class="text-red-500 font-semibold hidden"></p>    
-  
-<button onclick="calculateRoute()"
-class="w-full bg-blue-500 text-white font-bold py-3 rounded mt-2">
-Vypočítat cenu
-</button>
+@keyframes fadeOutSplash {
 
-<button onclick="createRide()"
-class="w-full bg-yellow-500 text-black font-bold py-3 rounded mt-4">
-Objednat jízdu
-</button>
+from { opacity: 1; }
+to { opacity: 0; }
+}
 
-<button id="installBtn"   
+.fadeOutSplash {
+animation: fadeOutSplash 0.6s ease forwards;
+}
+
+@keyframes fadeInLogo {
+
+from { opacity: 0; transform: scale(0.95); }
+to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fadeInLogo {
+animation: fadeInLogo 0.8s ease-out;
+}
+
+@keyframes fadeSlideUp {
+from {
+opacity: 0;
+transform: translateY(15px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.showThanks {
+animation: fadeSlideUp 0.4s ease forwards;
+}
+
+@keyframes fadeIn {
+from { opacity: 0; transform: scale(0.9); }
+to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fadeIn {
+animation: fadeIn 0.3s ease;
+}
+
+@keyframes pulseSoft {
+0% { transform: scale(1); }
+50% { transform: scale(1.08); }
+100% { transform: scale(1); }
+}
+
+.pulse-btn {
+animation: pulseSoft 1.8s infinite;
+}
+
+</style>    </head>   <body class="bg-gray-900 text-white min-h-screen">
+
+  <!-- SPLASH SCREEN -->     <div id="splashScreen" class="fixed inset-0 bg-black flex items-center justify-center z-[9999]">      
+<div class="text-center">  <img src="cobra-logo.png"       
+     class="w-96 mx-auto animate-fadeInLogo">  </div>   </div>    <div id="arrivalOverlay" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">      
+  <div class="text-center">      
+    <h2 class="text-4xl font-bold text-green-400 mb-4">🚕 Řidič přijel</h2>      
+    <p class="text-xl">Řidič je na místě. Prosím vyjděte ven.</p>      
+    <button onclick="closeArrival()" class="mt-6 bg-green-600 px-6 py-3 rounded font-bold">      
+      OK      
+    </button>      
+</div>    </div>      <div class="w-full max-w-md mx-auto p-6 mt-10 bg-gray-800 rounded-xl shadow-xl">   <!-- COBRA HEADER -->
+
+<div class="text-center mb-8 select-none">      
+  <p class="text-xs tracking-[0.3em] text-lime-400 uppercase">      
+přeprava osob    </p>    <h1 class="text-4xl font-extrabold tracking-wide text-lime-400">      
+    COBRA      
+  </h1>    <!-- linii viteză -->    <div class="flex justify-center mt-2">      
+    <div class="w-36 h-1 bg-lime-400 rounded-full opacity-90">    
+  </div>      </div>    <div class="flex justify-center mt-1">      
+<div class="w-52 h-0.5 bg-lime-400 rounded-full opacity-70">    </div>      </div>     </div>  <div id="formSection" class="space-y-4">      
+<input id="pickup"     
+  oninput="autoCalculate()"    
+  type="text"    
+    placeholder="Odkud jedete?  (ulice, č., mesto)"    
+class="w-full p-3 rounded bg-gray-900 border border-gray-700">  <p id="pickupError" class="text-red-500 text-sm hidden"></p>      
+<input id="destination"    
+oninput="autoCalculate()"    
+ type="text"    
+      placeholder="Kam jedete?  (ulice, č., mesto)"     
+class="w-full p-3 rounded bg-gray-900 border border-gray-700">  <p id="destinationError" class="text-red-500 text-sm hidden"></p>      
+   <input id="phone" type="tel" placeholder="Telefon"      
+class="w-full p-3 rounded bg-gray-900 border border-gray-700">  <p id="phoneError" class="text-red-500 text-sm hidden"></p>     
+    <p id="priceEstimate" class="text-green-400 font-bold text-lg"></p>      
+<p id="generalError" class="text-red-500 font-semibold hidden"></p>      
+    <button onclick="calculateRoute()"      
+class="w-full bg-blue-500 text-white font-bold py-3 rounded mt-2">    
+Vypočítat cenu    
+</button>  <button onclick="createRide()"      
+class="w-full bg-yellow-500 text-black font-bold py-3 rounded mt-4">  
+Objednat jízdu  
+</button>  <button id="installBtn"     
 class="w-full bg-green-600 text-white font-bold py-3 rounded mt-3">
 📲 Instalovat aplikaci
 </button>
 
-<div id="qrBox" class="hidden mt-4 text-center">  
-  <p class="text-sm text-gray-400 mb-2">Naskenujte pro instalaci</p>  
-  <div id="qrcode" class="flex justify-center"></div>  
-</div>  </div>  <div id="statusSection" class="hidden text-center mt-6">    
-<p class="text-lg">Stav objednávky:</p>    
-<p id="statusText" class="text-2xl font-bold mt-2"></p>    
-<p id="statusMessage" class="mt-4 text-gray-300"></p>   
-  <button id="cancelBtn"    
-class="hidden mt-4 bg-red-600 px-6 py-3 rounded font-bold w-full">  
-❌ Zrušit jízdu  
-</button>  <button id="callBtn"    
-class="hidden mt-3 bg-green-600 px-6 py-3 rounded font-bold w-full">
-📞 Volat řidiče
-</button>
-
-<button id="receiptBtn"    
+<div id="qrBox" class="hidden mt-4 text-center">    
+  <p class="text-sm text-gray-400 mb-2">Naskenujte pro instalaci</p>    
+  <div id="qrcode" class="flex justify-center"></div>    
+</div>  </div>  <div id="statusSection" class="hidden text-center mt-6">      
+<p class="text-lg">Stav objednávky:</p>      
+<p id="statusText" class="text-2xl font-bold mt-2"></p>      
+<p id="statusMessage" class="mt-4 text-gray-300"></p>     
+  <button id="cancelBtn"      
+class="hidden mt-4 bg-red-600 px-6 py-3 rounded font-bold w-full">    
+❌ Zrušit jízdu    
+</button>  <button id="callBtn"      
+class="hidden mt-3 bg-green-600 px-6 py-3 rounded font-bold w-full">  
+📞 Volat řidiče  
+</button>  <button id="receiptBtn"      
 class="hidden mt-3 bg-green-600 px-6 py-3 rounded font-bold w-full">
 📄 Stáhnout účtenku
 </button>
 
-<div id="ratingBox"   class="hidden mt-4 bg-gray-800 p-4 rounded-xl text-center">
+<div id="ratingBox"   class="hidden mt-4 bg-gray-800 p-4 rounded-xl text-center">  <p class="mb-2">Ohodnoťte jízdu:</p>  <div id="stars" class="flex justify-center gap-5 text-2xl flex-wrap">    
+<button onclick="rateRide(1)">⭐</button>    
+<button onclick="rateRide(2)">⭐⭐</button>    
+<button onclick="rateRide(3)">⭐⭐⭐</button>    
+<button onclick="rateRide(4)">⭐⭐⭐⭐</button>    
+<button onclick="rateRide(5)">⭐⭐⭐⭐⭐</button>    
+</div>  <div id="thankYouMsg"     
+class="hidden text-center mt-4 text-green-400 text-lg font-semibold">    
+Děkujeme za hodnocení 🙏    
+</div>  </div>  </div>  </div>  <div id="map" class="w-full max-w-md mx-auto h-72 mt-4 rounded-xl"></div>   <script type="module">
 
-<p class="mb-2">Ohodnoťte jízdu:</p>  <div id="stars" class="flex justify-center gap-5 text-2xl flex-wrap">  
-<button onclick="rateRide(1)">⭐</button>  
-<button onclick="rateRide(2)">⭐⭐</button>  
-<button onclick="rateRide(3)">⭐⭐⭐</button>  
-<button onclick="rateRide(4)">⭐⭐⭐⭐</button>  
-<button onclick="rateRide(5)">⭐⭐⭐⭐⭐</button>  
-</div>  <div id="thankYouMsg"   
-class="hidden text-center mt-4 text-green-400 text-lg font-semibold">  
-Děkujeme za hodnocení 🙏  
-</div>  </div>  </div>  </div>  <div id="map" class="w-full max-w-md mx-auto h-72 mt-4 rounded-xl"></div> 
-      
-      <script type="module"> 
+window.onerror = function(msg, url, line, col, error){
+alert("Eroare: " + msg);
+};
 
+window.addEventListener("unhandledrejection", function(e){
+alert("Promise error: " + e.reason);
+});
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp, doc, onSnapshot, query, where, getDocs,getDoc,updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -375,12 +339,12 @@ destination: destination,
 travelMode: google.maps.TravelMode.DRIVING
 }, function(result, status) {
 
-console.log("Directions status:", status);    
+console.log("Directions status:", status);
 
-if (status === google.maps.DirectionsStatus.OK) {    
-  directionsRenderer.setDirections(result);    
-} else {    
-  console.error("Directions failed:", status);    
+if (status === google.maps.DirectionsStatus.OK) {
+directionsRenderer.setDirections(result);
+} else {
+console.error("Directions failed:", status);
 }
 
 });
@@ -477,7 +441,7 @@ return;
 }
 
 let phone = phoneInput.value.trim().replace(/\s+/g,"");
-const phoneRegex=/^\+?[0-9]{8,15}$/;
+const phoneRegex=/^+?[0-9]{8,15}$/;
 
 if(!phoneRegex.test(phone)){
 phoneError.innerText="Neplatné telefonní číslo.";
@@ -615,11 +579,7 @@ if(driverSnap.exists()){
 const driver = driverSnap.data();
 currentDriver = driver;
 
-statusMessage.innerHTML = `
-Řidič: ${driver.name}<br>
-Auto: ${driver.car}<br>
-SPZ: ${driver.plate}<br>
-`;
+statusMessage.innerHTML =   Řidič: ${driver.name}<br>   Auto: ${driver.car}<br>   SPZ: ${driver.plate}<br>  ;
 
 callBtn.classList.remove("hidden");
 callBtn.onclick = ()=> window.location.href="tel:"+driver.phone;
@@ -814,8 +774,8 @@ const splash = document.getElementById("splashScreen");
 setTimeout(() => {
 splash.classList.add("fadeOutSplash");
 
-setTimeout(() => {    
-  splash.style.display = "none";    
+setTimeout(() => {
+splash.style.display = "none";
 }, 600);
 
 }, 1500);
@@ -901,34 +861,34 @@ document.getElementById("installBtn").addEventListener("click", async () => {
 
 if (deferredPrompt) {
 
-deferredPrompt.prompt();  
+deferredPrompt.prompt();
 
-const { outcome } = await deferredPrompt.userChoice;  
+const { outcome } = await deferredPrompt.userChoice;
 
-if (outcome === "accepted") {  
-  console.log("Installed");  
-}  
+if (outcome === "accepted") {
+console.log("Installed");
+}
 
 deferredPrompt = null;
 
 } else {
 
-const qrBox = document.getElementById("qrBox");  
-const qrContainer = document.getElementById("qrcode");  
+const qrBox = document.getElementById("qrBox");
+const qrContainer = document.getElementById("qrcode");
 
-qrBox.classList.remove("hidden");  
+qrBox.classList.remove("hidden");
 
-if (!qrGenerated) {  
+if (!qrGenerated) {
 
-  qrContainer.innerHTML = "";  
+qrContainer.innerHTML = "";
 
-  new QRCode(qrContainer, {  
-    text: window.location.href,  
-    width: 160,  
-    height: 160  
-  });  
+new QRCode(qrContainer, {
+text: window.location.href,
+width: 160,
+height: 160
+});
 
-  qrGenerated = true;  
+qrGenerated = true;
 }
 
 }
@@ -979,13 +939,13 @@ document.getElementById("installPopup").classList.add("hidden");
 
 if (deferredPrompt) {
 
-deferredPrompt.prompt();  
+deferredPrompt.prompt();
 
-const { outcome } = await deferredPrompt.userChoice;  
+const { outcome } = await deferredPrompt.userChoice;
 
-if (outcome === "accepted") {  
-  console.log("Installed");  
-}  
+if (outcome === "accepted") {
+console.log("Installed");
+}
 
 deferredPrompt = null;
 
@@ -1048,97 +1008,76 @@ dateObj.toLocaleTimeString("cs-CZ",{hour:"2-digit",minute:"2-digit"})
 
 div.innerHTML = `
 
-  <div class="space-y-2">  <!-- ROUTE -->  
-<div class="flex items-center justify-between">  
-  <p class="font-medium text-white text-sm">  
-    ${ride.pickup} → ${ride.destination}  
-  </p>  
-
-  <span class="text-[10px] bg-green-600/20 text-green-400 px-2 py-1 rounded-full">  
-    ✔ dokončeno  
-  </span>  
-</div>  
-
-<!-- DATE -->  
-<p class="text-gray-400 text-xs">  
-  🗓️ ${formattedDate}  
-</p>  
-
-<!-- PRICE -->  
-<p class="text-green-400 font-bold text-sm">  
-  💰 ${ride.estimatedPrice || 0} Kč  
-</p>  
-
-<!-- ACTIONS -->  
-<div class="flex gap-2 mt-2">  
-
-  <button class="receiptBtn flex-1 bg-green-600 py-2 rounded-lg text-xs font-semibold active:scale-95 transition">  
-    📄 Účtenka  
-  </button>  
-
-  <button class="repeatBtn flex-1 bg-blue-600 py-2 rounded-lg text-xs font-semibold active:scale-95 transition">  
-    🔁 Znovu  
-  </button>  
-
-</div>
-
-  </div>  
-`;  const receiptBtn = div.querySelector(".receiptBtn");
-const repeatBtn = div.querySelector(".repeatBtn");
-
-// PDF
+  <div class="space-y-2">  <!-- ROUTE -->    
+<div class="flex items-center justify-between">    
+  <p class="font-medium text-white text-sm">    
+    ${ride.pickup} → ${ride.destination}    
+  </p>      <span class="text-[10px] bg-green-600/20 text-green-400 px-2 py-1 rounded-full">    
+    ✔ dokončeno    
+  </span>    
+</div>    <!-- DATE -->    <p class="text-gray-400 text-xs">    
+  🗓️ ${formattedDate}    
+</p>    <!-- PRICE -->    <p class="text-green-400 font-bold text-sm">    
+  💰 ${ride.estimatedPrice || 0} Kč    
+</p>    <!-- ACTIONS -->    <div class="flex gap-2 mt-2">      <button class="receiptBtn flex-1 bg-green-600 py-2 rounded-lg text-xs font-semibold active:scale-95 transition">    
+    📄 Účtenka    
+  </button>      <button class="repeatBtn flex-1 bg-blue-600 py-2 rounded-lg text-xs font-semibold active:scale-95 transition">    
+    🔁 Znovu    
+  </button>    </div>    </div>    
+`;  const receiptBtn = div.querySelector(".receiptBtn");  
+const repeatBtn = div.querySelector(".repeatBtn");  // PDF
 const btn = div.querySelector("button");
 
 btn.onclick = () => {
 
-const { jsPDF } = window.jspdf;  
-const pdf = new jsPDF();  
+const { jsPDF } = window.jspdf;
+const pdf = new jsPDF();
 
-const date = ride.createdAt?.seconds  
-  ? new Date(ride.createdAt.seconds * 1000)  
-  : new Date();  
+const date = ride.createdAt?.seconds
+? new Date(ride.createdAt.seconds * 1000)
+: new Date();
 
-const receiptNumber = ride.receiptId || ("OLD-" + ride.id.slice(-6));  
+const receiptNumber = ride.receiptId || ("OLD-" + ride.id.slice(-6));
 
-pdf.setFontSize(20);  
-pdf.setFont("helvetica","bold");  
-pdf.text("COBRA",105,20,{align:"center"});  
+pdf.setFontSize(20);
+pdf.setFont("helvetica","bold");
+pdf.text("COBRA",105,20,{align:"center"});
 
-pdf.setFontSize(10);  
-pdf.setFont("helvetica","normal");  
-pdf.text("preprava osob Plzen",105,28,{align:"center"});  
-pdf.text("Telefon: +420 777 842 870",105,34,{align:"center"});  
-pdf.text("Email: Nicolaecristian100@yahoo.com",105,40,{align:"center"});  
+pdf.setFontSize(10);
+pdf.setFont("helvetica","normal");
+pdf.text("preprava osob Plzen",105,28,{align:"center"});
+pdf.text("Telefon: +420 777 842 870",105,34,{align:"center"});
+pdf.text("Email: Nicolaecristian100@yahoo.com",105,40,{align:"center"});
 
-pdf.line(20,45,190,45);  
+pdf.line(20,45,190,45);
 
-pdf.setFontSize(14);  
-pdf.setFont("helvetica","bold");  
-pdf.text("UCTENKA #"+receiptNumber,105,55,{align:"center"});  
+pdf.setFontSize(14);
+pdf.setFont("helvetica","bold");
+pdf.text("UCTENKA #"+receiptNumber,105,55,{align:"center"});
 
-pdf.setFont("helvetica","normal");  
-pdf.setFontSize(11);  
+pdf.setFont("helvetica","normal");
+pdf.setFontSize(11);
 
-pdf.text("Datum: "+date.toLocaleString("cs-CZ"),20,75);  
+pdf.text("Datum: "+date.toLocaleString("cs-CZ"),20,75);
 
-pdf.line(20,85,190,85);  
+pdf.line(20,85,190,85);
 
-pdf.text("Odkud: "+ride.pickup,20,100);  
-pdf.text("Kam: "+ride.destination,20,110);  
-pdf.text("Telefon: "+(ride.phone || "-"),20,120);  
+pdf.text("Odkud: "+ride.pickup,20,100);
+pdf.text("Kam: "+ride.destination,20,110);
+pdf.text("Telefon: "+(ride.phone || "-"),20,120);
 
-pdf.line(20,130,190,130);  
+pdf.line(20,130,190,130);
 
-pdf.setFontSize(14);  
-pdf.setFont("helvetica","bold");  
-pdf.text("Celkem:",20,150);  
-pdf.text((ride.estimatedPrice || 0)+" KC",150,150);  
+pdf.setFontSize(14);
+pdf.setFont("helvetica","bold");
+pdf.text("Celkem:",20,150);
+pdf.text((ride.estimatedPrice || 0)+" KC",150,150);
 
-pdf.line(20,160,190,160);  
+pdf.line(20,160,190,160);
 
-pdf.setFontSize(9);  
-pdf.setFont("helvetica","normal");  
-pdf.text("Dekuji za vyuziti nase sluzby.",105,175,{align:"center"});  
+pdf.setFontSize(9);
+pdf.setFont("helvetica","normal");
+pdf.text("Dekuji za vyuziti nase sluzby.",105,175,{align:"center"});
 
 pdf.save("uctenka_"+receiptNumber+".pdf");
 
@@ -1188,8 +1127,8 @@ behavior: "smooth"
 setTimeout(() => {
 calculateRoute();
 
-setTimeout(() => {  
-  createRide();  
+setTimeout(() => {
+createRide();
 }, 600);
 
 }, 300);
@@ -1233,32 +1172,32 @@ pickupInput.value = "📍 Zjišťuji polohu...";
 
 navigator.geolocation.getCurrentPosition(async (position)=>{
 
-const lat = position.coords.latitude;  
-const lng = position.coords.longitude;  
+const lat = position.coords.latitude;
+const lng = position.coords.longitude;
 
-try{  
+try{
 
-  const res = await fetch(  
-    `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCp4Rx2gO_4a8uTsBMP9JBrWQ_dge41wGg`  
-  );  
+const res = await fetch(
+https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCp4Rx2gO_4a8uTsBMP9JBrWQ_dge41wGg
+);
 
-  const data = await res.json();  
+const data = await res.json();
 
-  if(data.results && data.results.length > 0){  
+if(data.results && data.results.length > 0){
 
-    const address = data.results[0].formatted_address;  
+const address = data.results[0].formatted_address;    
 
-    pickupInput.value = address;  
+pickupInput.value = address;
 
-  } else {  
+} else {
 
-    pickupInput.value = lat + ", " + lng;  
+pickupInput.value = lat + ", " + lng;
 
-  }  
+}
 
-}catch(e){  
+}catch(e){
 
-  pickupInput.value = lat + ", " + lng;  
+pickupInput.value = lat + ", " + lng;
 
 }
 
@@ -1280,14 +1219,14 @@ clearTimeout(autoCalcTimeout);
 
 autoCalcTimeout = setTimeout(() => {
 
-const pickup = pickupInput.value.trim();  
-const destination = destinationInput.value.trim();  
+const pickup = pickupInput.value.trim();
+const destination = destinationInput.value.trim();
 
-// 🔥 resetăm prețul dacă user modifică  
-priceEstimate.innerText = "Počítám...";  
+// 🔥 resetăm prețul dacă user modifică
+priceEstimate.innerText = "Počítám...";
 
-if(pickup.length > 5 && destination.length > 5){  
-  calculateRoute();  
+if(pickup.length > 5 && destination.length > 5){
+calculateRoute();
 }
 
 }, 700);
@@ -1300,63 +1239,50 @@ detectLocation();
 
 destinationInput.addEventListener("change", autoCalculate);
 
-</script>     <!-- INFO BUTTON -->    <button onclick="toggleInfo()"     
-class="fixed bottom-6 right-6 w-14 h-14    
-bg-gray-800/90 backdrop-blur-md text-white text-xl font-bold    
-rounded-full shadow-2xl border border-white/20    
-flex items-center justify-center    
+</script>     <!-- INFO BUTTON -->    <button onclick="toggleInfo()"       
+class="fixed bottom-6 right-6 w-14 h-14      
+bg-gray-800/90 backdrop-blur-md text-white text-xl font-bold      
+rounded-full shadow-2xl border border-white/20      
+flex items-center justify-center      
 hover:scale-110 active:scale-95 transition z-50 pulse-btn">
 ℹ️
 </button>
 
-  <!-- INFO PANEL -->      <div id="infoPanel"     
-class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end justify-center z-40">    <div class="w-full max-w-md bg-gray-900 rounded-t-3xl p-6 text-center space-y-4 animate-slideUp">  <div class="w-12 h-1 bg-gray-600 rounded-full mx-auto mb-4"></div>    <p class="text-sm text-gray-400 tracking-wide">    
-  Provozovatel    
-</p>    <p class="text-white font-medium">    
-  Nicolae Cristian    
-</p>    <p class="text-gray-500 text-sm">    
-  IČO: 06928391    
-</p>    <p class="text-gray-500 text-sm leading-relaxed">    
-  Komenskeho 1075/77<br>    
-  Plzeň    
-</p>    <div class="text-sm space-y-1">    
-  <a href="mailto:Nicolaecristian100@yahoo.com"     
-     class="block text-gray-400 hover:text-white transition">    
-     Nicolaecristian100@yahoo.com    
-  </a>    <a href="tel:+420777842870"     
-class="block text-gray-400 hover:text-white transition">
-+420 777 842 870
-</a>
+  <!-- INFO PANEL -->      <div id="infoPanel"       class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end justify-center z-40">    <div class="w-full max-w-md bg-gray-900 rounded-t-3xl p-6 text-center space-y-4 animate-slideUp">  <div class="w-12 h-1 bg-gray-600 rounded-full mx-auto mb-4"></div>    <p class="text-sm text-gray-400 tracking-wide">
+Provozovatel
 
-</div>    <hr class="border-gray-600 my-3">  <button onclick="toggleClientHistory()"   
-class="w-full bg-gray-700 py-2 rounded text-sm">
-📄 Historie jízd
+</p>    <p class="text-white font-medium">      
+  Nicolae Cristian      
+</p>    <p class="text-gray-500 text-sm">      
+  IČO: 06928391      
+</p>    <p class="text-gray-500 text-sm leading-relaxed">      
+  Komenskeho 1075/77<br>      
+  Plzeň      
+</p>    <div class="text-sm space-y-1">      
+  <a href="mailto:Nicolaecristian100@yahoo.com"       
+     class="block text-gray-400 hover:text-white transition">      
+     Nicolaecristian100@yahoo.com      
+  </a>    <a href="tel:+420777842870"       
+class="block text-gray-400 hover:text-white transition">  
++420 777 842 870  
+</a>  </div>    <hr class="border-gray-600 my-3">  <button onclick="toggleClientHistory()"     
+class="w-full bg-gray-700 py-2 rounded text-sm">  
+📄 Historie jízd  
+</button>  <div id="clientHistoryPanel" class="hidden mt-3 space-y-2 max-h-60 overflow-y-auto"></div>  <p class="text-xs text-gray-600 pt-4">      
+  Služba přepravy osob dle zákona č. 111/1994 Sb.      
+</p>    <button onclick="toggleInfo()"       
+class="mt-4 text-sm text-gray-400 hover:text-white transition">  
+Zavřít  
+</button>  </div>      
+</div>   <div id="installPopup" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50">    <div class="bg-gray-900 text-white p-6 rounded-2xl w-[90%] max-w-sm text-center animate-fadeIn">  <h2 class="text-xl font-bold mb-2">📲 Instalovat aplikaci</h2>    <p class="text-gray-400 text-sm mb-4">    
+  Rychlejší přístup k taxi 🚕    
+</p>    <div class="flex gap-3">    
+  <button id="installConfirm"    
+    class="flex-1 bg-green-600 py-2 rounded font-bold">    
+    Instalovat    
+  </button>    <button id="installClose"    
+class="flex-1 bg-gray-700 py-2 rounded">
+Později
 </button>
 
-<div id="clientHistoryPanel" class="hidden mt-3 space-y-2 max-h-60 overflow-y-auto"></div>  <p class="text-xs text-gray-600 pt-4">    
-  Služba přepravy osob dle zákona č. 111/1994 Sb.    
-</p>    <button onclick="toggleInfo()"     
-class="mt-4 text-sm text-gray-400 hover:text-white transition">
-Zavřít
-</button>
-
-</div>    
-</div>   <div id="installPopup" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50">    <div class="bg-gray-900 text-white p-6 rounded-2xl w-[90%] max-w-sm text-center animate-fadeIn">  <h2 class="text-xl font-bold mb-2">📲 Instalovat aplikaci</h2>  
-
-<p class="text-gray-400 text-sm mb-4">  
-  Rychlejší přístup k taxi 🚕  
-</p>  
-
-<div class="flex gap-3">  
-  <button id="installConfirm"  
-    class="flex-1 bg-green-600 py-2 rounded font-bold">  
-    Instalovat  
-  </button>  
-
-  <button id="installClose"  
-    class="flex-1 bg-gray-700 py-2 rounded">  
-    Později  
-  </button>  
-</div>
-
-  </div>  </div>  </body>    </html>
+</div>    </div>  </div>  </body>    </html>  
