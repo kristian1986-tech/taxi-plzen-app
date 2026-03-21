@@ -593,6 +593,20 @@ status:"new",
 receiptId: receiptId,
 createdAt:serverTimestamp()
 });
+
+// 🔥 după 20 sec devine vizibil pentru toți
+if(calculatedPrice > 300){
+
+  setTimeout(async () => {
+
+    await updateDoc(doc(db,"rides",docRef.id),{
+      priorityOnly: false
+    });
+
+  }, 20000);
+
+}
+  
 localStorage.setItem("clientPhone", phoneInput.value.trim());
 
 localStorage.setItem("activeRideId",docRef.id);
