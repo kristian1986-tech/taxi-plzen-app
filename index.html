@@ -787,31 +787,12 @@ pdf.line(20,85,190,85);
     .replace(/ă/g,"a");
 }
 
-const odkud = fixText(ride.pickup || "");
-  
-const kam = fixText(ride.destination || "");
+pdf.text("Odkud: "+data.pickup,20,100);
+pdf.text("Kam: "+data.destination,20,110);
+pdf.text("Telefon: "+(data.phone||"-"),20,120);
 
-pdf.setFont("helvetica","normal");
-pdf.setFontSize(11);
+pdf.line(20,130,190,130);
 
-// 🔥 LABEL separat
-pdf.text("Odkud:", 20, 110);
-
-// 🔥 DOAR ADRESA se face wrap
-const odkudLines = pdf.splitTextToSize(odkud, 110);
-
-// 🔥 începe mai in dreapta (IMPORTANT!)
-pdf.text(odkudLines, 40, 110);
-
-// 🔥 calcul Y corect
-let y = 110 + (odkudLines.length * 6);
-
-// 🔥 restul
-
-pdf.text("Kam: " + kam, 20, y + 6);
-pdf.text("Telefon: " + (ride.phone || "-"), 20, y + 16);
-pdf.text("Vzdálenost: " + (ride.distance ? ride.distance.toFixed(1)+" km" : "-"), 20, y + 26); 
-pdf.line(20,160,190,160);
 
 // TOTAL
 pdf.setFontSize(14);
