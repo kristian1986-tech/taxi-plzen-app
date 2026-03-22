@@ -776,15 +776,19 @@ pdf.line(20,85,190,85);
 
 const odkud = data.pickup || "";
 
-pdf.text("Odkud:", 20, 100);
+pdf.setFontSize(11);
+pdf.text("Odkud:", 20, 90);
 
-const odkudLines = pdf.splitTextToSize(odkud, 150);
+pdf.setFontSize(10);
 
-pdf.text(odkudLines, 20, 108);
-  
-let y = 108 + (odkudLines.length * 6);
+const odkudLines = pdf.splitTextToSize(data.pickup || "", 150);
+pdf.text(odkudLines, 20, 96);
 
-pdf.text("Kam: " + (data.destination || ""), 20, y + 6);
+let y = 96 + (odkudLines.length * 6);
+
+pdf.setFontSize(11);
+
+pdf.text("Kam: " + (data.destination || ""), 20, y + 8);
 pdf.text("Telefon: " + (data.phone || "-"), 20, y + 16);
 
 pdf.line(20,130,190,130);
