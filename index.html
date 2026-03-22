@@ -781,17 +781,29 @@ pdf.text("Odkud:", 20, 90);
 
 pdf.setFontSize(10);
 
-const odkudLines = pdf.splitTextToSize(data.pickup || "", 150);
-pdf.text(odkudLines, 20, 96);
+const text = data.pickup || "";
 
-let y = 96 + (odkudLines.length * 6);
+// 🔥 împărțire manuală pe 2 rânduri
+const line1 = text.substring(0, 60);
+const line2 = text.substring(60, 120);
 
+pdf.text(line1, 20, 96);
+
+let y = 96;
+
+if(line2){
+  pdf.text(line2, 20, 102);
+  y = 102;
+}
+
+// 🔙 restul
 pdf.setFontSize(11);
 
-pdf.text("Kam: " + (data.destination || ""), 20, y + 8);
-pdf.text("Telefon: " + (data.phone || "-"), 20, y + 16);
+pdf.text("Kam: " + (data.destination || ""), 20, y + 10);
+pdf.text("Telefon: " + (data.phone || "-"), 20, y + 20);
 
-pdf.line(20,130,190,130);
+// 🔥 linie corectă
+pdf.line(20, y + 28, 190, y + 28);
 
 
 // TOTAL
@@ -1223,22 +1235,30 @@ pdf.line(20,85,190,85);
 pdf.setFontSize(11);
 pdf.text("Odkud:", 20, 90);
 
-// 🔥 text mai mic + mai îngust
 pdf.setFontSize(10);
 
-const odkudLines = pdf.splitTextToSize(ride.pickup || "", 130);
-pdf.text(odkudLines, 20, 96);
+const text = ride.pickup || "";
 
-// 🔥 calcul dinamic
-let y = 96 + (odkudLines.length * 7);
+// 🔥 împărțire manuală pe 2 rânduri
+const line1 = text.substring(0, 60);
+const line2 = text.substring(60, 120);
 
-// 🔙 revenim la font normal
+pdf.text(line1, 20, 96);
+
+let y = 96;
+
+if(line2){
+  pdf.text(line2, 20, 102);
+  y = 102;
+}
+
+// 🔙 restul
 pdf.setFontSize(11);
 
 pdf.text("Kam: " + (ride.destination || ""), 20, y + 10);
 pdf.text("Telefon: " + (ride.phone || "-"), 20, y + 20);
 
-// 🔥 LINIE DINAMICĂ (nu fixă!)
+// 🔥 linie corectă
 pdf.line(20, y + 28, 190, y + 28);
 
 pdf.setFontSize(14);
