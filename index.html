@@ -1223,20 +1223,23 @@ pdf.line(20,85,190,85);
 pdf.setFontSize(11);
 pdf.text("Odkud:", 20, 90);
 
+// 🔥 text mai mic + mai îngust
 pdf.setFontSize(10);
 
-const odkudLines = pdf.splitTextToSize(ride.pickup || "", 150);
+const odkudLines = pdf.splitTextToSize(ride.pickup || "", 130);
 pdf.text(odkudLines, 20, 96);
 
-let y = 96 + (odkudLines.length * 6);
+// 🔥 calcul dinamic
+let y = 96 + (odkudLines.length * 7);
 
+// 🔙 revenim la font normal
 pdf.setFontSize(11);
 
-pdf.text("Kam: " + (ride.destination || ""), 20, y + 8);
-pdf.text("Telefon: " + (ride.phone || "-"), 20, y + 16);
+pdf.text("Kam: " + (ride.destination || ""), 20, y + 10);
+pdf.text("Telefon: " + (ride.phone || "-"), 20, y + 20);
 
-// linie adaptivă
-pdf.line(20, y + 25, 190, y + 25);
+// 🔥 LINIE DINAMICĂ (nu fixă!)
+pdf.line(20, y + 28, 190, y + 28);
 
 pdf.setFontSize(14);
 pdf.setFont("helvetica","bold");
