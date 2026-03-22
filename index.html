@@ -1217,13 +1217,13 @@ pdf.line(20,85,190,85);
 
 pdf.text("Odkud:", 20, 100);
 
-const odkudLines = pdf.splitTextToSize(ride.pickup || "", 150);
+const odkudLines = pdf.splitTextToSize(ride.pickup || "", 140);
 pdf.text(odkudLines, 20, 108);
 
 let y = 108 + (odkudLines.length * 6);
 
-pdf.text("Kam: " + (ride.destination || ""), 20, y + 10);
-pdf.text("Telefon: " + (ride.phone || "-"), 20, y + 20);
+pdf.text("Kam: " + (ride.destination || ""), 20, y + 6);
+pdf.text("Telefon: " + (ride.phone || "-"), 20, y + 16);
 
 pdf.line(20,130,190,130);
 
