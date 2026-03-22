@@ -772,24 +772,20 @@ pdf.line(20,85,190,85);
 
 // CUSTOMER INFO
 
-  function fixText(text){
-  return text
-    .replace(/ň/g,"n")
-    .replace(/ř/g,"r")
-    .replace(/š/g,"s")
-    .replace(/č/g,"c")
-    .replace(/ž/g,"z")
-    .replace(/ě/g,"e")
-    .replace(/á/g,"a")
-    .replace(/í/g,"i")
-    .replace(/ý/g,"y")
-    .replace(/ů/g,"u")
-    .replace(/ă/g,"a");
-}
 
-pdf.text("Odkud: "+data.pickup,20,100);
-pdf.text("Kam: "+data.destination,20,110);
-pdf.text("Telefon: "+(data.phone||"-"),20,120);
+
+const odkud = ride.pickup || "";
+
+pdf.text("Odkud:", 20, 100);
+
+const odkudLines = pdf.splitTextToSize(odkud, 150);
+
+pdf.text(odkudLines, 20, 108);
+  
+let y = 108 + (odkudLines.length * 6);
+
+pdf.text("Kam: " + (ride.destination || ""), 20, y + 10);
+pdf.text("Telefon: " + (ride.phone || "-"), 20, y + 20);
 
 pdf.line(20,130,190,130);
 
