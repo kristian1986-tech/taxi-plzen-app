@@ -804,7 +804,8 @@ function fixText(text){
     .replace(/í/g,"i")
     .replace(/ý/g,"y")
     .replace(/ů/g,"u")
-    .replace(/ă/g,"a");
+    .replace(/ă/g,"a")
+    .replace(/Č/g,"C");
 }
 
 const odkud = fixText(data.pickup || "");
