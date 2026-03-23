@@ -792,30 +792,41 @@ pdf.line(20,85,190,85);
 
 
 
-const odkud = data.pickup || "";
-
-pdf.setFontSize(10);
-
-// 🔥 împărțire pe 2 rânduri
-const [line1, line2] = splitAddress(odkud, 55);
-
-// label
-pdf.text("Odkud:", 20, 95);
-
-// rând 1
-pdf.text(line1, 20, 102);
-
-// rând 2 (doar dacă există)
-if(line2){
-  pdf.text(line2, 20, 108);
+function fixText(text){
+  return text
+    .replace(/ň/g,"n")
+    .replace(/ř/g,"r")
+    .replace(/š/g,"s")
+    .replace(/č/g,"c")
+    .replace(/ž/g,"z")
+    .replace(/ě/g,"e")
+    .replace(/á/g,"a")
+    .replace(/í/g,"i")
+    .replace(/ý/g,"y")
+    .replace(/ů/g,"u")
+    .replace(/ă/g,"a");
 }
 
-// restul
-pdf.text("Kam: " + (data.destination || ""), 20, 118);
-pdf.text("Telefon: " + (data.phone || "-"), 20, 126);
+const odkud = fixText(data.pickup || "");
+const kam = fixText(data.destination || "");
 
-// 🔥 linie mai jos corect
-pdf.line(20, 135, 190, 135);
+// LABEL
+pdf.text("Odkud:", 20, 110);
+
+// 🔥 EXACT CA DRIVER
+const odkudLines = pdf.splitTextToSize(odkud, 110);
+
+// 🔥 IMPORTANT (mutat la dreapta!)
+pdf.text(odkudLines, 40, 110);
+
+// calcul Y
+let y = 110 + (odkudLines.length * 6);
+
+// rest
+pdf.text("Kam: " + kam, 20, y + 6);
+pdf.text("Telefon: " + (data.phone || "-"), 20, y + 16);
+
+pdf.line(20, 140, 190, 140);
 
 
 // TOTAL
@@ -1244,25 +1255,37 @@ pdf.text("Datum: "+date.toLocaleString("cs-CZ"),20,75);
 pdf.line(20,85,190,85);
 
 
-const odkud = ride.pickup || "";
-
-pdf.setFontSize(10);
-
-const [line1, line2] = splitAddress(odkud, 55);
-
-pdf.text("Odkud:", 20, 95);
-
-pdf.text(line1, 20, 102);
-
-if(line2){
-  pdf.text(line2, 20, 108);
+function fixText(text){
+  return text
+    .replace(/ň/g,"n")
+    .replace(/ř/g,"r")
+    .replace(/š/g,"s")
+    .replace(/č/g,"c")
+    .replace(/ž/g,"z")
+    .replace(/ě/g,"e")
+    .replace(/á/g,"a")
+    .replace(/í/g,"i")
+    .replace(/ý/g,"y")
+    .replace(/ů/g,"u")
+    .replace(/ă/g,"a");
 }
 
-pdf.text("Kam: " + (ride.destination || ""), 20, 118);
-pdf.text("Telefon: " + (ride.phone || "-"), 20, 126);
+const odkud = fixText(ride.pickup || "");
+const kam = fixText(ride.destination || "");
 
-pdf.line(20, 135, 190, 135);
+pdf.text("Odkud:", 20, 110);
 
+const odkudLines = pdf.splitTextToSize(odkud, 110);
+
+pdf.text(odkudLines, 40, 110);
+
+let y = 110 + (odkudLines.length * 6);
+
+pdf.text("Kam: " + kam, 20, y + 6);
+pdf.text("Telefon: " + (ride.phone || "-"), 20, y + 16);
+
+pdf.line(20, 140, 190, 140);
+  
 pdf.setFontSize(14);
 pdf.setFont("helvetica","bold");
 pdf.text("Celkem:",20,150);
