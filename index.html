@@ -612,6 +612,40 @@ receiptId: receiptId,
 createdAt:serverTimestamp()
 });
 
+
+// 🔥 NOTIFICARI PUSH LA SOFERI
+
+const driversSnap = await getDocs(collection(db,"drivers"));
+
+let tokens = [];
+
+driversSnap.forEach(doc => {
+  const data = doc.data();
+  if(data.pushToken){
+    tokens.push(data.pushToken);
+  }
+});
+
+if(tokens.length > 0){
+
+  await fetch("https://fcm.googleapis.com/fcm/send",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "Authorization":"key=AAAA_PUNE_SERVER_KEY_AICI"
+    },
+    body: JSON.stringify({
+      registration_ids: tokens,
+      notification:{
+        title:"🚕 Nová jízda!",
+        body: pickupInput.value + " ➜ " + destinationInput.value
+      }
+    })
+  });
+
+}
+
+
 // 🔥 după 7 sec devine vizibil pentru toți
 if(calculatedPrice > 300){
 
