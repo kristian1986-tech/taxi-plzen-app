@@ -541,6 +541,11 @@ if(total<minimumPrice) total=minimumPrice;
 
 calculatedPrice = Math.round(total);
 
+// 🔥 SIGURANȚĂ EXTRA
+if(calculatedPrice < minimumPrice){
+  calculatedPrice = minimumPrice;
+}
+
 priceEstimate.innerText =
 "Vzdálenost: "+calculatedDistance.toFixed(1)+
 " km | "+calculatedETA+
