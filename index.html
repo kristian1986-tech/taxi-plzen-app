@@ -828,6 +828,12 @@ let y = 110 + (odkudLines.length * 6);
 pdf.text("Kam: " + kam, 20, y + 6);
 pdf.text("Telefon: " + (data.phone || "-"), 20, y + 16);
 
+// 🔥 fallback dacă nu există în ride
+const driverName = data.driverName || currentDriver?.name || "-";
+const driverIco = data.driverIco || "-";
+
+pdf.text("Ridic: " + driverName, 20, y + 26);
+pdf.text("ICO: " + driverIco, 20, y + 36);
   
 pdf.line(20, 140, 190, 140);
 
@@ -1287,8 +1293,13 @@ let y = 110 + (odkudLines.length * 6);
 
 pdf.text("Kam: " + kam, 20, y + 6);
 pdf.text("Telefon: " + (ride.phone || "-"), 20, y + 16);
-pdf.text("Řidič: " + (ride.driverName || "-"), 20, y + 26);
-pdf.text("IČO: " + (ride.driverIco || "-"), 20, y + 36);
+
+const driverName = ride.driverName || "-";
+const driverIco = ride.driverIco || "-";
+
+  
+pdf.text("Ridic: " + (ride.driverName || "-"), 20, y + 26);
+pdf.text("ICO: " + (ride.driverIco || "-"), 20, y + 36);
   
 pdf.line(20, 140, 190, 140);
   
