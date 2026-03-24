@@ -826,30 +826,37 @@ let y = 110 + (odkudLines.length * 6);
 
 // rest
 pdf.text("Kam: " + kam, 20, y + 6);
-pdf.text("Telefon: " + (data.phone || "-"), 20, y + 16);
 
 // 🔥 fallback dacă nu există în ride
 const driverName = data.driverName || currentDriver?.name || "-";
 const driverIco = data.driverIco || "-";
 
-pdf.text("Ridic: " + driverName, 20, y + 26);
-pdf.text("ICO: " + driverIco, 20, y + 36);
-  
-pdf.line(20, 140, 190, 140);
+// 🔥 fără telefon
+pdf.text("Ridic: " + driverName, 20, y + 16);
+pdf.text("ICO: " + driverIco, 20, y + 26);
 
+// 🔥 mutăm linia jos dinamic
+y = y + 40;
+pdf.line(20, y, 190, y);
 
 // TOTAL
+
+y += 10;
+
 pdf.setFontSize(14);
 pdf.setFont("helvetica","bold");
-pdf.text("Celkem:",20,150);
-pdf.text((data.estimatedPrice||0)+" KC",150,150);
 
+pdf.text("Celkem:",20,y);
+pdf.text((data.estimatedPrice||0)+" KC",150,y);
 pdf.line(20,160,190,160);
+
+y += 20;
 
 pdf.setFontSize(9);
 pdf.setFont("helvetica","normal");
-pdf.text("Dekuji za vyuziti nase  sluzby.",105,175,{align:"center"});
 
+pdf.text("Dekuji za vyuziti nase sluzby.",105,y,{align:"center"});
+  
 pdf.save("uctenka_"+(data.receiptNumber||"taxi")+".pdf");
 
 /* 🔥 RESET DUPĂ DESCĂRCARE */
@@ -1292,27 +1299,34 @@ pdf.text(odkudLines, 40, 110);
 let y = 110 + (odkudLines.length * 6);
 
 pdf.text("Kam: " + kam, 20, y + 6);
-pdf.text("Telefon: " + (ride.phone || "-"), 20, y + 16);
 
 const driverName = ride.driverName || "-";
 const driverIco = ride.driverIco || "-";
 
   
-pdf.text("Ridic: " + (ride.driverName || "-"), 20, y + 26);
-pdf.text("ICO: " + (ride.driverIco || "-"), 20, y + 36);
+// 🔥 fără telefon
+pdf.text("Řidič: " + (ride.driverName || "-"), 20, y + 16);
+pdf.text("IČO: " + (ride.driverIco || "-"), 20, y + 26);
+
+// 🔥 linie dinamică
+y = y + 40;
+pdf.line(20, y, 190, y);
   
-pdf.line(20, 140, 190, 140);
-  
+y += 10;
+
 pdf.setFontSize(14);
 pdf.setFont("helvetica","bold");
-pdf.text("Celkem:",20,150);
-pdf.text((ride.estimatedPrice || 0)+" KC",150,150);
 
+pdf.text("Celkem:",20,y);
+pdf.text((ride.estimatedPrice || 0)+" KC",150,y);
 pdf.line(20,160,190,160);
+
+y += 20;
 
 pdf.setFontSize(9);
 pdf.setFont("helvetica","normal");
-pdf.text("Dekuji za vyuziti nase sluzby.",105,175,{align:"center"});
+
+pdf.text("Dekuji za vyuziti nase sluzby.",105,y,{align:"center"});
 
 pdf.save("uctenka_"+receiptNumber+".pdf");
 
