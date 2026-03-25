@@ -1633,6 +1633,18 @@ autoCalculate();
 
 }
 
+window.toggleTerms = function(){
+
+const popup = document.getElementById("termsPopup");
+
+if(popup.classList.contains("hidden")){
+popup.classList.remove("hidden");
+} else {
+popup.classList.add("hidden");
+}
+
+};
+
    
 </script>  
   
@@ -1673,6 +1685,12 @@ class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end justify-
 class="block text-gray-400 hover:text-white transition">  
 +420 777 842 870  
 </a>  </div>    <hr class="border-gray-600 my-3"> 
+
+<button onclick="toggleTerms()" 
+class="w-full bg-gradient-to-r from-purple-500 to-purple-600 py-3 rounded-xl text-sm font-semibold shadow-lg active:scale-95 transition">
+📜 Podmínky
+</button>
+
   
   <button onclick="toggleClientHistory()"     
 class="w-full bg-gray-700 py-2 rounded text-sm">  
@@ -1720,6 +1738,41 @@ Později
 </div>
 
 </div>
+
+<div id="termsPopup"
+class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+  <div class="bg-gray-900 p-6 rounded-2xl w-[90%] max-w-md text-sm text-gray-300 space-y-3 animate-fadeIn">
+
+    <h2 class="text-lg font-bold text-white text-center">
+      📜 Podmínky služby
+    </h2>
+
+    <p>
+    Tato aplikace slouží pouze jako zprostředkovatel mezi zákazníkem a řidičem.
+    </p>
+
+    <p>
+    Řidič je samostatný podnikatel a odpovídá za provedení služby.
+    </p>
+
+    <p>
+    Cena je orientační a může se mírně lišit podle situace.
+    </p>
+
+    <p>
+    Použitím aplikace souhlasíte s těmito podmínkami.
+    </p>
+
+    <button onclick="toggleTerms()" 
+    class="w-full bg-gray-700 py-2 rounded-xl mt-3">
+      Zavřít
+    </button>
+
+  </div>
+
+</div>
+
 
 </body>   
 
