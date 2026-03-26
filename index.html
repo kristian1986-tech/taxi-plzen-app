@@ -484,6 +484,19 @@ resetErrors();
 const pickup = pickupInput.value.trim();
 const destination = destinationInput.value.trim();
 
+// 🔥 dacă adresele sunt identice → preț minim direct
+if(pickup.toLowerCase() === destination.toLowerCase()){
+  calculatedDistance = 0;
+  calculatedETA = 1;
+  calculatedPrice = minimumPrice;
+
+  priceEstimate.innerText =
+    "Vzdálenost: 0 km | 1 min | Cena: " + minimumPrice + " Kč";
+
+  return;
+}
+  
+  
 let hasError=false;
 
 if(!pickup){
