@@ -601,6 +601,14 @@ phoneError.classList.remove("hidden");
 return;
 }
 
+
+function vibrateClick(){
+  if(navigator.vibrate){
+    navigator.vibrate(30); // 30ms = scurt și premium
+  }
+}
+  
+
 /* 🔒 VERIFICARE CURSA ACTIVĂ DUPĂ TELEFON */
 const activeQuery = query(
 collection(db,"rides"),
@@ -713,6 +721,8 @@ statusMessage.innerText="Čekáme na potvrzení.";
 cancelBtn.classList.remove("hidden");
 
 cancelBtn.onclick = async ()=>{
+
+vibrateClick(); // 🔥 AICI
 
 await updateDoc(doc(db,"rides",id),{ status:"cancelled" });
 
