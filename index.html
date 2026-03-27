@@ -554,7 +554,6 @@ if(calculatedDistance === 0 || isNaN(calculatedDistance)){
   priceEstimate.innerText =
     "Vzdálenost: 0 km | 1 min | Cena: " + minimumPrice + " Kč";
 
-  return;
 }
 const durationSeconds = parseInt(route.duration.replace("s",""));
 calculatedETA = Math.ceil(durationSeconds/60);
