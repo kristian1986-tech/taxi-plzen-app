@@ -483,8 +483,6 @@ resetErrors();
 
 const pickup = pickupInput.value.trim();
 const destination = destinationInput.value.trim();
-
-  
   
 let hasError=false;
 
@@ -521,20 +519,43 @@ travelMode:"DRIVE"
 
 const data = await response.json();
 if(!data.routes?.length){
+  calculatedPrice = minimumPrice;
+  priceEstimate.innerText = "Cena: " + minimumPrice + " Kč";
+  return;
+}
+  
+if(!data.routes?.length){
 generalError.innerText="Chyba výpočtu trasy.";
 generalError.classList.remove("hidden");
 return;
 }
 
 const route = data.routes[0];
+if(!route.distanceMeters || isNaN(route.distanceMeters)){
+  calculatedDistance = 0;
+  calculatedETA = 1;
+  calculatedPrice = minimumPrice;
 
+  priceEstimate.innerText =
+    "Vzdálenost: 0 km | 1 min | Cena: " + minimumPrice + " Kč";
+
+  return;
+}
+  
 pickupLocation = {
 lat: route.legs[0].startLocation.latLng.latitude,
 lng: route.legs[0].startLocation.latLng.longitude
 };
 
 calculatedDistance = route.distanceMeters / 1000;
+if(calculatedDistance === 0 || isNaN(calculatedDistance)){
+  calculatedPrice = minimumPrice;
 
+  priceEstimate.innerText =
+    "Vzdálenost: 0 km | 1 min | Cena: " + minimumPrice + " Kč";
+
+  return;
+}
 const durationSeconds = parseInt(route.duration.replace("s",""));
 calculatedETA = Math.ceil(durationSeconds/60);
 
