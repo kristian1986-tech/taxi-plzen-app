@@ -294,6 +294,12 @@ const callBtn = document.getElementById("callBtn");
 const arrivalOverlay = document.getElementById("arrivalOverlay");
 
 
+ cancelBtn.addEventListener("click", () => {
+  if(navigator.vibrate){
+    navigator.vibrate(30);
+  }
+});  
+
 function splitAddress(text, maxLen = 50){
   const words = text.split(" ");
   let line1 = "";
@@ -722,8 +728,6 @@ cancelBtn.classList.remove("hidden");
 
 cancelBtn.onclick = async ()=>{
 
-vibrateClick(); // 🔥 AICI
-
 await updateDoc(doc(db,"rides",id),{ status:"cancelled" });
 
 localStorage.removeItem("activeRideId");
@@ -731,7 +735,7 @@ localStorage.removeItem("activeRideId");
 statusSection.classList.add("hidden");
 formSection.classList.remove("hidden");
 
-/* 🔥 RESET COMPLET */
+/* RESET */
 pickupInput.value="";
 destinationInput.value="";
 phoneInput.value="";
