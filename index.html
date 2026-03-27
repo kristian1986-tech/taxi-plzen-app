@@ -773,14 +773,24 @@ callBtn.onclick = ()=> window.location.href="tel:"+driver.phone;
 }
 
 }
+  
 
 if(data.status==="arrived"){
+
 statusText.innerText="Řidič přijel";
 statusMessage.innerText="Řidič je na místě.";
 
+// 🔥 APELĂM DOAR O DATĂ
+if(!arrivalPlayed){
+  showArrivalAlert();
+  arrivalPlayed = true;
+}
+
 callBtn.classList.remove("hidden");
 callBtn.onclick = ()=> window.location.href="tel:"+currentDriver.phone;
+
 }
+  
 
 if(data.status==="in_progress"){
 statusText.innerText="Jízda probíhá";
@@ -951,15 +961,21 @@ arrivalPlayed=false;
 });
 }
 
+   
 function showArrivalAlert(){
 
 arrivalOverlay.classList.remove("hidden");
-const audio=new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
+
+const audio = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
 audio.play().catch(()=>{});
+
+// 🔥 VIBRAȚIE PUTERNICĂ (ca notificare reală)
 if(navigator.vibrate){
-navigator.vibrate([300,200,300,200,600]);
+  navigator.vibrate([200, 100, 200, 100, 400]);
 }
+
 }
+   
 
 window.closeArrival=function(){
 arrivalOverlay.classList.add("hidden");
