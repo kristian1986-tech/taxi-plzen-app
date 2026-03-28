@@ -715,11 +715,10 @@ driverMarker.setPosition(newPosition);
   
 /* traseu live către client */
   
-if(data.pickupLat && data.pickupLng){
-  drawRoute(
-    newPosition,
-    { lat: data.pickupLat, lng: data.pickupLng }
-  );
+drawRoute(
+  newPosition,
+  { lat: data.pickupLat, lng: data.pickupLng }
+);
 }
 
 }
