@@ -709,8 +709,10 @@ lng: data.driverLng
 
 driverMarker.setPosition(newPosition);
 
+  
 /* traseu live către client */
 if(
+  !routeDrawn &&
   (data.status === "confirmed" || data.status === "arrived") &&
   data.pickupLat && data.pickupLng
 ){
@@ -718,6 +720,8 @@ if(
     newPosition,
     { lat: data.pickupLat, lng: data.pickupLng }
   );
+
+  routeDrawn = true;
 }
 
 }
@@ -804,7 +808,9 @@ statusMessage.innerText="Cesta právě probíhá.";
 }
 
 if(data.status==="completed"){
-
+  
+routeDrawn = false;
+  
 statusText.innerText="Dokončena";
 statusMessage.innerText="Děkujeme za využití naše služby.";
 
