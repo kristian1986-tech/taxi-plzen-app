@@ -711,7 +711,9 @@ driverMarker.setPosition(newPosition);
 
   
 /* traseu live către client */
-if(
+alert("DRAW ROUTE: " + data.pickupLat + " / " + data.pickupLng);
+  
+  if(
   !routeDrawn &&
   (data.status === "confirmed" || data.status === "arrived") &&
   data.pickupLat && data.pickupLng
