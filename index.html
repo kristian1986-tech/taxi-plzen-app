@@ -385,7 +385,7 @@ let calculatedETA = 0;
 let pickupLocation = null;
 let destinationLocation = null;
 let arrivalPlayed = false;
-let routeDrawn = false;
+
 let map;
 let driverMarker;
 let driversMarkers = [];
@@ -463,6 +463,9 @@ driversMarkers.push(marker);
 }
 
 function drawRoute(origin, destination) {
+
+  
+directionsRenderer.setDirections({ routes: [] });
 
 directionsService.route({
 origin: origin,
@@ -711,17 +714,12 @@ driverMarker.setPosition(newPosition);
 
   
 /* traseu live către client */
-if(
-  !routeDrawn &&
-  (data.status === "confirmed" || data.status === "arrived") &&
-  data.pickupLat && data.pickupLng
-){
+  
+if(data.pickupLat && data.pickupLng){
   drawRoute(
     newPosition,
     { lat: data.pickupLat, lng: data.pickupLng }
   );
-
-  routeDrawn = true;
 }
 
 }
