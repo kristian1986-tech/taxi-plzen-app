@@ -710,8 +710,14 @@ lng: data.driverLng
 driverMarker.setPosition(newPosition);
 
 /* traseu live către client */
-if(data.pickup){
-drawRoute(newPosition, data.pickup);
+if(
+  (data.status === "confirmed" || data.status === "arrived") &&
+  data.pickupLat && data.pickupLng
+){
+  drawRoute(
+    newPosition,
+    { lat: data.pickupLat, lng: data.pickupLng }
+  );
 }
 
 }
