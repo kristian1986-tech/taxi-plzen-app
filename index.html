@@ -713,18 +713,12 @@ driverMarker.setPosition(newPosition);
 /* traseu live către client */
 alert("DRAW ROUTE: " + data.pickupLat + " / " + data.pickupLng);
   
-  if(
-  !routeDrawn &&
-  (data.status === "confirmed" || data.status === "arrived") &&
-  data.pickupLat && data.pickupLng
-){
+  if(data.pickupLat && data.pickupLng){
   drawRoute(
     newPosition,
     { lat: data.pickupLat, lng: data.pickupLng }
   );
-
-  routeDrawn = true;
-}
+  }
 
 }
 
