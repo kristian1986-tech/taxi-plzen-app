@@ -462,25 +462,36 @@ driversMarkers.push(marker);
 
 }
 
+
 function drawRoute(origin, destination) {
 
-directionsService.route({
-origin: origin,
-destination: destination,
-travelMode: google.maps.TravelMode.DRIVING
-}, function(result, status) {
+  if (!directionsRenderer) return;
 
-console.log("Directions status:", status);
+  directionsRenderer.setMap(null); // 🔥 șterge ruta veche
 
-if (status === google.maps.DirectionsStatus.OK) {
-directionsRenderer.setDirections(result);
-} else {
-console.error("Directions failed:", status);
+  directionsRenderer = new google.maps.DirectionsRenderer({
+    map: map,
+    suppressMarkers: false,
+    polylineOptions:{
+      strokeColor:"#3b82f6",
+      strokeWeight:6
+    }
+  });
+
+  directionsService.route({
+    origin: origin,
+    destination: destination,
+    travelMode: google.maps.TravelMode.DRIVING
+  }, function(result, status) {
+
+    if (status === google.maps.DirectionsStatus.OK) {
+      directionsRenderer.setDirections(result);
+    }
+
+  });
+
 }
-
-});
-
-};
+   
 
 /* ROUTE */
 window.calculateRoute = async function(){
