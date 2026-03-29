@@ -466,25 +466,25 @@ driversMarkers.push(marker);
 
 function drawRoute(origin, destination) {
 
-  if (!directionsService || !directionsRenderer) return;
+  if(!map) return;
 
-  directionsService.route({
-    origin: {
-      lat: origin.lat,
-      lng: origin.lng
-    },
-    destination: {
-      lat: destination.lat,
-      lng: destination.lng
-    },
-    travelMode: 'DRIVING'
-  }, (result, status) => {
+  // șterge linia veche
+  if(routeLine){
+    routeLine.setMap(null);
+  }
 
-    if (status === 'OK') {
-      directionsRenderer.setDirections(result);
-    }
-
+  routeLine = new google.maps.Polyline({
+    path: [
+      { lat: origin.lat, lng: origin.lng },
+      { lat: destination.lat, lng: destination.lng }
+    ],
+    geodesic: true,
+    strokeColor: "#3b82f6",
+    strokeOpacity: 1.0,
+    strokeWeight: 5
   });
+
+  routeLine.setMap(map);
 
 }
    
