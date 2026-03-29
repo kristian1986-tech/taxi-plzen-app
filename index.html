@@ -809,9 +809,10 @@ const driver = driverSnap.data();
 currentDriver = driver;
 
 statusMessage.innerHTML = `
+Příjezd přibližně za ${etaText} min.<br><br>
 Řidič: ${driver.name}<br>
 Auto: ${driver.car}<br>
-SPZ: ${driver.plate}<br>
+SPZ: ${driver.plate}
 `;
 
 callBtn.classList.remove("hidden");
