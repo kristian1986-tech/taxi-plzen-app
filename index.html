@@ -465,26 +465,21 @@ driversMarkers.push(marker);
 
 function drawRoute(origin, destination) {
 
-  if (!directionsRenderer) return;
-
-  directionsRenderer.setMap(null); // 🔥 șterge ruta veche
-
-  directionsRenderer = new google.maps.DirectionsRenderer({
-    map: map,
-    suppressMarkers: false,
-    polylineOptions:{
-      strokeColor:"#3b82f6",
-      strokeWeight:6
-    }
-  });
+  if (!directionsService || !directionsRenderer) return;
 
   directionsService.route({
-    origin: origin,
-    destination: destination,
-    travelMode: google.maps.TravelMode.DRIVING
-  }, function(result, status) {
+    origin: {
+      lat: origin.lat,
+      lng: origin.lng
+    },
+    destination: {
+      lat: destination.lat,
+      lng: destination.lng
+    },
+    travelMode: 'DRIVING'
+  }, (result, status) => {
 
-    if (status === google.maps.DirectionsStatus.OK) {
+    if (status === 'OK') {
       directionsRenderer.setDirections(result);
     }
 
@@ -589,7 +584,6 @@ priceEstimate.innerText =
 "Vzdálenost: "+calculatedDistance.toFixed(1)+
 " km | "+calculatedETA+
 " min | Cena: "+calculatedPrice+" Kč";
-drawRoute(pickup,destination);
 };
 
 /* CREATE */
