@@ -395,7 +395,15 @@ let currentDriver = null;
 let routeLine = null;   
 let qrGenerated = false;
 let deferredPrompt;
+   
+let deviceId = localStorage.getItem("deviceId");
 
+if(!deviceId){
+  deviceId = crypto.randomUUID();
+  localStorage.setItem("deviceId", deviceId);
+}
+
+   
 window.initMap = function(){
 
 map = new google.maps.Map(document.getElementById("map"),{
@@ -650,6 +658,7 @@ pickupLat: pickupLocation ? pickupLocation.lat : null,
 pickupLng: pickupLocation ? pickupLocation.lng : null,
 destination:destinationInput.value.trim(),
 phone,
+deviceId: deviceId, 
 distance:calculatedDistance,
 estimatedPrice:calculatedPrice,
 eta:calculatedETA,
