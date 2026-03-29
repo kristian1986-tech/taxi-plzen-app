@@ -715,6 +715,29 @@ lng: data.driverLng
 
 driverMarker.setPosition(newPosition);
 
+
+function calculateETA(from, to){
+
+  const R = 6371; // km
+
+  const dLat = (to.lat - from.lat) * Math.PI / 180;
+  const dLng = (to.lng - from.lng) * Math.PI / 180;
+
+  const a =
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(from.lat * Math.PI/180) *
+    Math.cos(to.lat * Math.PI/180) *
+    Math.sin(dLng/2) * Math.sin(dLng/2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const distance = R * c;
+
+  // viteză medie 40 km/h (oraș)
+  const eta = (distance / 40) * 60;
+
+  return Math.max(1, Math.round(eta));
+}
+  
   
 /* traseu live către client */
   
@@ -762,7 +785,20 @@ arrivalPlayed=false;
 if(data.status==="confirmed"){
 
 statusText.innerText="Řidič je na cestě";
-statusMessage.innerText="Příjezd přibližně za "+(data.eta||5)+" minut.";
+
+let etaText = (data.eta || 5);
+
+if(data.pickupLat && data.pickupLng && data.driverLat){
+
+  const etaLive = calculateETA(
+    newPosition,
+    { lat: data.pickupLat, lng: data.pickupLng }
+  );
+
+  etaText = etaLive;
+}
+
+statusMessage.innerText = "Příjezd přibližně za " + etaText + " min.";
 
 const driverRef = doc(db,"drivers",data.driverId);
 const driverSnap = await getDoc(driverRef);
