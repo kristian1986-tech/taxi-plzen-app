@@ -597,26 +597,34 @@ priceEstimate.innerText =
 
 /* CREATE */
 window.createRide = async function(){
+  
+resetErrors();
 
-// 🔴 CHECK BLACKLIST
+// 🔴 CHECK BLACKLIST (SAFE)
 
-const phone = phoneInput.value.trim().replace(/\s+/g,"");
+let phone = phoneInput.value.trim().replace(/\s+/g,"");
 const deviceId = localStorage.getItem("deviceId");
-
-const blacklistSnap = await getDocs(collection(db,"blacklist"));
 
 let blocked = false;
 
-blacklistSnap.forEach(doc=>{
-  const data = doc.data();
+try {
 
-  if(
-    (data.phone && data.phone === phone) ||
-    (data.deviceId && data.deviceId === deviceId)
-  ){
-    blocked = true;
-  }
-});
+  const blacklistSnap = await getDocs(collection(db,"blacklist"));
+
+  blacklistSnap.forEach(docSnap => {
+    const data = docSnap.data();
+
+    if(
+      (data.phone && data.phone === phone) ||
+      (data.deviceId && data.deviceId === deviceId)
+    ){
+      blocked = true;
+    }
+  });
+
+} catch(e) {
+  console.log("Blacklist error:", e);
+}
 
 if(blocked){
   alert("Byli jste zablokováni.");
@@ -624,8 +632,6 @@ if(blocked){
 }
 
   
-resetErrors();
-
 if(calculatedPrice===0){
 generalError.innerText="Nejprve vypočítejte cenu.";
 generalError.classList.remove("hidden");
