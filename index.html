@@ -644,7 +644,7 @@ generalError.classList.remove("hidden");
 return;
 }
 
-let phone = phoneInput.value.trim().replace(/\s+/g,"");
+phone = phoneInput.value.trim().replace(/\s+/g,"");
 const phoneRegex=/^\+?[0-9]{8,15}$/;
 
 if(!phoneRegex.test(phone)){
