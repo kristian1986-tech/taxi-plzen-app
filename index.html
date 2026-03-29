@@ -598,6 +598,32 @@ priceEstimate.innerText =
 /* CREATE */
 window.createRide = async function(){
 
+// 🔴 CHECK BLACKLIST
+
+const phone = phoneInput.value.trim().replace(/\s+/g,"");
+const deviceId = localStorage.getItem("deviceId");
+
+const blacklistSnap = await getDocs(collection(db,"blacklist"));
+
+let blocked = false;
+
+blacklistSnap.forEach(doc=>{
+  const data = doc.data();
+
+  if(
+    (data.phone && data.phone === phone) ||
+    (data.deviceId && data.deviceId === deviceId)
+  ){
+    blocked = true;
+  }
+});
+
+if(blocked){
+  alert("Byli jste zablokováni.");
+  return;
+}
+
+  
 resetErrors();
 
 if(calculatedPrice===0){
