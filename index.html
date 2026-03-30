@@ -729,34 +729,6 @@ function listenToStatus(id){
 
 onSnapshot(doc(db,"rides",id), async (snap)=>{
 
-if(!snap.exists()) return;
-
-const data=snap.data();
-
-if(data.driverLat && data.driverLng && driverMarker && map){
-
-const now = Date.now();
-
-if(data.driverUpdatedAt && now - data.driverUpdatedAt > 180000){
-
-await updateDoc(doc(db,"rides",id),{
-status:"new",
-driverId:null
-});
-
-statusText.innerText="Hledáme jiného řidiče";
-statusMessage.innerText="Původní řidič se odpojil.";
-
-}
-
-const newPosition = {
-lat: data.driverLat,
-lng: data.driverLng
-};
-
-driverMarker.setPosition(newPosition);
-
-
 function calculateETA(from, to){
 
   const R = 6371; // km
@@ -778,6 +750,40 @@ function calculateETA(from, to){
 
   return Math.max(1, Math.round(eta));
 }
+  
+if(!snap.exists()) return;
+
+const data=snap.data();
+
+let newPosition = null;
+
+if(data.driverLat && data.driverLng){
+  newPosition = {
+    lat: data.driverLat,
+    lng: data.driverLng
+  };
+  }
+
+const now = Date.now();
+
+if(data.driverUpdatedAt && now - data.driverUpdatedAt > 180000){
+
+await updateDoc(doc(db,"rides",id),{
+status:"new",
+driverId:null
+});
+
+statusText.innerText="Hledáme jiného řidiče";
+statusMessage.innerText="Původní řidič se odpojil.";
+
+}
+
+const newPosition = {
+lat: data.driverLat,
+lng: data.driverLng
+};
+
+driverMarker.setPosition(newPosition);
   
   
 /* traseu live către client */
@@ -828,10 +834,11 @@ if(data.status==="confirmed"){
 statusText.innerText="Řidič je na cestě";
 
 cancelBtn.classList.remove("hidden");
-  
-let etaText = (data.eta || 5);
 
-if(data.pickupLat && data.pickupLng && data.driverLat){
+  
+let etaText = 5;
+
+if(newPosition && data.pickupLat && data.pickupLng){
 
   const etaLive = calculateETA(
     newPosition,
@@ -840,6 +847,7 @@ if(data.pickupLat && data.pickupLng && data.driverLat){
 
   etaText = etaLive;
 }
+  
 
 statusMessage.innerText = "Příjezd přibližně za " + etaText + " min.";
 
