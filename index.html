@@ -896,7 +896,7 @@ if(!arrivalPlayed){
   showArrivalAlert();
   arrivalPlayed = true;
 }
-
+cancelBtn.classList.add("hidden");
 callBtn.classList.remove("hidden");
 callBtn.onclick = ()=> window.location.href="tel:"+currentDriver.phone;
 
@@ -906,6 +906,7 @@ callBtn.onclick = ()=> window.location.href="tel:"+currentDriver.phone;
 if(data.status==="in_progress"){
 statusText.innerText="Jízda probíhá";
 statusMessage.innerText="Cesta právě probíhá.";
+cancelBtn.classList.add("hidden");  
 }
 
 if(data.status==="completed"){
