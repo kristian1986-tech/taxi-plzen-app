@@ -778,12 +778,9 @@ statusMessage.innerText="Původní řidič se odpojil.";
 
 }
 
-const newPosition = {
-lat: data.driverLat,
-lng: data.driverLng
-};
-
-driverMarker.setPosition(newPosition);
+ if(newPosition && driverMarker){
+  driverMarker.setPosition(newPosition);
+ }
   
   
 /* traseu live către client */
