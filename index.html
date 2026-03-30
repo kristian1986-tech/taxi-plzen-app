@@ -729,9 +729,13 @@ function listenToStatus(id){
 
 onSnapshot(doc(db,"rides",id), async (snap)=>{
 
-function calculateETA(from, to){
+if(!snap.exists()) return;
 
-  const R = 6371; // km
+const data = snap.data();
+
+// 🔥 ETA function
+function calculateETA(from, to){
+  const R = 6371;
 
   const dLat = (to.lat - from.lat) * Math.PI / 180;
   const dLng = (to.lng - from.lng) * Math.PI / 180;
@@ -745,16 +749,10 @@ function calculateETA(from, to){
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   const distance = R * c;
 
-  // viteză medie 40 km/h (oraș)
-  const eta = (distance / 40) * 60;
-
-  return Math.max(1, Math.round(eta));
+  return Math.max(1, Math.round((distance / 40) * 60));
 }
-  
-if(!snap.exists()) return;
 
-const data=snap.data();
-
+// 🔥 poziție driver SAFE
 let newPosition = null;
 
 if(data.driverLat && data.driverLng){
@@ -762,35 +760,18 @@ if(data.driverLat && data.driverLng){
     lat: data.driverLat,
     lng: data.driverLng
   };
+
+  if(driverMarker){
+    driverMarker.setPosition(newPosition);
   }
 
-const now = Date.now();
-
-if(data.driverUpdatedAt && now - data.driverUpdatedAt.toMillis() > 180000){
-
-await updateDoc(doc(db,"rides",id),{
-status:"new",
-driverId:null
-});
-
-statusText.innerText="Hledáme jiného řidiče";
-statusMessage.innerText="Původní řidič se odpojil.";
-
-}
-
- if(newPosition && driverMarker){
-  driverMarker.setPosition(newPosition);
- }
-  
-  
-/* traseu live către client */
-  
   if(data.pickupLat && data.pickupLng){
-  drawRoute(
-    newPosition,
-    { lat: data.pickupLat, lng: data.pickupLng }
-  );
+    drawRoute(
+      newPosition,
+      { lat: data.pickupLat, lng: data.pickupLng }
+    );
   }
+}
 
 
 receiptBtn.classList.add("hidden");
