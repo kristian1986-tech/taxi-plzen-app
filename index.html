@@ -827,6 +827,8 @@ if(data.status==="confirmed"){
 
 statusText.innerText="Řidič je na cestě";
 
+cancelBtn.classList.remove("hidden");
+  
 let etaText = (data.eta || 5);
 
 if(data.pickupLat && data.pickupLng && data.driverLat){
@@ -859,6 +861,26 @@ SPZ: ${driver.plate}
 callBtn.classList.remove("hidden");
 callBtn.onclick = ()=> window.location.href="tel:"+driver.phone;
 
+cancelBtn.onclick = async ()=>{
+
+  if(data.status === "arrived" || data.status === "in_progress"){
+    alert("Jízdu již nelze zrušit.");
+    return;
+  }
+
+  await updateDoc(doc(db,"rides",id),{ status:"cancelled" });
+
+  localStorage.removeItem("activeRideId");
+
+  statusSection.classList.add("hidden");
+  formSection.classList.remove("hidden");
+
+  pickupInput.value="";
+  destinationInput.value="";
+  phoneInput.value="";
+  priceEstimate.innerText="";
+};
+  
 }
 
 }
