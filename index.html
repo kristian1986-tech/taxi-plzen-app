@@ -1818,7 +1818,24 @@ async function sendMessage(text){
 
 }
    
-sendMessage("test mesaj");
+
+
+function listenMessages(rideId){
+
+  onSnapshot(collection(db,"rides",rideId,"messages"), snapshot=>{
+
+    snapshot.forEach(doc=>{
+      const msg = doc.data();
+      console.log(msg.text);
+    });
+
+  });
+
+}
+
+
+   
+   
    
 </script>  
   
