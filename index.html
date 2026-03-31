@@ -786,7 +786,10 @@ cancelBtn.classList.remove("hidden");
 
 cancelBtn.onclick = async ()=>{
 
-await updateDoc(doc(db,"rides",id),{ status:"cancelled" });
+await updateDoc(doc(db,"rides",id),{
+  status:"cancelled",
+  driverId: null
+});
 
 localStorage.removeItem("activeRideId");
 
@@ -853,7 +856,10 @@ cancelBtn.onclick = async ()=>{
     return;
   }
 
-  await updateDoc(doc(db,"rides",id),{ status:"cancelled" });
+  await updateDoc(doc(db,"rides",id),{
+  status:"cancelled",
+  driverId: null
+});
 
   localStorage.removeItem("activeRideId");
 
