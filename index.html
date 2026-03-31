@@ -1829,25 +1829,39 @@ async function sendMessage(text){
     createdAt: serverTimestamp()
   });
 
+document.getElementById("chatInput").value = "";
+  
 }
    
 
 
 function listenMessages(rideId){
 
-  onSnapshot(collection(db,"rides",rideId,"messages"), snapshot=>{
+onSnapshot(collection(db,"rides",rideId,"messages"), snapshot=>{
 
-    snapshot.forEach(doc=>{
-      const msg = doc.data();
-      const chatBox = document.getElementById("chatBox");
+  const chatBox = document.getElementById("chatBox");
+  chatBox.innerHTML = ""; // 🔥 IMPORTANT
 
-const div = document.createElement("div");
-div.innerText = msg.text;
+  snapshot.forEach(doc=>{
+    const msg = doc.data();
 
-chatBox.appendChild(div);
-chatBox.scrollTop = chatBox.scrollHeight;
-      
-    });
+    const div = document.createElement("div");
+    div.innerText = msg.text;
+
+    // stil stânga / dreapta
+    if(msg.sender === "client"){
+      div.className = "bg-blue-600 text-white p-2 rounded-xl ml-auto mb-1 max-w-[70%]";
+    }else{
+      div.className = "bg-gray-700 text-white p-2 rounded-xl mr-auto mb-1 max-w-[70%]";
+    }
+
+    chatBox.appendChild(div);
+  });
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+});
+  
 
   });
 
