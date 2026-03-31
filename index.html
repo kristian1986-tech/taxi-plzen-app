@@ -1804,6 +1804,21 @@ popup.classList.add("hidden");
 
 };
 
+
+async function sendMessage(text){
+
+  const rideId = localStorage.getItem("activeRideId");
+  if(!rideId || !text) return;
+
+  await addDoc(collection(db,"rides",rideId,"messages"),{
+    text: text,
+    sender: "client",
+    createdAt: serverTimestamp()
+  });
+
+}
+   
+sendMessage("test mesaj");
    
 </script>  
   
