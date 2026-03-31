@@ -921,6 +921,14 @@ routeDrawn = false;
 statusText.innerText="Dokončena";
 statusMessage.innerText="Děkujeme za využití naše služby.";
 
+
+// 🔥 AICI ADAUGI
+const chatBox = document.getElementById("chatBox");
+if(chatBox){
+  chatBox.innerHTML = "";
+}
+  
+  
 document.getElementById("ratingBox").classList.remove("hidden");
 
 /* 🔥 ARATĂ BUTONUL */
@@ -1821,7 +1829,7 @@ popup.classList.add("hidden");
 async function sendMessage(text){
 
   const rideId = localStorage.getItem("activeRideId");
-  if(!rideId || !text) return;
+  if(!rideId || !text.trim()) return;
 
   await addDoc(collection(db,"rides",rideId,"messages"),{
     text: text,
@@ -1855,6 +1863,15 @@ onSnapshot(collection(db,"rides",rideId,"messages"), snapshot=>{
       div.className = "bg-gray-700 text-white p-2 rounded-xl mr-auto mb-1 max-w-[70%]";
     }
 
+if(msg.sender === "driver"){
+  const audio = new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
+  audio.play().catch(()=>{});
+
+  if(navigator.vibrate){
+    navigator.vibrate(200);
+  }
+}
+    
     chatBox.appendChild(div);
   });
 
