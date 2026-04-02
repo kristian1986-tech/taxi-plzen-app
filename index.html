@@ -1851,44 +1851,43 @@ window.sendMessage = sendMessage;
 function listenMessages(rideId){
 
 onSnapshot(
-query(
 collection(db,"rides",rideId,"messages"),
-orderBy("createdAt","asc")
-),
 snapshot=>{
 
   const chatBox = document.getElementById("chatBox");
-  chatBox.innerHTML = ""; // 🔥 IMPORTANT
+  chatBox.innerHTML = "";
 
-  snapshot.forEach(doc=>{
+  snapshot.docs
+  .sort((a,b)=> (a.data().createdAt?.seconds || 0) - (b.data().createdAt?.seconds || 0))
+  .forEach(doc=>{
+
     const msg = doc.data();
 
     const div = document.createElement("div");
     div.innerText = msg.text;
 
-    // stil stânga / dreapta
     if(msg.sender === "client"){
       div.className = "bg-blue-600 text-white p-2 rounded-xl ml-auto mb-1 max-w-[70%]";
     }else{
       div.className = "bg-gray-700 text-white p-2 rounded-xl mr-auto mb-1 max-w-[70%]";
     }
 
-if(msg.sender === "driver"){
-  const audio = new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
-  audio.play().catch(()=>{});
+    if(msg.sender === "driver"){
+      const audio = new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
+      audio.play().catch(()=>{});
 
-  if(navigator.vibrate){
-    navigator.vibrate(200);
-  }
-}
-    
+      if(navigator.vibrate){
+        navigator.vibrate(200);
+      }
+    }
+
     chatBox.appendChild(div);
+
   });
 
   chatBox.scrollTop = chatBox.scrollHeight;
 
 });
-
 }
 
 
