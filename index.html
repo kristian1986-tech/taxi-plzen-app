@@ -1889,11 +1889,19 @@ const chatOpen = !document.getElementById("chatSection").classList.contains("hid
 // 🔥 număr total mesaje de la driver
 let driverCount = 0;
 
-snapshot.forEach(doc=>{
-  const msg = doc.data();
+snapshot.forEach(docSnap=>{
+  const msg = docSnap.data();
 
+  // 🔥 count pt badge
   if(msg.sender === "driver"){
     driverCount++;
+  }
+
+  // 🔥 SEEN SYSTEM (AICI E MAGIA)
+  if(msg.sender === "driver" && !msg.seen){
+    updateDoc(doc(db,"rides",rideId,"messages",docSnap.id),{
+      seen: true
+    });
   }
 });
 
