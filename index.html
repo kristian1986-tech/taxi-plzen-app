@@ -1922,7 +1922,23 @@ if(!chatOpen && newMessages > 0){
     const msg = doc.data();
 
     const div = document.createElement("div");
-    div.innerText = msg.text;
+
+    div.innerHTML = msg.text;
+
+// 🔥 dacă e mesaj trimis de client
+if(msg.sender === "client"){
+  const tick = document.createElement("span");
+
+  tick.className = "text-xs ml-2 opacity-70";
+
+  if(msg.seen){
+    tick.innerText = "✔✔";
+  }else{
+    tick.innerText = "✔";
+  }
+
+  div.appendChild(tick);
+}
 
     // stil stânga / dreapta
     if(msg.sender === "client"){
