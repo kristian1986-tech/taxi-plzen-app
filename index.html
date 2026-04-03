@@ -250,10 +250,18 @@ class="hidden mt-3 bg-green-600 px-6 py-3 rounded font-bold w-full">
 </button>
 
 <!-- 🔘 BUTON CHAT -->
-<button onclick="toggleChat()" 
-class="mt-4 w-full bg-blue-600 py-3 rounded-2xl font-semibold active:scale-95 transition">
+
+ <button onclick="toggleChat()" 
+class="relative mt-4 w-full bg-blue-600 py-3 rounded-2xl font-semibold active:scale-95 transition">
+
 💬 Chat
-</button>
+
+<span id="chatBadge"
+class="hidden absolute -top-2 -right-2 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">
+0
+</span>
+
+ </button> 
 
 <!-- 📦 CHAT -->
 <div id="chatSection" class="hidden">
@@ -421,7 +429,7 @@ let currentDriver = null;
 let routeLine = null;   
 let qrGenerated = false;
 let deferredPrompt;
-   
+let lastMessageCount = 0;   
 let deviceId = localStorage.getItem("deviceId");
 
 if(!deviceId){
@@ -1870,6 +1878,21 @@ orderBy("createdAt","asc")
 ),
 snapshot=>{
 
+const badge = document.getElementById("chatBadge");
+const currentCount = snapshot.size;
+
+// 🔥 verificăm dacă chat-ul e deschis
+const chatOpen = !document.getElementById("chatSection").classList.contains("hidden");
+
+// 🔥 badge doar dacă chat închis și mesaje noi
+if(!chatOpen && currentCount > lastMessageCount){
+  badge.classList.remove("hidden");
+  badge.innerText = currentCount;
+}
+
+lastMessageCount = currentCount;
+  
+  
   const chatBox = document.getElementById("chatBox");
   chatBox.innerHTML = ""; // 🔥 IMPORTANT
 
@@ -1907,9 +1930,18 @@ if(msg.sender === "driver"){
 
  window.toggleChat = function(){
   const chat = document.getElementById("chatSection");
+  const badge = document.getElementById("chatBadge");
 
   if(chat.classList.contains("hidden")){
     chat.classList.remove("hidden");
+
+    // 🔥 RESET BADGE
+    badge.classList.add("hidden");
+    badge.innerText = "0";
+
+    // 🔥 reset count (IMPORTANT)
+    lastMessageCount = document.querySelectorAll("#chatBox div").length;
+
   }else{
     chat.classList.add("hidden");
   }
