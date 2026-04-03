@@ -1859,6 +1859,7 @@ async function sendMessage(text){
   await addDoc(collection(db,"rides",rideId,"messages"),{
     text: text,
     sender: "client",
+    seen: false,
     createdAt: serverTimestamp()
   });
 
