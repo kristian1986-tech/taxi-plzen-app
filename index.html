@@ -430,6 +430,7 @@ let routeLine = null;
 let qrGenerated = false;
 let deferredPrompt;
 let lastMessageCount = 0;   
+let unreadDriverMessages = 0;   
 let deviceId = localStorage.getItem("deviceId");
 
 if(!deviceId){
@@ -1879,18 +1880,30 @@ orderBy("createdAt","asc")
 snapshot=>{
 
 const badge = document.getElementById("chatBadge");
-const currentCount = snapshot.size;
 
 // 🔥 verificăm dacă chat-ul e deschis
 const chatOpen = !document.getElementById("chatSection").classList.contains("hidden");
 
-// 🔥 badge doar dacă chat închis și mesaje noi
-if(!chatOpen && currentCount > lastMessageCount){
-  badge.classList.remove("hidden");
-  badge.innerText = currentCount;
-}
+// 🔥 parcurgem mesajele
+let newDriverMessages = 0;
 
-lastMessageCount = currentCount;
+snapshot.forEach(doc=>{
+  const msg = doc.data();
+
+  if(msg.sender === "driver"){
+    newDriverMessages++;
+  }
+});
+
+// 🔥 dacă chat închis → actualizăm badge
+if(!chatOpen){
+  unreadDriverMessages = newDriverMessages;
+
+  if(unreadDriverMessages > 0){
+    badge.classList.remove("hidden");
+    badge.innerText = unreadDriverMessages;
+  }
+}
   
   
   const chatBox = document.getElementById("chatBox");
@@ -1935,12 +1948,10 @@ if(msg.sender === "driver"){
   if(chat.classList.contains("hidden")){
     chat.classList.remove("hidden");
 
-    // 🔥 RESET BADGE
-    badge.classList.add("hidden");
-    badge.innerText = "0";
-
-    // 🔥 reset count (IMPORTANT)
-    lastMessageCount = document.querySelectorAll("#chatBox div").length;
+    // 🔥 RESET REAL
+unreadDriverMessages = 0;
+badge.classList.add("hidden");
+badge.innerText = "0";
 
   }else{
     chat.classList.add("hidden");
