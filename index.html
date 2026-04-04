@@ -2055,6 +2055,16 @@ if(!clientId){
   localStorage.setItem("clientId", clientId);
 }
 
+ setDoc(
+  doc(db,"supportChats",clientId),
+  {
+    phone: clientId,
+    lastMessage: "",
+    updatedAt: serverTimestamp()
+  },
+  { merge: true }
+);
+   
 
 function loadClientChat(){
 
