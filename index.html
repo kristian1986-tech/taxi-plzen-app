@@ -2136,8 +2136,8 @@ function listenClientMessages(){
 
    
 
-async function sendClientMessage(){
-
+window.sendClientMessage = async function(){
+  
   const input = document.getElementById("clientInput");
   const text = input.value.trim();
 
