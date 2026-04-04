@@ -1906,6 +1906,10 @@ snapshot.forEach(docSnap=>{
   }
 });
 
+if(lastSeenDriverMessages === 0){
+  lastSeenDriverMessages = driverCount;
+}
+  
 // 🔥 câte sunt NOI (diferența)
 const newMessages = driverCount - lastSeenDriverCount;
 
