@@ -1980,6 +1980,24 @@ if(msg.sender === "driver"){
 if(chat.classList.contains("hidden")){
   chat.classList.remove("hidden");
 
+// 🔥 marchează toate mesajele ca seen când deschizi chatul
+const rideId = localStorage.getItem("activeRideId");
+
+if(rideId){
+  getDocs(collection(db,"rides",rideId,"messages")).then(snapshot=>{
+    snapshot.forEach(docSnap=>{
+      const msg = docSnap.data();
+
+      if(msg.sender === "driver" && !msg.seen){
+        updateDoc(doc(db,"rides",rideId,"messages",docSnap.id),{
+          seen: true
+        });
+      }
+    });
+  });
+}
+  
+
   // 🔥 calculăm câte mesaje driver există ACUM
   let driverCount = 0;
 
