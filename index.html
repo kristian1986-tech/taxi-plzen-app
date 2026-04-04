@@ -2132,9 +2132,9 @@ messages.forEach(msg=>{
   div.innerText = msg.text;
 
   if(msg.sender === "client"){
-    div.className = "bg-blue-600 p-2 rounded ml-auto mb-1 max-w-[70%]";
+    div.className = "bg-blue-600 text-white p-2 rounded-xl ml-auto mb-1 max-w-[75%] w-fit text-right";
   }else{
-    div.className = "bg-gray-700 p-2 rounded mr-auto mb-1 max-w-[70%]";
+    div.className = "bg-gray-700 text-white p-2 rounded-xl mr-auto mb-1 max-w-[75%] w-fit text-left";
   }
 
   box.appendChild(div);
