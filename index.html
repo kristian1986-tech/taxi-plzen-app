@@ -2111,22 +2111,22 @@ function listenClientMessages(){
     ),
     snapshot=>{
 
-      box.innerHTML = "";
-
 const messages = [];
 
 snapshot.forEach(docSnap=>{
-  messages.push(docSnap.data());
+  messages.push({
+    id: docSnap.id,
+    ...docSnap.data()
+  });
 });
 
-// 🔥 SORTARE MANUALĂ CORECTĂ
+// 🔥 IMPORTANT: sort stabil
+messages.sort((a,b)=>{
+  return new Date(a.createdAt) - new Date(b.createdAt);
+});
 
- messages.sort((a,b)=>{
-  return (a.createdAt?.seconds || a.createdAtClient || 0)
-       - (b.createdAt?.seconds || b.createdAtClient || 0);
-});     
+box.innerHTML = "";
 
-// 🔥 AFIȘARE ÎN ORDINE CORECTĂ
 messages.forEach(msg=>{
 
   const div = document.createElement("div");
@@ -2140,11 +2140,11 @@ messages.forEach(msg=>{
 
   box.appendChild(div);
 
-});      
+});
 
-      setTimeout(()=>{
-  box.scrollTop = box.scrollHeight;
-}, 50);
+box.scrollTop = box.scrollHeight;
+
+
 
     }
   );
