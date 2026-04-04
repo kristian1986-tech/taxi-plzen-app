@@ -2113,20 +2113,32 @@ function listenClientMessages(){
 
       box.innerHTML = "";
 
-      snapshot.forEach(docSnap=>{
-        const msg = docSnap.data();
+      const messages = [];
 
-        const div = document.createElement("div");
-        div.innerText = msg.text;
+snapshot.forEach(docSnap=>{
+  messages.push(docSnap.data());
+});
 
-        if(msg.sender === "client"){
-          div.className = "bg-blue-600 p-2 rounded ml-auto mb-1";
-        }else{
-          div.className = "bg-gray-700 p-2 rounded mr-auto mb-1";
-        }
+// 🔥 SORTARE CORECTĂ
+messages.sort((a,b)=>{
+  return (a.createdAt || 0) - (b.createdAt || 0);
+});
 
-        box.appendChild(div);
-      });
+box.innerHTML = "";
+
+messages.forEach(msg=>{
+
+  const div = document.createElement("div");
+  div.innerText = msg.text;
+
+  if(msg.sender === "client"){
+    div.className = "bg-blue-600 p-2 rounded ml-auto mb-1 max-w-[70%]";
+  }else{
+    div.className = "bg-gray-700 p-2 rounded mr-auto mb-1 max-w-[70%]";
+  }
+
+  box.appendChild(div);
+});
 
       setTimeout(()=>{
   box.scrollTop = box.scrollHeight;
