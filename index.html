@@ -2048,6 +2048,124 @@ window.toggleSupportClient = function(){
 },500);
 
    
+let clientId = localStorage.getItem("clientId");
+
+if(!clientId){
+  clientId = "client_" + Date.now();
+  localStorage.setItem("clientId", clientId);
+}
+
+
+function loadClientChat(){
+
+  const list = document.getElementById("clientChatList");
+
+  list.innerHTML = "";
+
+  const div = document.createElement("div");
+
+  div.className = "bg-gray-700 p-3 rounded-xl cursor-pointer";
+
+  div.innerHTML = `
+    <div>📱 ${clientId}</div>
+    <div class="text-xs text-gray-300">Chat suport</div>
+  `;
+
+  div.onclick = ()=>{
+
+    const box = document.getElementById("clientChatBox");
+
+    // 🔥 toggle open/close
+    if(box.classList.contains("hidden")){
+      box.classList.remove("hidden");
+      listenClientMessages();
+    }else{
+      box.classList.add("hidden");
+    }
+
+  };
+
+  list.appendChild(div);
+}
+
+
+   
+function listenClientMessages(){
+
+  const box = document.getElementById("clientMessages");
+
+  onSnapshot(
+    query(
+      collection(db,"supportChats",clientId,"messages"),
+      orderBy("createdAt","asc")
+    ),
+    snapshot=>{
+
+      box.innerHTML = "";
+
+      snapshot.forEach(docSnap=>{
+        const msg = docSnap.data();
+
+        const div = document.createElement("div");
+        div.innerText = msg.text;
+
+        if(msg.sender === "client"){
+          div.className = "bg-blue-600 p-2 rounded ml-auto mb-1";
+        }else{
+          div.className = "bg-gray-700 p-2 rounded mr-auto mb-1";
+        }
+
+        box.appendChild(div);
+      });
+
+      box.scrollTop = box.scrollHeight;
+
+    }
+  );
+}
+
+   
+
+async function sendClientMessage(){
+
+  const input = document.getElementById("clientInput");
+  const text = input.value.trim();
+
+  if(!text) return;
+
+  await addDoc(
+    collection(db,"supportChats",clientId,"messages"),
+    {
+      text: text,
+      sender: "client",
+      createdAt: serverTimestamp()
+    }
+  );
+
+  await setDoc(
+    doc(db,"supportChats",clientId),
+    {
+      phone: clientId,
+      lastMessage: text,
+      updatedAt: serverTimestamp()
+    },
+    {merge:true}
+  );
+
+  input.value = "";
+}
+   
+
+toggleSupportClient = function(){
+  const panel = document.getElementById("clientSupport");
+
+  if(panel.classList.contains("hidden")){
+    panel.classList.remove("hidden");
+    loadClientChat(); // 🔥 IMPORTANT
+  }else{
+    panel.classList.add("hidden");
+  }
+}
    
    
 </script>  
@@ -2211,18 +2329,24 @@ class="hidden fixed inset-0 bg-black/70 flex items-end justify-center z-50">
 
     <h2 class="text-center mb-3">💬 Podpora</h2>
 
-    <div id="clientMessages"
-    class="bg-gray-800 p-3 rounded h-40 overflow-y-auto mb-2"></div>
+    <div id="clientChatList" class="space-y-2"></div>
 
-    <div class="flex gap-2">
-      <input id="clientInput"
-      class="flex-1 p-2 rounded bg-gray-700 text-white">
+<div id="clientChatBox" class="hidden mt-3">
 
-      <button onclick="sendClientMessage()"
-      class="bg-blue-600 px-3 rounded">
-        ➤
-      </button>
-    </div>
+  <div id="clientMessages"
+  class="bg-gray-800 p-3 rounded h-40 overflow-y-auto mb-2"></div>
+
+  <div class="flex gap-2">
+    <input id="clientInput"
+    class="flex-1 p-2 rounded bg-gray-700 text-white">
+
+    <button onclick="sendClientMessage()"
+    class="bg-blue-600 px-3 rounded">
+      ➤
+    </button>
+  </div>
+
+</div>
 
   </div>
 </div>
