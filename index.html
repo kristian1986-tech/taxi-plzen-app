@@ -1912,7 +1912,7 @@ if(lastSeenDriverMessages === 0){
 }
   
 // 🔥 câte sunt NOI (diferența)
-const newMessages = driverCount - lastSeenDriverCount;
+ const newMessages = driverCount - lastSeenDriverMessages; 
 
 // 🔥 dacă chat închis → arată badge DOAR pt noi
 if(!chatOpen && newMessages > 0){
@@ -1976,30 +1976,31 @@ if(msg.sender === "driver"){
   const chat = document.getElementById("chatSection");
   const badge = document.getElementById("chatBadge");
 
-  if(chat.classList.contains("hidden")){
-    chat.classList.remove("hidden");
+if(chat.classList.contains("hidden")){
+  chat.classList.remove("hidden");
 
-    // 🔥 RESET REAL
+  // 🔥 calculăm câte mesaje driver există ACUM
+  let driverCount = 0;
 
-  // 🔥 salvăm câte mesaje driver există acum (le-ai văzut)
-let driverCount = 0;
+  document.querySelectorAll("#chatBox div").forEach(div=>{
+    if(div.className.includes("bg-gray-700")){
+      driverCount++;
+    }
+  });
 
-document.querySelectorAll("#chatBox div").forEach(div=>{
-  if(div.className.includes("bg-gray-700")){
-    driverCount++;
-  }
-});
+  // 🔥 AICI E FIXUL IMPORTANT
+  lastSeenDriverMessages = driverCount;
+  localStorage.setItem("lastSeenDriverMessages", driverCount);
 
-lastSeenDriverCount = driverCount;
+  // 🔥 reset badge
+  unreadDriverMessages = 0;
+  badge.classList.add("hidden");
+  badge.innerText = "0";
 
-// 🔥 reset badge
-unreadDriverMessages = 0;
-badge.classList.add("hidden");
-badge.innerText = "0";
-
-  }else{
-    chat.classList.add("hidden");
-  }
+}else{
+  chat.classList.add("hidden");
+}
+   
 };
    
    
