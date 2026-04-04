@@ -433,7 +433,7 @@ let lastMessageCount = 0;
 let unreadDriverMessages = 0;   
 let lastSeenDriverCount = 0;
 let deviceId = localStorage.getItem("deviceId");
-let lastSeenDriverMessages = 0;
+let lastSeenDriverMessages = parseInt(localStorage.getItem("lastSeenDriverMessages")) || 0;
    
 if(!deviceId){
   deviceId = crypto.randomUUID();
@@ -1908,6 +1908,7 @@ snapshot.forEach(docSnap=>{
 
 if(lastSeenDriverMessages === 0){
   lastSeenDriverMessages = driverCount;
+  localStorage.setItem("lastSeenDriverMessages", driverCount);
 }
   
 // 🔥 câte sunt NOI (diferența)
