@@ -2128,7 +2128,9 @@ function listenClientMessages(){
         box.appendChild(div);
       });
 
-      box.scrollTop = box.scrollHeight;
+      setTimeout(()=>{
+  box.scrollTop = box.scrollHeight;
+}, 50);
 
     }
   );
