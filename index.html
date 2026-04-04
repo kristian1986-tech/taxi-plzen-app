@@ -2120,9 +2120,11 @@ snapshot.forEach(docSnap=>{
 });
 
 // 🔥 SORTARE MANUALĂ CORECTĂ
-messages.sort((a,b)=>{
-  return (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0);
-});
+
+ messages.sort((a,b)=>{
+  return (a.createdAt?.seconds || a.createdAtClient || 0)
+       - (b.createdAt?.seconds || b.createdAtClient || 0);
+});     
 
 // 🔥 AFIȘARE ÎN ORDINE CORECTĂ
 messages.forEach(msg=>{
@@ -2162,6 +2164,7 @@ window.sendClientMessage = async function(){
     {
       text: text,
       sender: "client",
+      createdAt: serverTimestamp(),
       createdAt: Date.now()
     }
   );
