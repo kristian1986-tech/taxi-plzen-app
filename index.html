@@ -2156,8 +2156,7 @@ async function sendClientMessage(){
     doc(db,"supportChats",clientId),
     {
       phone: clientId,
-      lastMessage: text,
-      updatedAt: serverTimestamp()
+      lastMessage: Date.now()
     },
     {merge:true}
   );
