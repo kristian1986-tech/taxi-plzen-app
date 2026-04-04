@@ -433,7 +433,8 @@ let lastMessageCount = 0;
 let unreadDriverMessages = 0;   
 let lastSeenDriverCount = 0;
 let deviceId = localStorage.getItem("deviceId");
-
+let lastSeenDriverMessages = 0;
+   
 if(!deviceId){
   deviceId = crypto.randomUUID();
   localStorage.setItem("deviceId", deviceId);
