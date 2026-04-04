@@ -2121,9 +2121,10 @@ snapshot.forEach(docSnap=>{
 });
 
 // 🔥 IMPORTANT: sort stabil
+
 messages.sort((a,b)=>{
-  return new Date(a.createdAt) - new Date(b.createdAt);
-});
+  return a.createdAt - b.createdAt;
+});      
 
 box.innerHTML = "";
 
@@ -2164,7 +2165,6 @@ window.sendClientMessage = async function(){
     {
       text: text,
       sender: "client",
-      createdAt: serverTimestamp(),
       createdAt: Date.now()
     }
   );
