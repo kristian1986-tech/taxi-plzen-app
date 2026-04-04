@@ -1898,12 +1898,13 @@ snapshot.forEach(docSnap=>{
     driverCount++;
   }
 
-  // 🔥 SEEN SYSTEM (AICI E MAGIA)
-  if(msg.sender === "driver" && !msg.seen){
-    updateDoc(doc(db,"rides",rideId,"messages",docSnap.id),{
-      seen: true
-    });
-  }
+// 🔥 SEEN DOAR CÂND CHAT DESCHIS
+if(chatOpen && msg.sender === "driver" && !msg.seen){
+  updateDoc(doc(db,"rides",rideId,"messages",docSnap.id),{
+    seen: true
+  });
+}
+  
 });
 
 if(lastSeenDriverMessages === 0){
