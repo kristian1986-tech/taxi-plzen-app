@@ -2022,6 +2022,32 @@ if(rideId){
    
 };
    
+
+window.toggleSupportClient = function(){
+
+  const panel = document.getElementById("clientSupport");
+
+  if(panel.classList.contains("hidden")){
+    panel.classList.remove("hidden");
+  }else{
+    panel.classList.add("hidden");
+  }
+
+}
+
+
+   setTimeout(()=>{
+  const panel = document.getElementById("clientSupport");
+
+  panel.addEventListener("click",(e)=>{
+    if(e.target.id === "clientSupport"){
+      panel.classList.add("hidden");
+    }
+  });
+
+},500);
+
+   
    
    
 </script>  
@@ -2074,6 +2100,13 @@ class="w-full bg-gradient-to-r from-purple-500 to-purple-600 py-3 rounded-xl tex
 class="w-full bg-gray-700 py-2 rounded text-sm">  
 📄 Historie jízd  
 </button>  
+
+
+<button onclick="toggleSupportClient()"
+class="w-full bg-blue-600 py-3 rounded mt-3">
+💬 Podpora
+</button>
+
   
   <div id="clientHistoryPanel" class="hidden mt-3 space-y-2 max-h-60 overflow-y-auto"></div> 
   <p class="text-xs text-gray-600 pt-4">      
@@ -2171,6 +2204,30 @@ class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
 </div>
 
 
+<div id="clientSupport"
+class="hidden fixed inset-0 bg-black/70 flex items-end justify-center z-50">
+
+  <div class="w-full max-w-md bg-gray-900 rounded-t-3xl p-4 h-[60vh]">
+
+    <h2 class="text-center mb-3">💬 Podpora</h2>
+
+    <div id="clientMessages"
+    class="bg-gray-800 p-3 rounded h-40 overflow-y-auto mb-2"></div>
+
+    <div class="flex gap-2">
+      <input id="clientInput"
+      class="flex-1 p-2 rounded bg-gray-700 text-white">
+
+      <button onclick="sendClientMessage()"
+      class="bg-blue-600 px-3 rounded">
+        ➤
+      </button>
+    </div>
+
+  </div>
+</div>
+
+  
 </body>   
 
 </html>  
