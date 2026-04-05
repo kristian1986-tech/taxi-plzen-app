@@ -467,6 +467,7 @@ let unreadDriverMessages = 0;
 let lastSeenDriverCount = 0;
 let deviceId = localStorage.getItem("deviceId");
 let lastSeenDriverMessages = parseInt(localStorage.getItem("lastSeenDriverMessages")) || 0;
+let lastCalculatedRoute = "";
    
 if(!deviceId){
   deviceId = crypto.randomUUID();
@@ -574,6 +575,12 @@ resetErrors();
 
 const pickup = pickupInput.value.trim();
 const destination = destinationInput.value.trim();
+  const currentRoute = pickup + "|" + destination;
+
+// 🔥 dacă e aceeași rută → nu mai calculăm
+if(currentRoute === lastCalculatedRoute){
+  return;
+}
   
 let hasError=false;
 
@@ -665,6 +672,9 @@ priceEstimate.innerText =
 " min | Cena: "+calculatedPrice+" Kč";
 };
 
+lastCalculatedRoute = currentRoute;
+
+   
 /* CREATE */
 window.createRide = async function(){
   
@@ -1713,6 +1723,8 @@ maximumAge: 0
 
 function autoCalculate(){
 
+lastCalculatedRoute = "";
+  
 clearTimeout(autoCalcTimeout);
 
 autoCalcTimeout = setTimeout(() => {
