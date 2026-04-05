@@ -2161,7 +2161,7 @@ window.sendClientMessage = async function(){
     {
       text: text,
       sender: "client",
-      createdAt: serverTimestamp() + Math.random()
+      createdAt: serverTimestamp()
     }
   );
 
@@ -2169,7 +2169,7 @@ window.sendClientMessage = async function(){
     doc(db,"supportChats",clientId),
     {
       phone: clientId,
-      lastMessage: Date.now()
+      lastMessage: serverTimestamp()
     },
     {merge:true}
   );
