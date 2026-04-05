@@ -1629,8 +1629,9 @@ panel.classList.remove("hidden");
 loadClientHistory(phone);
 }
 
-async function detectLocation(){
+window.detectLocation = async function(){
 
+   
 if(!navigator.geolocation) return;
 
 // 🔥 arată instant text
