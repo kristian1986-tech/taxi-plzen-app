@@ -1694,9 +1694,10 @@ calculateRoute();
 
 }
 
-setTimeout(() => {
-detectLocation();
-}, 2000);
+// detectLocation dezactivat (economisim costuri)
+// setTimeout(() => {
+//   detectLocation();
+// }, 2000);
 
 if(destinationInput){
 destinationInput.addEventListener("change", autoCalculate);
