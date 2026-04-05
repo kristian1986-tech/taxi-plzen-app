@@ -1751,13 +1751,13 @@ const change = confirm("Použít uloženou adresu?\n\nOK = použít\nZrušit = z
 
 if(change){
 document.getElementById("destination").value = saved;
-autoCalculate();
+priceEstimate.innerText = "";
 } else {
 const addr = prompt("Zadejte novou adresu domů:");
 if(addr){
 localStorage.setItem("homeAddress", addr);
 document.getElementById("destination").value = addr;
-autoCalculate();
+priceEstimate.innerText = "";
 }
 }
 
@@ -1767,7 +1767,7 @@ const addr = prompt("Zadejte adresu domů:");
 if(addr){
 localStorage.setItem("homeAddress", addr);
 document.getElementById("destination").value = addr;
-autoCalculate();
+priceEstimate.innerText = "";
 }
 
 }
