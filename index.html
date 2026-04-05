@@ -108,6 +108,18 @@ transition: opacity 0.4s ease;
 opacity: 1;
 }
 
+
+@keyframes pulseLocation {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+.animate-pulseLocation {
+  animation: pulseLocation 1.2s infinite ease-in-out;
+}    
+    
+    
 </style>   
   
 </head>  
@@ -161,12 +173,13 @@ type="text"
 placeholder="Odkud jedete?  (ulice, č., mesto)"
 class="w-full p-4 pr-12 rounded-2xl bg-gray-900/80 border border-gray-700 focus:border-lime-400 focus:ring-2 focus:ring-lime-400/30 outline-none transition text-white placeholder-gray-400">
 
-<button onclick="detectLocation()"
-class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center">
+<button onclick="detectLocation()" 
+class="absolute right-2 top-1/2 -translate-y-1/2 
+w-12 h-12 bg-gray-700 rounded-xl flex items-center justify-center">
 
 <svg xmlns="http://www.w3.org/2000/svg" 
 viewBox="0 0 24 24" 
-class="w-8 h-8">
+class="w-6 h-6 animate-pulseLocation">
 
 <path fill="#22c55e"
 d="M12 2C8.69 2 6 4.69 6 8c0 4.5 6 12 6 12s6-7.5 6-12c0-3.31-2.69-6-6-6zm0 8a2 2 0 110-4 2 2 0 010 4z"/>
