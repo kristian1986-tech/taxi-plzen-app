@@ -1658,7 +1658,10 @@ loadClientHistory(phone);
 
 window.detectLocation = async function(){
 
-   
+
+document.querySelector(".animate-pulseLocation")?.classList.remove("animate-pulseLocation");
+  
+  
 if(!navigator.geolocation) return;
 
 // 🔥 arată instant text
