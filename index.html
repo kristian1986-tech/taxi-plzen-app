@@ -468,6 +468,7 @@ let lastSeenDriverCount = 0;
 let deviceId = localStorage.getItem("deviceId");
 let lastSeenDriverMessages = parseInt(localStorage.getItem("lastSeenDriverMessages")) || 0;
 let lastCalculatedRoute = "";
+let routeCache = JSON.parse(localStorage.getItem("routeCache")) || {};
    
 if(!deviceId){
   deviceId = crypto.randomUUID();
@@ -581,6 +582,23 @@ const destination = destinationInput.value.trim();
 if(currentRoute === lastCalculatedRoute){
   return;
 }
+
+// 🔥 verificăm cache
+if(routeCache[currentRoute]){
+  const cached = routeCache[currentRoute];
+
+  calculatedDistance = cached.distance;
+  calculatedPrice = cached.price;
+  calculatedETA = cached.eta;
+
+  priceEstimate.innerText =
+    "Vzdálenost: " + cached.distance.toFixed(1) +
+    " km | " + cached.eta +
+    " min | Cena: " + cached.price + " Kč";
+
+  return;
+}
+
   
 let hasError=false;
 
@@ -671,6 +689,15 @@ priceEstimate.innerText =
 " km | "+calculatedETA+
 " min | Cena: "+calculatedPrice+" Kč";
 
+routeCache[currentRoute] = {
+  distance: calculatedDistance,
+  price: calculatedPrice,
+  eta: calculatedETA
+};
+
+localStorage.setItem("routeCache", JSON.stringify(routeCache));
+
+  
 lastCalculatedRoute = currentRoute;
   
 };
