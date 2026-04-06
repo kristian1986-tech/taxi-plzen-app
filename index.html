@@ -331,6 +331,11 @@ Děkujeme za hodnocení 🙏
 </div> 
 <div id="map" class="w-full max-w-md mx-auto h-72 mt-4 rounded-xl"></div>
 
+<p id="driversCount" class="text-center text-sm text-gray-400 mt-2">
+🚕 Načítání řidičů...
+</p>
+
+  
   
  <script type="module"> 
 
@@ -539,6 +544,21 @@ driversMarkers.push(marker);
 
 });
 
+const count = driversMarkers.length;
+
+const el = document.getElementById("driversCount");
+
+if(el){
+  if(count === 0){
+    el.innerText = "❌ Žádní řidiči online";
+  } else if(count === 1){
+    el.innerText = "🚕 1 řidič online";
+  } else {
+    el.innerText = "🚕 " + count + " řidičů online";
+  }
+}
+
+  
 });
 
 }
