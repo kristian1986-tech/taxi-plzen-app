@@ -1761,7 +1761,12 @@ const pickup = pickupInput.value.trim();
 const destination = destinationInput.value.trim();
 
 // 🔥 resetăm prețul dacă user modifică
-priceEstimate.innerHTML = "⏳ Počítám cenu...";
+priceEstimate.innerHTML = `
+<div class="flex items-center gap-2">
+  <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+  <span>Počítám cenu...</span>
+</div>
+`;
 
 if(pickup.length > 5 && destination.length > 5){
 calculateRoute();
