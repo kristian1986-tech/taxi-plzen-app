@@ -689,6 +689,13 @@ priceEstimate.innerText =
 " km | "+calculatedETA+
 " min | Cena: "+calculatedPrice+" Kč";
 
+priceEstimate.classList.add("scale-105");
+
+setTimeout(() => {
+  priceEstimate.classList.remove("scale-105");
+}, 200);
+
+  
 routeCache[currentRoute] = {
   distance: calculatedDistance,
   price: calculatedPrice,
