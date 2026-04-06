@@ -329,13 +329,20 @@ class="hidden text-center mt-4 text-green-400 text-lg font-semibold">
 Děkujeme za hodnocení 🙏    
 </div>  </div>  </div>
 </div> 
+
+<div id="driversCount"
+class="flex items-center justify-center gap-2 bg-gray-800/60 backdrop-blur-md border border-gray-700 rounded-xl py-2 px-3 text-sm text-white shadow-md mb-2">
+  
+  <span id="driversDot" class="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></span>
+  
+  <span>Načítání řidičů...</span>
+
+</div>
+  
+  
 <div id="map" class="w-full max-w-md mx-auto h-72 mt-4 rounded-xl"></div>
 
-<p id="driversCount" class="text-center text-sm text-gray-400 mt-2">
-🚕 Načítání řidičů...
-</p>
 
-  
   
  <script type="module"> 
 
@@ -544,18 +551,26 @@ driversMarkers.push(marker);
 
 });
 
+  
 const count = driversMarkers.length;
 
 const el = document.getElementById("driversCount");
 
 if(el){
+  let text = "";
+
   if(count === 0){
-    el.innerText = "❌ Žádní řidiči online";
+    text = "❌ Žádní řidiči online";
   } else if(count === 1){
-    el.innerText = "🚕 1 řidič online";
+    text = "🚕 1 řidič online";
   } else {
-    el.innerText = "🚕 " + count + " řidičů online";
+    text = "🚕 " + count + " řidičů online";
   }
+
+  el.innerHTML = `
+    <span id="driversDot" class="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></span>
+    <span>${text}</span>
+  `;
 }
 
   
