@@ -481,6 +481,7 @@ let deviceId = localStorage.getItem("deviceId");
 let lastSeenDriverMessages = parseInt(localStorage.getItem("lastSeenDriverMessages")) || 0;
 let lastCalculatedRoute = "";
 let routeCache = JSON.parse(localStorage.getItem("routeCache")) || {};
+let nearestDriverDistance = null;
    
 if(!deviceId){
   deviceId = crypto.randomUUID();
@@ -526,10 +527,32 @@ onSnapshot(collection(db,"drivers"),snapshot=>{
 
 driversMarkers.forEach(marker=>marker.setMap(null));
 driversMarkers = [];
-
+nearestDriverDistance = null;
+  
 snapshot.forEach(docSnap=>{
 
 const driver = docSnap.data();
+
+if(pickupLocation && driver.lat && driver.lng){
+
+  const dLat = (driver.lat - pickupLocation.lat) * Math.PI / 180;
+  const dLng = (driver.lng - pickupLocation.lng) * Math.PI / 180;
+
+  const a =
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(pickupLocation.lat * Math.PI / 180) *
+    Math.cos(driver.lat * Math.PI / 180) *
+    Math.sin(dLng/2) * Math.sin(dLng/2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+  const distanceKm = 6371 * c;
+
+  if(nearestDriverDistance === null || distanceKm < nearestDriverDistance){
+    nearestDriverDistance = distanceKm;
+  }
+}
+  
 
 if(driver.status === "online" && driver.lat && driver.lng){
 
@@ -570,6 +593,13 @@ if(el){
     text = "🚕 " + count + " řidičů online";
   }
 
+// 🔥 ETA cel mai apropiat driver
+if(nearestDriverDistance !== null){
+  const eta = Math.max(2, Math.round(nearestDriverDistance * 2));
+  text += " • nejbližší za " + eta + " min";
+}
+
+  
   el.innerHTML = `
     <span class="w-2.5 h-2.5 ${dotColor} rounded-full animate-pulse"></span>
     <span>${text}</span>
