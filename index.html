@@ -685,9 +685,14 @@ travelMode:"DRIVE"
 );
 
 const data = await response.json();
+  
 if(!data.routes?.length){
-  calculatedPrice = minimumPrice;
-  priceEstimate.innerText = "Cena: " + minimumPrice + " Kč";
+
+  priceEstimate.innerText = "❗ Zadejte přesnou adresu";
+
+  calculatedPrice = 0; // IMPORTANT
+  lastCalculatedRoute = ""; // IMPORTANT
+
   return;
 }
   
@@ -698,6 +703,7 @@ return;
 }
 
 const route = data.routes[0];
+  
 if(!route.distanceMeters || isNaN(route.distanceMeters)){
   calculatedDistance = 0;
   calculatedETA = 1;
@@ -797,14 +803,14 @@ if(blocked){
 }
 
   
-if(calculatedPrice===0){
-generalError.innerText="Nejprve vypočítejte cenu.";
-generalError.classList.remove("hidden");
-return;
+if(!lastCalculatedRoute || calculatedPrice === 0){
+  generalError.innerText="Nejprve vypočítejte přesnou trasu.";
+  generalError.classList.remove("hidden");
+  return;
 }
 
 if(!pickupInput.value || !destinationInput.value){
-generalError.innerText = "Nejprve vypočítejte trasu.";
+generalError.innerText = "Zadejte adresu a vypočítejte trasu.";
 generalError.classList.remove("hidden");
 return;
 }
