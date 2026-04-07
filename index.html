@@ -535,9 +535,11 @@ const driver = docSnap.data();
 
 if(driver.lat && driver.lng){
 
-  const userLat = pickupLocation?.lat || map.getCenter().lat();
-  const userLng = pickupLocation?.lng || map.getCenter().lng();
+if(!pickupLocation) return;
 
+const userLat = pickupLocation.lat;
+const userLng = pickupLocation.lng;
+  
   const dLat = (driver.lat - userLat) * Math.PI / 180;
   const dLng = (driver.lng - userLng) * Math.PI / 180;
 
