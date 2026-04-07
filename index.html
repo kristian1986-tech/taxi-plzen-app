@@ -363,6 +363,9 @@ const phoneInput = document.getElementById("phone");
 pickupInput.addEventListener("input", autoCalculate);
 destinationInput.addEventListener("input", autoCalculate);
 
+pickupInput.addEventListener("input", resetCalculation);
+destinationInput.addEventListener("input", resetCalculation);
+   
 const pickupError = document.getElementById("pickupError");
 const destinationError = document.getElementById("destinationError");
 const phoneError = document.getElementById("phoneError");
