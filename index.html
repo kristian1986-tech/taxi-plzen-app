@@ -533,55 +533,6 @@ snapshot.forEach(docSnap=>{
 
 const driver = docSnap.data();
 
-if(driver.lat && driver.lng){
-
-if(!pickupLocation){
-  // nu avem ETA, dar continuam
-} else {
-
-  const userLat = pickupLocation.lat;
-  const userLng = pickupLocation.lng;
-
-  const dLat = (driver.lat - userLat) * Math.PI / 180;
-  const dLng = (driver.lng - userLng) * Math.PI / 180;
-
-  const a =
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(userLat * Math.PI / 180) *
-    Math.cos(driver.lat * Math.PI / 180) *
-    Math.sin(dLng/2) * Math.sin(dLng/2);
-
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-
-  const distanceKm = 6371 * c;
-
-  if(nearestDriverDistance === null || distanceKm < nearestDriverDistance){
-    nearestDriverDistance = distanceKm;
-  }
-
-}
-
-if(driver.status === "online" && driver.lat && driver.lng){
-
-const marker = new google.maps.Marker({
-position:{
-lat: driver.lat,
-lng: driver.lng
-},
-map: map,
-icon:{
-url:"https://maps.google.com/mapfiles/kml/shapes/cabs.png",
-scaledSize:new google.maps.Size(28,28)
-}
-});
-
-driversMarkers.push(marker);
-
-}
-
-});
-
-  
 const count = driversMarkers.length;
 
 const el = document.getElementById("driversCount");
@@ -600,12 +551,6 @@ if(el){
     text = "🚕 " + count + " řidičů online";
   }
 
-// 🔥 ETA cel mai apropiat driver
-if(nearestDriverDistance !== null){
-  const eta = Math.max(2, Math.round(nearestDriverDistance * 2));
-  text += " • nejbližší za " + eta + " min";
-
-}  
   el.innerHTML = `
     <span class="w-2.5 h-2.5 ${dotColor} rounded-full animate-pulse"></span>
     <span>${text}</span>
