@@ -535,11 +535,13 @@ const driver = docSnap.data();
 
 if(driver.lat && driver.lng){
 
-if(!pickupLocation) return;
+if(!pickupLocation){
+  // nu avem ETA, dar continuam
+} else {
 
-const userLat = pickupLocation.lat;
-const userLng = pickupLocation.lng;
-  
+  const userLat = pickupLocation.lat;
+  const userLng = pickupLocation.lng;
+
   const dLat = (driver.lat - userLat) * Math.PI / 180;
   const dLng = (driver.lng - userLng) * Math.PI / 180;
 
