@@ -521,46 +521,73 @@ showOnlineDrivers();
 
 };
 
+
 function showOnlineDrivers(){
 
-onSnapshot(collection(db,"drivers"),snapshot=>{
+  onSnapshot(collection(db,"drivers"),snapshot=>{
 
-driversMarkers.forEach(marker=>marker.setMap(null));
-driversMarkers = [];
-nearestDriverDistance = null;
-  
-snapshot.forEach(docSnap=>{
+    driversMarkers.forEach(marker=>marker.setMap(null));
+    driversMarkers = [];
 
-const driver = docSnap.data();
+    let count = 0; // 👈 ADĂUGAT
 
-const count = driversMarkers.length;
+    snapshot.forEach(docSnap=>{
 
-const el = document.getElementById("driversCount");
+      const driver = docSnap.data();
 
-if(el){
+      if(
+        driver.status &&
+        driver.status.toLowerCase() === "online" &&
+        driver.lat != null &&
+        driver.lng != null
+      ){
 
-  const dotColor = count === 0 ? "bg-red-400" : "bg-green-400";
+        count++; // 👈 ADĂUGAT
 
-  let text = "";
+        const marker = new google.maps.Marker({
+          position:{
+            lat: driver.lat,
+            lng: driver.lng
+          },
+          map: map,
+          icon:{
+            url:"https://maps.google.com/mapfiles/kml/shapes/cabs.png",
+            scaledSize:new google.maps.Size(28,28)
+          }
+        });
 
-  if(count === 0){
-    text = "❌ Žádní řidiči online";
-  } else if(count === 1){
-    text = "🚕 1 řidič online";
-  } else {
-    text = "🚕 " + count + " řidičů online";
-  }
+        driversMarkers.push(marker);
 
-  el.innerHTML = `
-    <span class="w-2.5 h-2.5 ${dotColor} rounded-full animate-pulse"></span>
-    <span>${text}</span>
-  `;
-}
+      }
 
-  
-});
+    });
 
-}
+    // 🔥 ADAUGĂ ASTA LA FINAL
+    const el = document.getElementById("driversOnline");
+
+    if(el){
+
+      let text = "";
+
+      if(count === 0){
+        text = "❌ Žádní řidiči online";
+      } else if(count === 1){
+        text = "🚕 1 řidič online";
+      } else {
+        text = "🚕 " + count + " řidičů online";
+      }
+
+      const dotColor = count === 0 ? "bg-red-400" : "bg-green-400";
+
+      el.innerHTML = `
+        <span class="w-2.5 h-2.5 ${dotColor} rounded-full animate-pulse"></span>
+        <span>${text}</span>
+      `;
+    }
+
+  });
+
+}   
 
 
 function drawRoute(origin, destination) {
