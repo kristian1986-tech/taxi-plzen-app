@@ -533,7 +533,7 @@ snapshot.forEach(docSnap=>{
 
 const driver = docSnap.data();
 
-if(pickupLocation && driver.lat && driver.lng){
+if(driver.lat && driver.lng && pickupInput.value.length > 5){
 
   const dLat = (driver.lat - pickupLocation.lat) * Math.PI / 180;
   const dLng = (driver.lng - pickupLocation.lng) * Math.PI / 180;
@@ -548,9 +548,13 @@ if(pickupLocation && driver.lat && driver.lng){
 
   const distanceKm = 6371 * c;
 
-  if(nearestDriverDistance === null || distanceKm < nearestDriverDistance){
-    nearestDriverDistance = distanceKm;
-  }
+if(nearestDriverDistance !== null){
+  const eta = Math.max(2, Math.round(nearestDriverDistance * 2));
+  text += " • nejbližší za " + eta + " min";
+} else if(count > 0){
+  text += " • řidič blízko";
+}
+  
 }
   
 
