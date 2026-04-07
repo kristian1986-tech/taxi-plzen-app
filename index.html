@@ -603,8 +603,7 @@ if(nearestDriverDistance !== null){
   const eta = Math.max(2, Math.round(nearestDriverDistance * 2));
   text += " • nejbližší za " + eta + " min";
 }
-
-  
+}  
   el.innerHTML = `
     <span class="w-2.5 h-2.5 ${dotColor} rounded-full animate-pulse"></span>
     <span>${text}</span>
