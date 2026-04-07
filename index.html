@@ -803,8 +803,8 @@ if(blocked){
 }
 
   
-if(!lastCalculatedRoute || calculatedPrice === 0){
-  generalError.innerText="Nejprve vypočítejte přesnou trasu.";
+if(calculatedPrice === 0){
+  generalError.innerText="Nejprve vypočítejte cenu.";
   generalError.classList.remove("hidden");
   return;
 }
