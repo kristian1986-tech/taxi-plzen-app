@@ -524,70 +524,66 @@ showOnlineDrivers();
 
 function showOnlineDrivers(){
 
-  onSnapshot(collection(db,"drivers"),snapshot=>{
+onSnapshot(collection(db,"drivers"),snapshot=>{
 
-    driversMarkers.forEach(marker=>marker.setMap(null));
-    driversMarkers = [];
+driversMarkers.forEach(marker=>marker.setMap(null));
+driversMarkers = [];
 
-    let count = 0; // 👈 ADĂUGAT
+snapshot.forEach(docSnap=>{
 
-    snapshot.forEach(docSnap=>{
+const driver = docSnap.data();
 
-      const driver = docSnap.data();
+if(driver.status === "online" && driver.lat && driver.lng){
 
-      if(
-        driver.status &&
-        driver.status.toLowerCase() === "online" &&
-        driver.lat != null &&
-        driver.lng != null
-      ){
+const marker = new google.maps.Marker({
+position:{
+lat: driver.lat,
+lng: driver.lng
+},
+map: map,
+icon:{
+url:"https://maps.google.com/mapfiles/kml/shapes/cabs.png",
+scaledSize:new google.maps.Size(28,28)
+}
+});
 
-        count++; // 👈 ADĂUGAT
+driversMarkers.push(marker);
 
-        const marker = new google.maps.Marker({
-          position:{
-            lat: driver.lat,
-            lng: driver.lng
-          },
-          map: map,
-          icon:{
-            url:"https://maps.google.com/mapfiles/kml/shapes/cabs.png",
-            scaledSize:new google.maps.Size(28,28)
-          }
-        });
+}
 
-        driversMarkers.push(marker);
+});
+  
 
-      }
+const count = driversMarkers.length;
 
-    });
+const el = document.getElementById("driversCount");
 
-    // 🔥 ADAUGĂ ASTA LA FINAL
-    const el = document.getElementById("driversOnline");
+if(el){
 
-    if(el){
+  const dotColor = count === 0 ? "bg-red-400" : "bg-green-400";
 
-      let text = "";
+  let text = "";
 
-      if(count === 0){
-        text = "❌ Žádní řidiči online";
-      } else if(count === 1){
-        text = "🚕 1 řidič online";
-      } else {
-        text = "🚕 " + count + " řidičů online";
-      }
+  if(count === 0){
+    text = "❌ Žádní řidiči online";
+  } else if(count === 1){
+    text = "🚕 1 řidič online";
+  } else {
+    text = "🚕 " + count + " řidičů online";
+  }
 
-      const dotColor = count === 0 ? "bg-red-400" : "bg-green-400";
+  el.innerHTML = `
+    <span class="w-2.5 h-2.5 ${dotColor} rounded-full animate-pulse"></span>
+    <span>${text}</span>
+  `;
+}
+  
+  
+});
 
-      el.innerHTML = `
-        <span class="w-2.5 h-2.5 ${dotColor} rounded-full animate-pulse"></span>
-        <span>${text}</span>
-      `;
-    }
+}
 
-  });
 
-}   
 
 
 function drawRoute(origin, destination) {
