@@ -1560,7 +1560,7 @@ async function loadClientHistory(phone){
 const q = query(
 collection(db,"rides"),
 where("phone","==",phone),
-where("status","==","completed")
+where("status","in",["completed"])
 );
 
 const snap = await getDocs(q);
@@ -1575,12 +1575,22 @@ return;
 
 const rides = [];
 
+
 snap.forEach(docSnap=>{
+const data = docSnap.data();
+
+// 🔥 IGNORĂ curse anulate de driver
+if(data.status === "cancelled_by_driver"){
+  return;
+}
+
 rides.push({
-id: docSnap.id,
-...docSnap.data()
+  id: docSnap.id,
+  ...data
 });
 });
+  
+  
 
 // 🔥 SORTARE (cele mai noi sus)
 rides.sort((a,b)=>{
