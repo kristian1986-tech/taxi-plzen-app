@@ -926,6 +926,29 @@ if(!snap.exists()) return;
 
 const data = snap.data();
 
+  
+// 🔥 DRIVER A ANULAT CURSA
+if(data.status === "cancelled_by_driver"){
+
+  alert("Řidič zrušil jízdu");
+
+  // reset stare
+  localStorage.removeItem("activeRideId");
+
+  // UI inapoi la formular
+  formSection.classList.remove("hidden");
+  statusSection.classList.add("hidden");
+
+  // reset date
+  destinationInput.value = "";
+  calculatedPrice = 0;
+  calculatedDistance = 0;
+  calculatedETA = 0;
+
+  return;
+}
+
+  
 // 🔥 ETA function
 function calculateETA(from, to){
   const R = 6371;
