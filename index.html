@@ -1229,7 +1229,7 @@ pdf.setFontSize(14);
 pdf.setFont("helvetica","bold");
 
 pdf.text("Celkem:",20,y);
-pdf.text((data.estimatedPrice||0)+" KC",150,y);
+pdf.text((data.finalPrice || data.estimatedPrice || 0)+" KC",150,y);
 pdf.line(20,160,190,160);
 
 y += 20;
@@ -1237,7 +1237,9 @@ y += 20;
 pdf.setFontSize(9);
 pdf.setFont("helvetica","normal");
 
-pdf.text("Dekuji za vyuziti nase sluzby.",105,y,{align:"center"});
+statusMessage.innerText =
+"Děkujeme za využití služby.\nCena: " +
+(data.finalPrice || data.estimatedPrice) + " Kč";
   
 pdf.save("uctenka_"+(data.receiptNumber||"taxi")+".pdf");
 
@@ -1624,9 +1626,17 @@ div.innerHTML = `
   </span>    
 </div>    <!-- DATE -->    <p class="text-gray-400 text-xs">    
   🗓️ ${formattedDate}    
-</p>    <!-- PRICE -->    <p class="text-green-400 font-bold text-sm">    
-  💰 ${ride.estimatedPrice || 0} Kč    
-</p>    <!-- ACTIONS -->    <div class="flex gap-2 mt-2">      <button class="receiptBtn flex-1 bg-green-600 py-2 rounded-lg text-xs font-semibold active:scale-95 transition">    
+</p>  
+
+<!-- PRICE --> 
+
+<p class="text-green-400 font-bold text-sm">    
+  💰 ${ride.finalPrice || ride.estimatedPrice || 0} Kč   
+</p> 
+
+<!-- ACTIONS -->
+
+<div class="flex gap-2 mt-2">      <button class="receiptBtn flex-1 bg-green-600 py-2 rounded-lg text-xs font-semibold active:scale-95 transition">    
     📄 Účtenka    
   </button>      <button class="repeatBtn flex-1 bg-blue-600 py-2 rounded-lg text-xs font-semibold active:scale-95 transition">    
     🔁 Znovu    
