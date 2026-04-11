@@ -664,6 +664,7 @@ if(routeCache[currentRoute]){
     calculatedDistance = cached.distance;
     calculatedPrice = cached.price;
     calculatedETA = cached.eta;
+    pickupLocation = cached.pickupLocation;
 
     priceEstimate.innerText =
       "Vzdálenost: " + cached.distance.toFixed(1) +
@@ -784,6 +785,7 @@ routeCache[currentRoute] = {
   distance: calculatedDistance,
   price: calculatedPrice,
   eta: calculatedETA,
+  pickupLocation: pickupLocation,
   time: Date.now()
 };
 
