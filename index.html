@@ -657,18 +657,29 @@ if(currentRoute === lastCalculatedRoute){
 
 // 🔥 verificăm cache
 if(routeCache[currentRoute]){
+
   const cached = routeCache[currentRoute];
 
-  calculatedDistance = cached.distance;
-  calculatedPrice = cached.price;
-  calculatedETA = cached.eta;
+  const now = Date.now();
+  const maxAge = 1000 * 60 * 10; // 10 minute
 
-  priceEstimate.innerText =
-    "Vzdálenost: " + cached.distance.toFixed(1) +
-    " km | " + cached.eta +
-    " min | Cena: " + cached.price + " Kč";
+  if(now - cached.time < maxAge){
 
-  return;
+    calculatedDistance = cached.distance;
+    calculatedPrice = cached.price;
+    calculatedETA = cached.eta;
+
+    priceEstimate.innerText =
+      "Vzdálenost: " + cached.distance.toFixed(1) +
+      " km | " + cached.eta +
+      " min | Cena: " + cached.price + " Kč";
+
+    return;
+
+  } else {
+    // 🔥 șterge dacă e vechi
+    delete routeCache[currentRoute];
+  }
 }
 
   
@@ -777,11 +788,19 @@ setTimeout(() => {
 routeCache[currentRoute] = {
   distance: calculatedDistance,
   price: calculatedPrice,
-  eta: calculatedETA
+  eta: calculatedETA,
+  time: Date.now()
 };
 
 localStorage.setItem("routeCache", JSON.stringify(routeCache));
 
+  // 🔥 limităm la max 20 rute
+const keys = Object.keys(routeCache);
+
+if(keys.length > 20){
+  delete routeCache[keys[0]];
+  localStorage.setItem("routeCache", JSON.stringify(routeCache));
+}
   
 lastCalculatedRoute = currentRoute;
   
