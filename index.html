@@ -650,10 +650,6 @@ const pickup = pickupInput.value.trim();
 const destination = destinationInput.value.trim();
   const currentRoute = pickup + "|" + destination;
 
-// 🔥 dacă e aceeași rută → nu mai calculăm
-if(currentRoute === lastCalculatedRoute){
-  return;
-}
 
 // 🔥 verificăm cache
 if(routeCache[currentRoute]){
@@ -674,7 +670,6 @@ if(routeCache[currentRoute]){
       " km | " + cached.eta +
       " min | Cena: " + cached.price + " Kč";
 
-    return;
 
   } else {
     // 🔥 șterge dacă e vechi
@@ -849,6 +844,14 @@ if(calculatedPrice === 0){
   return;
 }
 
+
+if(!pickupLocation){
+  generalError.innerText="Nejprve vypočítejte trasu.";
+  generalError.classList.remove("hidden");
+  return;
+}  
+
+  
 if(!pickupInput.value || !destinationInput.value){
 generalError.innerText = "Zadejte adresu a vypočítejte trasu.";
 generalError.classList.remove("hidden");
