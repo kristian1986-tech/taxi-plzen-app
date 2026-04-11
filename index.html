@@ -512,6 +512,7 @@ let lastSeenDriverMessages = parseInt(localStorage.getItem("lastSeenDriverMessag
 let lastCalculatedRoute = "";
 let routeCache = JSON.parse(localStorage.getItem("routeCache")) || {};
 let nearestDriverDistance = null;
+let priceShown = false;
    
 if(!deviceId){
   deviceId = crypto.randomUUID();
@@ -1118,26 +1119,29 @@ statusMessage.innerText="Cesta právě probíhá.";
 cancelBtn.classList.add("hidden");  
 }
 
+
 if(data.status==="completed"){
-  
-routeDrawn = false;
-  
-statusText.innerText="Dokončena";
-statusMessage.innerText="Děkujeme za využití naše služby.";
 
+  routeDrawn = false;
 
-// 🔥 CALCUL PRETURI
-const base = data.estimatedPrice || 0;
-const waiting = data.waitingFee || 0;
-const total = data.finalPrice || base;
+  statusText.innerText="Dokončena";
+  statusMessage.innerText="Děkujeme za využití naše služby.";
 
-// 🔥 BAGĂ ÎN UI
-document.getElementById("modalBasePrice").innerText = base + " Kč";
-document.getElementById("modalWaiting").innerText = waiting + " Kč";
-document.getElementById("modalTotal").innerText = total + " Kč";
+  // 🔥 PROTECȚIE
+  if(!priceShown){
 
-// 🔥 ARATĂ MODAL
-document.getElementById("priceModal").classList.remove("hidden");
+    priceShown = true;
+
+    const base = data.estimatedPrice || 0;
+    const waiting = data.waitingFee || 0;
+    const total = data.finalPrice || (base + waiting);
+
+    document.getElementById("modalBasePrice").innerText = base + " Kč";
+    document.getElementById("modalWaiting").innerText = waiting + " Kč";
+    document.getElementById("modalTotal").innerText = total + " Kč";
+
+    document.getElementById("priceModal").classList.remove("hidden");
+  }  
   
 
 // 🔥 AICI ADAUGI
@@ -2431,6 +2435,7 @@ toggleSupportClient = function(){
 document.addEventListener("click", function(e){
   if(e.target.id === "closePriceBtn"){
     document.getElementById("priceModal").classList.add("hidden");
+    priceShown = false; // 🔥 RESET
   }
 });
 
