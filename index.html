@@ -1126,6 +1126,20 @@ statusText.innerText="Dokončena";
 statusMessage.innerText="Děkujeme za využití naše služby.";
 
 
+// 🔥 CALCUL PRETURI
+const base = data.estimatedPrice || 0;
+const waiting = data.waitingFee || 0;
+const total = data.finalPrice || base;
+
+// 🔥 BAGĂ ÎN UI
+document.getElementById("modalBasePrice").innerText = base + " Kč";
+document.getElementById("modalWaiting").innerText = waiting + " Kč";
+document.getElementById("modalTotal").innerText = total + " Kč";
+
+// 🔥 ARATĂ MODAL
+document.getElementById("priceModal").classList.remove("hidden");
+  
+
 // 🔥 AICI ADAUGI
 const chatBox = document.getElementById("chatBox");
 if(chatBox){
@@ -2411,6 +2425,15 @@ toggleSupportClient = function(){
     panel.classList.add("hidden");
   }
 }
+
+
+
+document.addEventListener("click", function(e){
+  if(e.target.id === "closePriceBtn"){
+    document.getElementById("priceModal").classList.add("hidden");
+  }
+});
+
    
    
 </script>  
@@ -2596,6 +2619,46 @@ class="hidden fixed inset-0 bg-black/70 flex items-end justify-center z-50">
   </div>
 </div>
 
+
+  
+<div id="priceModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+  <div class="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl w-[90%] max-w-sm text-center shadow-2xl border border-gray-700">
+
+    <h2 class="text-xl font-bold mb-4 text-white">
+      💰 Shrnutí jízdy
+    </h2>
+
+    <div class="bg-gray-800 rounded-xl p-4 space-y-2 text-left">
+
+      <div class="flex justify-between">
+        <span>Cena jízdy</span>
+        <span id="modalBasePrice">0 Kč</span>
+      </div>
+
+      <div class="flex justify-between text-yellow-400">
+        <span>Čekání</span>
+        <span id="modalWaiting">0 Kč</span>
+      </div>
+
+      <hr class="border-gray-600">
+
+      <div class="flex justify-between text-green-400 font-bold text-lg">
+        <span>CELKEM</span>
+        <span id="modalTotal">0 Kč</span>
+      </div>
+
+    </div>
+
+    <button id="closePriceBtn"
+      class="mt-5 bg-green-600 w-full py-3 rounded-xl font-bold active:scale-95 transition">
+      OK
+    </button>
+
+  </div>
+</div>
+
+  
   
 </body>   
 
