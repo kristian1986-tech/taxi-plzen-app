@@ -1624,7 +1624,10 @@ div.innerHTML = `
   </p>      <span class="text-[10px] bg-green-600/20 text-green-400 px-2 py-1 rounded-full">    
     ✔ dokončeno    
   </span>    
-</div>    <!-- DATE -->    <p class="text-gray-400 text-xs">    
+</div>  
+
+<!-- DATE -->  
+<p class="text-gray-400 text-xs">    
   🗓️ ${formattedDate}    
 </p>  
 
@@ -1636,11 +1639,20 @@ div.innerHTML = `
 
 <!-- ACTIONS -->
 
-<div class="flex gap-2 mt-2">      <button class="receiptBtn flex-1 bg-green-600 py-2 rounded-lg text-xs font-semibold active:scale-95 transition">    
+<div class="flex gap-2 mt-2">   
+
+<button class="receiptBtn flex-1 bg-green-600 py-2 rounded-lg text-xs font-semibold active:scale-95 transition">    
     📄 Účtenka    
-  </button>      <button class="repeatBtn flex-1 bg-blue-600 py-2 rounded-lg text-xs font-semibold active:scale-95 transition">    
+  </button>    
+  
+  <button class="repeatBtn flex-1 bg-blue-600 py-2 rounded-lg text-xs font-semibold active:scale-95 transition">    
     🔁 Znovu    
-  </button>    </div>    </div>    
+  </button>  
+  
+  </div>   
+  
+  </div>   
+  
 `;  const receiptBtn = div.querySelector(".receiptBtn");  
 const repeatBtn = div.querySelector(".repeatBtn");  // PDF
 const btn = div.querySelector("button");
@@ -1727,7 +1739,7 @@ pdf.setFontSize(14);
 pdf.setFont("helvetica","bold");
 
 pdf.text("Celkem:",20,y);
-pdf.text((ride.estimatedPrice || 0)+" KC",150,y);
+pdf.text((ride.finalPrice || ride.estimatedPrice || 0) + " KC",150,y);
 pdf.line(20,160,190,160);
 
 y += 20;
