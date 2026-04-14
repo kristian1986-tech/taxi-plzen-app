@@ -141,6 +141,18 @@ opacity: 1;
 .promo-animate {
   animation: promoPulse 1.2s ease;
 }
+
+
+@keyframes hintPop {
+  0% { transform: scale(0.7); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.hint-animate {
+  animation: hintPop 0.6s ease;
+}
+    
     
     
 </style>   
@@ -373,6 +385,12 @@ class="bg-gray-800/60 backdrop-blur-md border border-gray-700 rounded-xl py-3 px
     🎁 Každý 300. zákazník získá další jízdu zdarma
   </p>
 
+  p id="promoHint"
+class="text-yellow-400 text-sm mt-1 hidden font-semibold">
+  🎯 Možná jsi právě TY!
+</p>
+
+  
   <p class="text-gray-400 text-sm mt-1">
     Max. sleva 250 Kč
   </p>
@@ -1429,6 +1447,7 @@ splash.style.display = "none";
 }, 1500);
 
 startPromoAnimation();
+randomPromoHint();
   
 });
 
@@ -2499,6 +2518,30 @@ function startPromoAnimation(){
   }, 2500);
 }
    
+
+function randomPromoHint(){
+  
+  const hint = document.getElementById("promoHint");
+  if(!hint) return;
+
+  setInterval(()=>{
+
+    // 🔥 30% șansă
+    if(Math.random() < 0.3){
+
+      hint.classList.remove("hidden");
+      hint.classList.add("hint-animate");
+
+      setTimeout(()=>{
+        hint.classList.add("hidden");
+        hint.classList.remove("hint-animate");
+      }, 2000);
+
+    }
+
+  }, 5000); // la fiecare 5 sec
+}
+
    
    
 </script>  
