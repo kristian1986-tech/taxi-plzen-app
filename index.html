@@ -130,6 +130,17 @@ opacity: 1;
   display: inline-block;
   animation: softPulse 2s ease-in-out infinite;
 }
+
+
+@keyframes promoPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.promo-animate {
+  animation: promoPulse 1.2s ease;
+}
     
     
 </style>   
@@ -348,6 +359,23 @@ class="flex items-center justify-center gap-2 bg-gray-800/60 backdrop-blur-md bo
   <span id="driversDot" class="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></span>
   
   <span>Načítání řidičů...</span>
+
+</div>
+
+
+<div class="mt-3"></div>
+
+<div id="promoCard"
+class="bg-gray-800/60 backdrop-blur-md border border-gray-700 rounded-xl py-3 px-4 text-center shadow-md">
+
+  <p id="promoText"
+     class="text-green-400 font-bold text-lg">
+    🎁 Každá 300. dokončená jízda ZDARMA
+  </p>
+
+  <p class="text-gray-400 text-sm mt-1">
+    Max. sleva 300 Kč
+  </p>
 
 </div>
   
@@ -1399,6 +1427,9 @@ splash.style.display = "none";
 }, 600);
 
 }, 1500);
+
+startPromoAnimation();
+  
 });
 
 function loadGoogleMaps(){
@@ -2451,6 +2482,23 @@ document.addEventListener("click", function(e){
   }
 });
 
+
+
+function startPromoAnimation(){
+  
+  const el = document.getElementById("promoText");
+  if(!el) return;
+
+  setInterval(()=>{
+    el.classList.add("promo-animate");
+
+    setTimeout(()=>{
+      el.classList.remove("promo-animate");
+    }, 1200);
+
+  }, 2500);
+}
+   
    
    
 </script>  
