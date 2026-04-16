@@ -398,6 +398,21 @@ class="text-yellow-400 text-sm mt-1 hidden font-semibold">
 
 </div>
   
+
+<div onclick="openTerms()" 
+class="bg-gradient-to-r from-yellow-600 to-yellow-500 
+p-4 rounded-2xl shadow-xl mt-3 text-center cursor-pointer active:scale-95 transition">
+
+  <p class="text-white font-bold text-lg">
+    💰 MEGA BONUS 2000 Kč
+  </p>
+
+  <p class="text-white text-sm mt-1">
+    Každá 2000. jízda získává bonus 2000 Kč
+  </p>
+
+</div>
+
   
 <div id="map" class="w-full max-w-md mx-auto h-72 mt-4 rounded-xl"></div>
 
@@ -2543,9 +2558,26 @@ function randomPromoHint(){
   }, 5000); // la fiecare 5 sec
 }
 
+
+
+window.openTerms = function(){
+  document.getElementById("termsPopup").classList.remove("hidden");
+};
+
+window.closeTerms = function(){
+  document.getElementById("termsPopup").classList.add("hidden");
+};
+
    
    
 </script>  
+
+
+document.getElementById("termsPopup").addEventListener("click",(e)=>{
+  if(e.target.id === "termsPopup"){
+    closeTerms();
+  }
+});
   
   
   <!-- INFO BUTTON --> 
@@ -2719,6 +2751,12 @@ Bonus nelze vyplatit v hotovosti.<br><br>
  Čím více jízd proběhne, tím častěji můžeš získat bonus.
 </p>
 
+
+<button onclick="closeTerms()" 
+class="w-full mt-4 bg-gray-700 py-2 rounded">
+Zavřít
+</button>
+      
       
     </div>
 
