@@ -2561,13 +2561,15 @@ function randomPromoHint(){
 
 
 window.openTerms = function(){
-  document.getElementById("termsPopup").classList.remove("hidden");
+  document.getElementById("termsPopup").style.display = "flex";
 };
 
-window.closeTerms = function(){
-  document.getElementById("termsPopup").classList.add("hidden");
+
+   window.closeTerms = function(){
+  document.getElementById("termsPopup").style.display = "none";
 };
 
+   
    
    
 </script>  
