@@ -2561,14 +2561,12 @@ function randomPromoHint(){
 
 
 window.openTerms = function(){
-  document.getElementById("termsPopup").style.display = "flex";
+  document.getElementById("termsPopup").classList.remove("hidden");
 };
 
-
-   window.closeTerms = function(){
-  document.getElementById("termsPopup").style.display = "none";
+window.closeTerms = function(){
+  document.getElementById("termsPopup").classList.add("hidden");
 };
-
    
    
    
@@ -2675,18 +2673,7 @@ Později
 
 
 <div id="termsPopup"
-style="
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.8);
-z-index:9999;
-align-items:center;
-justify-content:center;
-padding:20px;
-box-sizing:border-box;
-">
-
+class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-5">
   
   <div style="
 background:#111827;
