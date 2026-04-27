@@ -2805,29 +2805,90 @@ Bonus nelze vyplatit v hotovosti.<br><br>
 
 
 <div id="clientSupport"
-class="hidden fixed inset-0 z-[999999] bg-gray-950 flex items-center justify-center p-3">
+class="hidden"
+style="
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+z-index:9999999;
+background:#030712;
+padding:16px;
+box-sizing:border-box;
+">
 
-  <div class="w-full max-w-md bg-gray-900 rounded-3xl p-4
-              h-[78vh] flex flex-col shadow-2xl border border-gray-700">
+  <div style="
+    width:100%;
+    max-width:480px;
+    height:78vh;
+    margin:40px auto 0 auto;
+    background:#111827;
+    border:1px solid #374151;
+    border-radius:28px;
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    box-sizing:border-box;
+  ">
 
-    <h2 class="text-center text-2xl font-bold mb-4 shrink-0">
+    <h2 style="
+      text-align:center;
+      font-size:30px;
+      font-weight:700;
+      margin:0 0 16px 0;
+      color:white;
+    ">
       💬 Podpora
     </h2>
 
-    <div id="clientChatList" class="space-y-2 shrink-0"></div>
+    <div id="clientChatList" style="margin-bottom:12px;"></div>
 
-    <div id="clientChatBox" class="hidden mt-3 flex-1 flex flex-col min-h-0">
+    <div id="clientChatBox"
+    class="hidden"
+    style="
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      min-height:0;
+    ">
 
       <div id="clientMessages"
-      class="flex-1 bg-gray-800 rounded-xl p-3 overflow-y-auto mb-3 min-h-[320px]">
-      </div>
+      style="
+        flex:1;
+        min-height:320px;
+        background:#1f2937;
+        border-radius:16px;
+        padding:12px;
+        overflow-y:auto;
+        margin-bottom:12px;
+      "></div>
 
-      <div class="flex gap-2 shrink-0">
+      <div style="
+        display:flex;
+        gap:10px;
+      ">
         <input id="clientInput"
-        class="flex-1 h-14 px-4 rounded-xl bg-gray-700 text-white outline-none">
+        style="
+          flex:1;
+          height:56px;
+          border:none;
+          border-radius:14px;
+          padding:0 16px;
+          background:#374151;
+          color:white;
+          outline:none;
+        ">
 
         <button onclick="sendClientMessage()"
-        class="w-20 rounded-xl bg-blue-600 text-2xl">
+        style="
+          width:74px;
+          border:none;
+          border-radius:14px;
+          background:#2563eb;
+          color:white;
+          font-size:28px;
+        ">
           ➤
         </button>
       </div>
@@ -2836,7 +2897,6 @@ class="hidden fixed inset-0 z-[999999] bg-gray-950 flex items-center justify-cen
 
   </div>
 </div>
-
 
   
 <div id="priceModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
