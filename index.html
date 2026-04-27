@@ -2805,27 +2805,29 @@ Bonus nelze vyplatit v hotovosti.<br><br>
 
 
 <div id="clientSupport"
-class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[99999]">
+class="hidden fixed inset-0 z-[999999] bg-gray-950 flex items-end justify-center">
 
-  <div class="w-[95%] max-w-md bg-gray-900 rounded-3xl p-4 h-[80vh] flex flex-col">
+  <div class="w-full max-w-md bg-gray-900 rounded-t-3xl p-4
+              h-[78vh] flex flex-col shadow-2xl border-t border-gray-700">
 
-    <h2 class="text-center mb-3 shrink-0">💬 Podpora</h2>
+    <h2 class="text-center text-2xl font-bold mb-4 shrink-0">
+      💬 Podpora
+    </h2>
 
-    <div id="clientChatList"
-    class="space-y-2 w-full shrink-0"></div>
+    <div id="clientChatList" class="space-y-2 shrink-0"></div>
 
-    <div id="clientChatBox"
-    class="hidden mt-3 flex-1 flex flex-col w-full min-h-0">
+    <div id="clientChatBox" class="hidden mt-3 flex-1 flex flex-col min-h-0">
 
       <div id="clientMessages"
-      class="bg-gray-800 p-3 rounded flex-1 overflow-y-auto mb-2 min-h-0"></div>
+      class="flex-1 bg-gray-800 rounded-xl p-3 overflow-y-auto mb-3 min-h-[320px]">
+      </div>
 
       <div class="flex gap-2 shrink-0">
         <input id="clientInput"
-        class="flex-1 p-2 rounded bg-gray-700 text-white min-w-0">
+        class="flex-1 h-14 px-4 rounded-xl bg-gray-700 text-white outline-none">
 
         <button onclick="sendClientMessage()"
-        class="bg-blue-600 px-4 rounded shrink-0">
+        class="w-20 rounded-xl bg-blue-600 text-2xl">
           ➤
         </button>
       </div>
