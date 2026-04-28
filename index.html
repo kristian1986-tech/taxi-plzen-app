@@ -1848,7 +1848,19 @@ pdf.setFont("helvetica","normal");
 
 pdf.text("Dekuji za vyuziti nase sluzby.",105,y,{align:"center"});
 
-pdf.save("uctenka_"+receiptNumber+".pdf");
+
+const pdfBlob = pdf.output("blob");
+const pdfUrl = URL.createObjectURL(pdfBlob);
+
+const a = document.createElement("a");
+a.href = pdfUrl;
+a.download = "uctenka_" + receiptNumber + ".pdf";
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+
+setTimeout(() => URL.revokeObjectURL(pdfUrl), 3000);
+  
 
 };
 
