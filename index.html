@@ -1323,8 +1323,20 @@ pdf.setFont("helvetica","normal");
 statusMessage.innerText =
 "Děkujeme za využití služby.\nCena: " +
 (data.finalPrice || data.estimatedPrice) + " Kč";
+
   
-pdf.save("uctenka_"+(data.receiptNumber||"taxi")+".pdf");
+const pdfBlob = pdf.output("blob");
+const pdfUrl = URL.createObjectURL(pdfBlob);
+
+const a = document.createElement("a");
+a.href = pdfUrl;
+a.download = "uctenka_" + (data.receiptNumber || "taxi") + ".pdf";
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+
+setTimeout(() => URL.revokeObjectURL(pdfUrl), 3000);
+  
 
 /* 🔥 RESET DUPĂ DESCĂRCARE */
 setTimeout(()=>{
