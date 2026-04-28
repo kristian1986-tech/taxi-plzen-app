@@ -1326,11 +1326,21 @@ statusMessage.innerText =
 
   
 const pdfBlob = pdf.output("blob");
-const pdfUrl = URL.createObjectURL(pdfBlob);
 
-window.open(pdfUrl, "_blank");
+const file = new File(
+  [pdfBlob],
+  "uctenka_" + (receiptNumber || "taxi") + ".pdf",
+  { type: "application/pdf" }
+);
 
-setTimeout(() => URL.revokeObjectURL(pdfUrl), 10000);
+const url = URL.createObjectURL(file);
+
+const a = document.createElement("a");
+a.href = url;
+a.target = "_blank";
+a.click();
+
+setTimeout(() => URL.revokeObjectURL(url), 10000);
   
 
 /* 🔥 RESET DUPĂ DESCĂRCARE */
@@ -1845,15 +1855,26 @@ pdf.text("Dekuji za vyuziti nase sluzby.",105,y,{align:"center"});
 
 
 const pdfBlob = pdf.output("blob");
-const pdfUrl = URL.createObjectURL(pdfBlob);
 
-window.open(pdfUrl, "_blank");
+const file = new File(
+  [pdfBlob],
+  "uctenka_" + (receiptNumber || "taxi") + ".pdf",
+  { type: "application/pdf" }
+);
 
-setTimeout(() => URL.revokeObjectURL(pdfUrl), 10000);
+const url = URL.createObjectURL(file);
+
+const a = document.createElement("a");
+a.href = url;
+a.target = "_blank";
+a.click();
+
+setTimeout(() => URL.revokeObjectURL(url), 10000);
 
   
 };
 
+  
 repeatBtn.onclick = async () => {
 
 document.getElementById("pickup").value = ride.pickup;
