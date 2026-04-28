@@ -1328,14 +1328,9 @@ statusMessage.innerText =
 const pdfBlob = pdf.output("blob");
 const pdfUrl = URL.createObjectURL(pdfBlob);
 
-const a = document.createElement("a");
-a.href = pdfUrl;
-a.download = "uctenka_" + (data.receiptNumber || "taxi") + ".pdf";
-document.body.appendChild(a);
-a.click();
-document.body.removeChild(a);
+window.open(pdfUrl, "_blank");
 
-setTimeout(() => URL.revokeObjectURL(pdfUrl), 3000);
+setTimeout(() => URL.revokeObjectURL(pdfUrl), 10000);
   
 
 /* 🔥 RESET DUPĂ DESCĂRCARE */
@@ -1852,16 +1847,11 @@ pdf.text("Dekuji za vyuziti nase sluzby.",105,y,{align:"center"});
 const pdfBlob = pdf.output("blob");
 const pdfUrl = URL.createObjectURL(pdfBlob);
 
-const a = document.createElement("a");
-a.href = pdfUrl;
-a.download = "uctenka_" + receiptNumber + ".pdf";
-document.body.appendChild(a);
-a.click();
-document.body.removeChild(a);
+window.open(pdfUrl, "_blank");
 
-setTimeout(() => URL.revokeObjectURL(pdfUrl), 3000);
+setTimeout(() => URL.revokeObjectURL(pdfUrl), 10000);
+
   
-
 };
 
 repeatBtn.onclick = async () => {
