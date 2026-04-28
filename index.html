@@ -1335,14 +1335,12 @@ const file = new File(
 
 const url = URL.createObjectURL(file);
 
-const a = document.createElement("a");
-a.href = url;
-a.target = "_blank";
-a.click();
+window.location.href = url;
 
-setTimeout(() => URL.revokeObjectURL(url), 10000);
+setTimeout(() => URL.revokeObjectURL(url), 10000);  
+
+
   
-
 /* 🔥 RESET DUPĂ DESCĂRCARE */
 setTimeout(()=>{
 
@@ -1864,13 +1862,10 @@ const file = new File(
 
 const url = URL.createObjectURL(file);
 
-const a = document.createElement("a");
-a.href = url;
-a.target = "_blank";
-a.click();
+window.location.href = url;
 
 setTimeout(() => URL.revokeObjectURL(url), 10000);
-
+  
   
 };
 
