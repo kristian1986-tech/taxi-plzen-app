@@ -1326,21 +1326,30 @@ statusMessage.innerText =
 
 
 alert("apasat");
-  
+
 const pdfBlob = pdf.output("blob");
+const reader = new FileReader();
 
-const file = new File(
-  [pdfBlob],
-  "uctenka_" + (receiptNumber || "taxi") + ".pdf",
-  { type: "application/pdf" }
-);
+reader.onloadend = function () {
+  const base64 = reader.result.split(",")[1];
 
-const url = URL.createObjectURL(file);
+  if (window.Android && window.Android.saveBase64) {
+    window.Android.saveBase64(base64);
+    alert("Učtenka uložena");
+  } else {
+    const file = new File(
+      [pdfBlob],
+      "uctenka_" + (receiptNumber || "taxi") + ".pdf",
+      { type: "application/pdf" }
+    );
 
-window.location.href = url;
+    const url = URL.createObjectURL(file);
+    window.open(url, "_blank");
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+  }
+};
 
-setTimeout(() => URL.revokeObjectURL(url), 10000);  
-
+reader.readAsDataURL(pdfBlob);
 
   
 /* 🔥 RESET DUPĂ DESCĂRCARE */
@@ -1855,20 +1864,30 @@ pdf.text("Dekuji za vyuziti nase sluzby.",105,y,{align:"center"});
 
 
 alert("apasat");
-  
+
 const pdfBlob = pdf.output("blob");
+const reader = new FileReader();
 
-const file = new File(
-  [pdfBlob],
-  "uctenka_" + (receiptNumber || "taxi") + ".pdf",
-  { type: "application/pdf" }
-);
+reader.onloadend = function () {
+  const base64 = reader.result.split(",")[1];
 
-const url = URL.createObjectURL(file);
+  if (window.Android && window.Android.saveBase64) {
+    window.Android.saveBase64(base64);
+    alert("Učtenka uložena");
+  } else {
+    const file = new File(
+      [pdfBlob],
+      "uctenka_" + (receiptNumber || "taxi") + ".pdf",
+      { type: "application/pdf" }
+    );
 
-window.location.href = url;
+    const url = URL.createObjectURL(file);
+    window.open(url, "_blank");
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+  }
+};
 
-setTimeout(() => URL.revokeObjectURL(url), 10000);
+reader.readAsDataURL(pdfBlob);
   
   
 };
