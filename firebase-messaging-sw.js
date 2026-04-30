@@ -12,12 +12,19 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(function(payload) {
- self.registration.showNotification(payload.notification.title, {
-  body: payload.notification.body,
-  icon: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
-  sound: "/notification.ogg",
-  vibrate: [300,100,300,100,300],
-  requireInteraction: true
-});
+messaging.onBackgroundMessage((payload) => {
+  const title =
+    payload?.notification?.title || "🚕 Řidič přijel";
+
+  const body =
+    payload?.notification?.body || "Řidič je na místě. Prosím vyjděte ven.";
+
+  self.registration.showNotification(title, {
+    body: body,
+    icon: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+    badge: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+    vibrate: [400, 200, 400, 200, 700],
+    requireInteraction: true,
+    tag: "driver-arrived"
+  });
 });
