@@ -1172,11 +1172,20 @@ if(data.status==="arrived"){
 statusText.innerText="Řidič přijel";
 statusMessage.innerText="Řidič je na místě.";
 
-// 🔥 APELĂM DOAR O DATĂ
+
 if(!arrivalPlayed){
   showArrivalAlert();
+
+  if(data.notifyClient){
+    await updateDoc(doc(db,"rides",id),{
+      notifyClient: false
+    });
+  }
+
   arrivalPlayed = true;
 }
+  
+  
 cancelBtn.classList.add("hidden");
 callBtn.classList.remove("hidden");
 callBtn.onclick = ()=> window.location.href="tel:"+currentDriver.phone;
