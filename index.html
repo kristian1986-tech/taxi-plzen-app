@@ -584,6 +584,7 @@ let lastSeenDriverMessages = parseInt(localStorage.getItem("lastSeenDriverMessag
 let lastCalculatedRoute = "";
 let routeCache = JSON.parse(localStorage.getItem("routeCache")) || {};
 let nearestDriverDistance = null;
+let unsubscribeClientChat = null;
    
 if(!deviceId){
   deviceId = crypto.randomUUID();
@@ -2261,6 +2262,12 @@ window.sendMessage = sendMessage;
 
 function listenMessages(rideId){
 
+if(unsubscribeClientChat){
+  unsubscribeClientChat();
+}
+
+unsubscribeClientChat =
+  
 onSnapshot(
 query(
 collection(db,"rides",rideId,"messages"),
