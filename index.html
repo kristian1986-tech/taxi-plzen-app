@@ -544,9 +544,12 @@ async function requestPushPermission(rideId){
 try{
 const permission = await Notification.requestPermission();
 if(permission === "granted"){
-const token = await getToken(messaging,{
+  
+const token = window.androidFcmToken || await getToken(messaging,{
+  
 vapidKey: "BNjO8QUOa0ncoJsS_XsEwYeWzwYzskAkbPGaMlDv4WOgvWXKQmsEMhKluwF_yPYxYkBKZqpDx05ERWQp2DI7-Ck"
 });
+  
 if(token){
 await updateDoc(doc(db,"rides",rideId),{ pushToken: token });
 }
