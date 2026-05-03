@@ -540,22 +540,38 @@ phoneError.classList.add("hidden");
 generalError.classList.add("hidden");
 }
 
+
 async function requestPushPermission(rideId){
-try{
-const permission = await Notification.requestPermission();
-if(permission === "granted"){
-  
-const token = window.androidFcmToken || await getToken(messaging,{
-  
-vapidKey: "BNjO8QUOa0ncoJsS_XsEwYeWzwYzskAkbPGaMlDv4WOgvWXKQmsEMhKluwF_yPYxYkBKZqpDx05ERWQp2DI7-Ck"
-});
-  
-if(token){
-await updateDoc(doc(db,"rides",rideId),{ pushToken: token });
+  try{
+    let token = "";
+
+    // Android app
+    if(window.Android && window.Android.getFcmToken){
+      token = window.Android.getFcmToken();
+      console.log("ANDROID TOKEN:", token);
+    }
+    // Browser / PWA fallback
+    else{
+      const permission = await Notification.requestPermission();
+
+      if(permission === "granted"){
+        token = await getToken(messaging,{
+          vapidKey: "BNjO8QUOa0ncoJsS_XsEwYeWzwYzskAkbPGaMlDv4WOgvWXKQmsEMhKluwF_yPYxYkBKZqpDx05ERWQp2DI7-Ck"
+        });
+      }
+    }
+
+    if(token){
+      await updateDoc(doc(db,"rides",rideId),{
+        pushToken: token
+      });
+    }
+
+  }catch(e){
+    console.log(e);
+  }
 }
-}
-}catch(e){}
-}
+   
 
 const GOOGLE_API_KEY = "AIzaSyB7yhLHZNZDmNIg_tjGQCXA78TPPrN8pQE";
 const pricePerKm = 22;
