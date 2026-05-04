@@ -2661,6 +2661,20 @@ window.closeTerms = function(){
   document.getElementById("termsPopup").classList.add("hidden");
 };
    
+
+
+window.addEventListener("app-resume", async () => {
+  const rideId = localStorage.getItem("activeRideId");
+  if (!rideId) return;
+
+  try {
+    await getDoc(doc(db, "rides", rideId));
+    console.log("Ride refreshed instantly");
+  } catch (e) {
+    console.log(e);
+  }
+});   
+
    
    
 </script>  
