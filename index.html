@@ -2663,17 +2663,14 @@ window.closeTerms = function(){
    
 
 
-window.addEventListener("app-resume", async () => {
+window.addEventListener("app-resume", () => {
   const rideId = localStorage.getItem("activeRideId");
   if (!rideId) return;
 
-  try {
-    await getDoc(doc(db, "rides", rideId));
-    console.log("Ride refreshed instantly");
-  } catch (e) {
-    console.log(e);
-  }
-});   
+  console.log("Force reconnect ride listener");
+
+  listenToStatus(rideId);
+});
 
    
    
