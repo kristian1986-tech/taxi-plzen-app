@@ -1055,9 +1055,19 @@ function calculateETA(from, to){
     Math.sin(dLng/2) * Math.sin(dLng/2);
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  const distance = R * c;
 
-  return Math.max(1, Math.round((distance / 40) * 60));
+  let distance = R * c;
+
+  // 🔥 corecție traseu real (nu linie dreaptă)
+  distance = distance * 1.25;
+
+  // 🔥 viteză realistă oraș
+  const speed = 27;
+
+  return Math.max(
+    1,
+    Math.round((distance / speed) * 60)
+  );
 }
 
 // 🔥 poziție driver SAFE
