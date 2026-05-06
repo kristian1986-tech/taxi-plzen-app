@@ -1138,15 +1138,15 @@ let etaText = 5;
 
 if(newPosition && data.pickupLat && data.pickupLng){
 
-  console.log("Driver position =", newPosition);
-  console.log("Pickup =", data.pickupLat, data.pickupLng);
-
   const etaLive = calculateETA(
     newPosition,
     { lat: data.pickupLat, lng: data.pickupLng }
   );
 
-  console.log("ETA =", etaLive);
+  statusText.innerText =
+    "ETA " + etaLive +
+    " | D:" + newPosition.lat.toFixed(3) +
+    "," + newPosition.lng.toFixed(3);
 
   etaText = etaLive;
 }
