@@ -1371,7 +1371,7 @@ reader.onloadend = function () {
 
   if (window.Android && window.Android.saveBase64) {
     window.Android.saveBase64(base64);
-    alert("Učtenka uložena");
+    showSimpleNotice("✅ Učtenka uložena");
   } else {
     const file = new File(
       [pdfBlob],
@@ -1907,7 +1907,7 @@ reader.onloadend = function () {
 
   if (window.Android && window.Android.saveBase64) {
     window.Android.saveBase64(base64);
-    alert("Učtenka uložena");
+    showSimpleNotice("✅ Učtenka uložena");
   } else {
     const file = new File(
       [pdfBlob],
@@ -2672,6 +2672,31 @@ window.addEventListener("app-resume", () => {
   listenToStatus(rideId);
 });
 
+
+function showSimpleNotice(text){
+  const box = document.createElement("div");
+
+  box.innerText = text;
+  box.style.position = "fixed";
+  box.style.bottom = "30px";
+  box.style.left = "50%";
+  box.style.transform = "translateX(-50%)";
+  box.style.background = "#0f172a";
+  box.style.color = "#fff";
+  box.style.padding = "14px 22px";
+  box.style.borderRadius = "14px";
+  box.style.zIndex = "99999";
+  box.style.fontSize = "16px";
+  box.style.boxShadow = "0 8px 30px rgba(0,0,0,.35)";
+
+  document.body.appendChild(box);
+
+  setTimeout(() => {
+    box.remove();
+  }, 2200);
+}
+
+   
    
    
 </script>  
