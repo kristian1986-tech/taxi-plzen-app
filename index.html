@@ -1073,7 +1073,10 @@ function calculateETA(from, to){
 // 🔥 poziție driver SAFE
 let newPosition = null;
 
-if(data.driverLat && data.driverLng){
+if(
+  data.driverLat !== undefined &&
+  data.driverLng !== undefined
+){
   newPosition = {
     lat: data.driverLat,
     lng: data.driverLng
