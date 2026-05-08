@@ -604,6 +604,7 @@ let lastCalculatedRoute = "";
 let routeCache = JSON.parse(localStorage.getItem("routeCache")) || {};
 let nearestDriverDistance = null;
 let unsubscribeClientChat = null;
+let lastRouteOrigin = null;
    
 if(!deviceId){
   deviceId = crypto.randomUUID();
@@ -707,30 +708,94 @@ if(el){
 
 
 
-
-function drawRoute(origin, destination) {
+async function drawRoute(origin, destination){
 
   if(!map) return;
 
-  // șterge linia veche
+  function distanceMeters(a,b){
+    const R = 6371000;
+    const dLat = (b.lat-a.lat) * Math.PI/180;
+    const dLng = (b.lng-a.lng) * Math.PI/180;
+
+    const x =
+      Math.sin(dLat/2)*Math.sin(dLat/2) +
+      Math.cos(a.lat*Math.PI/180) *
+      Math.cos(b.lat*Math.PI/180) *
+      Math.sin(dLng/2)*Math.sin(dLng/2);
+
+    return R * (2 * Math.atan2(Math.sqrt(x), Math.sqrt(1-x)));
+  }
+
+  if(
+    lastRouteOrigin &&
+    distanceMeters(lastRouteOrigin, origin) < 150
+  ){
+    return;
+  }
+
+  lastRouteOrigin = {
+    lat: origin.lat,
+    lng: origin.lng
+  };
+
   if(routeLine){
     routeLine.setMap(null);
   }
 
-  routeLine = new google.maps.Polyline({
-    path: [
-      { lat: origin.lat, lng: origin.lng },
-      { lat: destination.lat, lng: destination.lng }
-    ],
-    geodesic: true,
-    strokeColor: "#3b82f6",
-    strokeOpacity: 1.0,
-    strokeWeight: 5
-  });
+  try{
 
-  routeLine.setMap(map);
+    const response = await fetch(
+      "https://routes.googleapis.com/directions/v2:computeRoutes",
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "X-Goog-Api-Key": GOOGLE_API_KEY,
+          "X-Goog-FieldMask":"routes.polyline.encodedPolyline"
+        },
+        body: JSON.stringify({
+          origin:{
+            location:{
+              latLng:{
+                latitude: origin.lat,
+                longitude: origin.lng
+              }
+            }
+          },
+          destination:{
+            location:{
+              latLng:{
+                latitude: destination.lat,
+                longitude: destination.lng
+              }
+            }
+          },
+          travelMode:"DRIVE"
+        })
+      }
+    );
 
+    const data = await response.json();
+
+    if(!data.routes?.length) return;
+
+    const encoded = data.routes[0].polyline.encodedPolyline;
+    const path = google.maps.geometry.encoding.decodePath(encoded);
+
+    routeLine = new google.maps.Polyline({
+      path,
+      strokeColor:"#3b82f6",
+      strokeOpacity:1,
+      strokeWeight:5
+    });
+
+    routeLine.setMap(map);
+
+  }catch(e){
+    console.log("Route error", e);
+  }
 }
+
    
 
 /* ROUTE */
@@ -1547,7 +1612,7 @@ function loadGoogleMaps(){
 const script = document.createElement("script");
 
 script.src =
-"https://maps.googleapis.com/maps/api/js?key=AIzaSyB7yhLHZNZDmNIg_tjGQCXA78TPPrN8pQE&libraries=routes";
+"https://maps.googleapis.com/maps/api/js?key=AIzaSyB7yhLHZNZDmNIg_tjGQCXA78TPPrN8pQE&libraries=routes,geometry";
 
 script.onload = () => {
 initMap();
