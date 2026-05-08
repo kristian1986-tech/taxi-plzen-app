@@ -1267,6 +1267,8 @@ cancelBtn.onclick = async ()=>{
 
 if(data.status==="arrived"){
 
+  clearRoute();
+
 statusText.innerText="Řidič přijel";
 statusMessage.innerText="Řidič je na místě.";
 
@@ -1292,6 +1294,9 @@ callBtn.onclick = ()=> window.location.href="tel:"+currentDriver.phone;
   
 
 if(data.status==="in_progress"){
+
+clearRoute();
+  
 statusText.innerText="Jízda probíhá";
 statusMessage.innerText="Cesta právě probíhá.";
 cancelBtn.classList.add("hidden");  
@@ -1299,6 +1304,8 @@ cancelBtn.classList.add("hidden");
 
 
 if(data.status==="completed"){
+
+  clearRoute();
 
   routeDrawn = false;
 
@@ -2774,6 +2781,16 @@ function showSimpleNotice(text){
   }, 2200);
 }
 
+   
+
+function clearRoute(){
+  if(routeLine){
+    routeLine.setMap(null);
+    routeLine = null;
+  }
+
+  lastRouteOrigin = null;
+}
    
    
    
