@@ -1146,11 +1146,6 @@ if(newPosition && data.pickupLat && data.pickupLng){
     { lat: data.pickupLat, lng: data.pickupLng }
   );
 
-  statusText.innerText =
-    "ETA " + etaLive +
-    " | D:" + newPosition.lat.toFixed(3) +
-    "," + newPosition.lng.toFixed(3);
-
   etaText = etaLive;
 }
   
