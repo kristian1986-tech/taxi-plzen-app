@@ -855,7 +855,7 @@ method:"POST",
 headers:{
 "Content-Type":"application/json",
 "X-Goog-Api-Key":GOOGLE_API_KEY,
-"X-Goog-FieldMask":"routes.distanceMeters,routes.duration,routes.legs.startLocation"
+"X-Goog-FieldMask":"routes.distanceMeters,routes.duration,routes.legs.startLocation,routes.viewport"
 },
 body:JSON.stringify({
 origin:{address:pickup},
@@ -896,10 +896,21 @@ if(!route.distanceMeters || isNaN(route.distanceMeters)){
   return;
 }
   
-pickupLocation = {
-lat: route.legs[0].startLocation.latLng.latitude,
-lng: route.legs[0].startLocation.latLng.longitude
-};
+  
+const start =
+  route.legs?.[0]?.startLocation?.latLng ||
+  route?.viewport?.low ||
+  null;
+
+if(start){
+  pickupLocation = {
+    lat: start.latitude,
+    lng: start.longitude
+  };
+}else{
+  pickupLocation = null;
+}
+  
 
 calculatedDistance = route.distanceMeters / 1000;
 if(calculatedDistance === 0 || isNaN(calculatedDistance)){
