@@ -1138,6 +1138,7 @@ function calculateETA(from, to){
 // 🔥 poziție driver SAFE
 let newPosition = null;
 
+  
 if(
   data.driverLat !== undefined &&
   data.driverLng !== undefined
@@ -1151,14 +1152,25 @@ if(
     driverMarker.setPosition(newPosition);
   }
 
-  if(data.pickupLat && data.pickupLng){
+  // desenăm ruta doar când șoferul vine spre client
+  if(
+    data.status === "confirmed" &&
+    data.pickupLat &&
+    data.pickupLng
+  ){
     drawRoute(
       newPosition,
-      { lat: data.pickupLat, lng: data.pickupLng }
+      {
+        lat: data.pickupLat,
+        lng: data.pickupLng
+      }
     );
+  } else {
+    clearRoute();
   }
 }
 
+  
 
 receiptBtn.classList.add("hidden");
 cancelBtn.classList.add("hidden");
