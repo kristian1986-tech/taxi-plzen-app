@@ -820,6 +820,9 @@ if(routeCache[currentRoute]){
   calculatedPrice = cached.price;
   calculatedETA = cached.eta;
 
+  // 🔥 IMPORTANT
+  pickupLocation = cached.pickupLocation || null;
+
   priceEstimate.innerText =
     "Vzdálenost: " + cached.distance.toFixed(1) +
     " km | " + cached.eta +
@@ -934,7 +937,8 @@ setTimeout(() => {
 routeCache[currentRoute] = {
   distance: calculatedDistance,
   price: calculatedPrice,
-  eta: calculatedETA
+  eta: calculatedETA,
+  pickupLocation: pickupLocation
 };
 
 localStorage.setItem("routeCache", JSON.stringify(routeCache));
