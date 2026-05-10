@@ -652,12 +652,38 @@ onSnapshot(collection(db,"drivers"),snapshot=>{
 driversMarkers.forEach(marker=>marker.setMap(null));
 driversMarkers = [];
 
+nearestDriverDistance = null; 
+
 snapshot.forEach(docSnap=>{
 
 const driver = docSnap.data();
 
 if(driver.status === "online" && driver.lat && driver.lng){
 
+
+if(pickupLocation){
+
+  const R = 6371;
+
+  const dLat = (driver.lat - pickupLocation.lat) * Math.PI / 180;
+  const dLng = (driver.lng - pickupLocation.lng) * Math.PI / 180;
+
+  const a =
+    Math.sin(dLat/2)*Math.sin(dLat/2) +
+    Math.cos(pickupLocation.lat*Math.PI/180) *
+    Math.cos(driver.lat*Math.PI/180) *
+    Math.sin(dLng/2)*Math.sin(dLng/2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const km = R * c;
+
+  if(nearestDriverDistance === null || km < nearestDriverDistance){
+    nearestDriverDistance = km;
+  }
+
+}
+  
+  
 const marker = new google.maps.Marker({
 position:{
 lat: driver.lat,
@@ -1049,6 +1075,14 @@ generalError.classList.remove("hidden");
 return;
 }
 
+
+if(nearestDriverDistance !== null && nearestDriverDistance > 20){
+  generalError.innerText = "Momentálně nemáme řidiče do 20 km.";
+  generalError.classList.remove("hidden");
+  return;
+} 
+
+  
 const receiptId = "COBRA-" + Date.now();
 
 const docRef = await addDoc(collection(db,"rides"),{
