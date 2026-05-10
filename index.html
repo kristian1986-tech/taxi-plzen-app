@@ -1077,8 +1077,23 @@ return;
 
 
 if(nearestDriverDistance !== null && nearestDriverDistance > 20){
-  generalError.innerText = "Momentálně nemáme řidiče do 20 km.";
-  generalError.classList.remove("hidden");
+
+
+generalError.innerHTML = `
+  <div class="mt-2 bg-blue-900/40 border border-blue-500 rounded-2xl p-4 text-center">
+    <div class="text-2xl mb-2">🚕</div>
+    <div class="text-white font-semibold">
+      Služba v této oblasti zatím není dostupná.
+    </div>
+    <div class="text-sm text-blue-200 mt-2">
+      Brzy rozšíříme provoz i do Vaší lokality.
+    </div>
+  </div>
+`;
+
+generalError.classList.remove("hidden");
+  
+  
   return;
 } 
 
