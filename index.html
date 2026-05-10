@@ -805,7 +805,10 @@ resetErrors();
 
 const pickup = pickupInput.value.trim();
 const destination = destinationInput.value.trim();
-  const currentRoute = pickup + "|" + destination;
+const currentRoute =
+  pickup.trim().toLowerCase() +
+  "|" +
+  destination.trim().toLowerCase();
 
 // 🔥 dacă e aceeași rută → nu mai calculăm
 if(currentRoute === lastCalculatedRoute){
