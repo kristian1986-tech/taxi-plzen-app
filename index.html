@@ -1512,30 +1512,25 @@ statusMessage.innerText =
 (data.finalPrice || data.estimatedPrice) + " Kč";
 
 
-const pdfBlob = pdf.output("blob");
-const reader = new FileReader();
+const pdfBase64 = pdf.output("datauristring").split(",")[1];
 
-reader.onloadend = function () {
-  const base64 = reader.result.split(",")[1];
+if (window.Android && window.Android.saveBase64) {
 
-  if (window.Android && window.Android.saveBase64) {
-    window.Android.saveBase64(base64);
-    showSimpleNotice("✅ Učtenka uložena");
-  } else {
-    const file = new File(
-      [pdfBlob],
-      "uctenka_" + (receiptNumber || "taxi") + ".pdf",
-      { type: "application/pdf" }
-    );
+  window.Android.saveBase64(pdfBase64);
 
-    const url = URL.createObjectURL(file);
-    window.open(url, "_blank");
-    setTimeout(() => URL.revokeObjectURL(url), 10000);
-  }
-};
+  showSimpleNotice("✅ Učtenka uložena");
 
-reader.readAsDataURL(pdfBlob);
+} else {
 
+  const pdfBlob = pdf.output("blob");
+
+  const url = URL.createObjectURL(pdfBlob);
+
+  window.open(url, "_blank");
+
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
+  
   
 /* 🔥 RESET DUPĂ DESCĂRCARE */
 setTimeout(()=>{
