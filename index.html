@@ -1767,8 +1767,14 @@ deferredPrompt = null;
 const qrBox = document.getElementById("qrBox");
 const qrContainer = document.getElementById("qrcode");
 
-qrBox.classList.remove("hidden");
+// 🔥 toggle open/close
+if(!qrBox.classList.contains("hidden")){
+  qrBox.classList.add("hidden");
+  return;
+}
 
+qrBox.classList.remove("hidden");
+  
 if (!qrGenerated) {
 
 qrContainer.innerHTML = "";
