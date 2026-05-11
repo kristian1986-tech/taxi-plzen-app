@@ -1431,7 +1431,7 @@ pdf.line(20,45,190,45);
 // TITLE
 pdf.setFontSize(14);
 pdf.setFont("helvetica","bold");
-const receiptNumber = data.receiptId || ("COBRA");
+const receiptNumber = data.receiptId || ("OLD-" + ride.id.slice(-6));
 pdf.text("UCTENKA #"+receiptNumber,105,55,{align:"center"});
 
 pdf.setFont("helvetica","normal");
