@@ -1083,7 +1083,7 @@ return;
 }
 
 
-if(nearestDriverDistance === null || nearestDriverDistance > 20){
+if(driversMarkers.length === 0){
   generalError.innerText = "🚕 V této oblasti momentálně nejsou dostupní žádní řidiči.";
   generalError.classList.remove("hidden");
   return;
