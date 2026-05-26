@@ -943,6 +943,9 @@ if(start){
     lat: start.latitude,
     lng: start.longitude
   };
+
+showOnlineDrivers();
+  
 }else{
   pickupLocation = null;
 }
@@ -1082,7 +1085,11 @@ generalError.classList.remove("hidden");
 return;
 }
 
+nearestDriverDistance = null;
 
+showOnlineDrivers();
+
+  
 if(
   driversMarkers.length === 0 ||
   (nearestDriverDistance !== null && nearestDriverDistance > 20)
