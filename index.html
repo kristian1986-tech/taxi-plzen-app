@@ -2186,6 +2186,10 @@ navigator.geolocation.getCurrentPosition(async (position)=>{
 const lat = position.coords.latitude;
 const lng = position.coords.longitude;
 
+// ✅ IMPORTANT: salvăm coordonatele pickup
+  pickupLocation = { lat, lng };
+
+  
 try{
 
 const res = await fetch(
