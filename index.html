@@ -2503,10 +2503,11 @@ if(!chatOpen && newMessages > 0){
   snapshot.forEach(doc=>{
     const msg = doc.data();
 
-    const div = document.createElement("div");
+const div = document.createElement("div");
 
-    div.innerHTML = msg.text;
-
+// ✅ mesajul e tratat ca text, nu HTML (fără XSS)
+div.textContent = String(msg.text ?? "");
+    
 // 🔥 dacă e mesaj trimis de client
 if(msg.sender === "client"){
   const tick = document.createElement("span");
