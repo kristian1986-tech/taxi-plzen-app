@@ -517,6 +517,22 @@ const cancelBtn = document.getElementById("cancelBtn");
 const callBtn = document.getElementById("callBtn");
 const arrivalOverlay = document.getElementById("arrivalOverlay");
 
+const cobraCard = document.getElementById("cobraCard");
+const cardToggle = document.getElementById("cardToggle");
+
+function closeCobraCard() {
+    cobraCard.classList.add("card-hidden");
+    cardToggle.classList.remove("hidden");
+}
+
+function openCobraCard() {
+    cobraCard.classList.remove("card-hidden");
+    cardToggle.classList.add("hidden");
+}
+
+cardToggle.addEventListener("click", openCobraCard);
+
+   
 
  cancelBtn.addEventListener("click", () => {
   if(navigator.vibrate){
@@ -1172,6 +1188,8 @@ await requestPushPermission(docRef.id);
 formSection.classList.add("hidden");
 statusSection.classList.remove("hidden");
 
+closeCobraCard();
+  
 listenToStatus(docRef.id);
 listenMessages(docRef.id);
 };
