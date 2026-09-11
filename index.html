@@ -531,6 +531,27 @@ p-4 rounded-2xl shadow-xl mt-3 text-center cursor-pointer active:scale-95 transi
   
  <script type="module"> 
 
+
+const menuButton = document.getElementById("menuButton");
+const closeMenu = document.getElementById("closeMenu");
+const sideMenu = document.getElementById("sideMenu");
+const menuOverlay = document.getElementById("menuOverlay");
+
+function openSideMenu() {
+    sideMenu.classList.add("open");
+    menuOverlay.classList.add("open");
+}
+
+function closeSideMenu() {
+    sideMenu.classList.remove("open");
+    menuOverlay.classList.remove("open");
+}
+
+menuButton.addEventListener("click", openSideMenu);
+closeMenu.addEventListener("click", closeSideMenu);
+menuOverlay.addEventListener("click", closeSideMenu);
+   
+
     
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";  
 import { getFirestore, collection, addDoc, serverTimestamp, doc, onSnapshot, query, where, getDocs,getDoc,updateDoc,orderBy, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";  
