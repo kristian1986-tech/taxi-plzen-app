@@ -169,7 +169,16 @@ body > div:not(#map):not(#splashScreen):not(#arrivalOverlay) {
     position: relative;
     z-index: 10;
 }  
-  
+
+    
+#cobraCard {
+    transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+#cobraCard.card-hidden {
+    transform: translateY(calc(100vh - 90px));
+}
+
     
 </style>   
   
