@@ -160,9 +160,13 @@ opacity: 1;
     left: 0;
     width: 100%;
     height: 100dvh;
-    z-index: 1;
+    z-index: 0;
 }
-    
+
+ #appContent {
+    position: relative;
+    z-index: 100;
+ }   
     
 </style>   
   
@@ -195,9 +199,9 @@ opacity: 1;
     </button>      
 </div>    </div>  
   
-<div class="relative z-10 w-full max-w-md mx-auto p-6 mt-10 bg-transparent rounded-3xl shadow-2xl border border-gray-700 backdrop-blur">
+<div id="appContent" class="relative w-full max-w-md mx-auto p-6 mt-10 bg-transparent rounded-3xl shadow-2xl border border-gray-700 backdrop-blur">
   
-  <!-- COBRA HEADER -->  
+  <!-- COBRA HEADER -->  >
   
   <div class="text-center mb-8 select-none">      
   <p class="text-xs tracking-[0.3em] text-lime-400 uppercase">      
