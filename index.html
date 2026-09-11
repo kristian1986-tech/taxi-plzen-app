@@ -172,11 +172,26 @@ body > div:not(#map):not(#splashScreen):not(#arrivalOverlay) {
 
     
 #cobraCard {
-    transition: transform 0.35s ease, opacity 0.35s ease;
+    position: fixed !important;
+    left: 50% !important;
+    bottom: 16px !important;
+    top: auto !important;
+    transform: translateX(-50%) !important;
+
+    width: calc(100vw - 24px) !important;
+    max-width: 448px !important;
+
+    max-height: calc(100vh - 100px) !important;
+    overflow-y: auto !important;
+
+    margin: 0 !important;
+    z-index: 20 !important;
+
+    transition: transform 0.35s ease, opacity 0.35s ease !important;
 }
 
 #cobraCard.card-hidden {
-    transform: translateY(calc(100vh - 90px));
+    transform: translate(-50%, calc(100% - 70px)) !important;
 }
 
     
@@ -210,8 +225,9 @@ body > div:not(#map):not(#splashScreen):not(#arrivalOverlay) {
 </div>    </div>  
   
 
-  <div id="cobraCard" class="relative z-10 w-full max-w-md mx-auto p-6 mt-10 bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl shadow-2xl border border-gray-700 backdrop-blur">
-  
+<div id="cobraCard" class="relative z-10 p-5 bg-gray-900/90 backdrop-blur-xl rounded-[28px] shadow-2xl border border-white/15">
+
+<div class="w-12 h-1.5 bg-white/30 rounded-full mx-auto mb-4"></div>  
   
   <!-- COBRA HEADER -->  
   
@@ -459,9 +475,17 @@ p-4 rounded-2xl shadow-xl mt-3 text-center cursor-pointer active:scale-95 transi
 
 <button id="cardToggle"
         type="button"
-        class="hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-30
-               w-14 h-8 rounded-full bg-gray-900/90
-               border border-white/20 text-white text-xl shadow-lg">
+        aria-label="Deschide panoul COBRA"
+        class="hidden fixed bottom-3 left-1/2 -translate-x-1/2 z-30
+               w-16 h-9 rounded-full
+               bg-gray-900/95 backdrop-blur-xl
+               border border-white/20
+               text-white text-lg font-bold
+               shadow-2xl">
+    ⌃
+</button>
+
+  
     ⌃
 </button>
   
