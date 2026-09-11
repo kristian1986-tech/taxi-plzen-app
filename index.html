@@ -553,11 +553,11 @@ function closeSideMenu() {
     menuOverlay.classList.remove("open");
 }
 
-function toggleMegaBonus() {
+window.toggleMegaBonus = function() {
     const content = document.getElementById("megaBonusContent");
 
     content.classList.toggle("hidden");
-}
+};
    
    
 menuButton.addEventListener("click", openSideMenu);
