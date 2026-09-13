@@ -255,7 +255,7 @@ opacity: 1;
     </div>
 
 
-<div onclick="closeSideMenu(); 
+<div onclick="window.closeSideMenu();
   window.toggleClientHistory()"
     class="mt-2 bg-white
             border border-black
@@ -586,7 +586,7 @@ function openSideMenu() {
     menuOverlay.classList.add("open");
 }
 
-function closeSideMenu() {
+window.closeSideMenu = function() {
     sideMenu.classList.remove("open");
     menuOverlay.classList.remove("open");
 }
