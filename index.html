@@ -2307,12 +2307,14 @@ createRide();
 window.toggleClientHistory = async function(){
 
 const panel = document.getElementById("clientHistoryPanel");
+const closeButton = document.getElementById("closeHistoryButton");
 
 const isVisible = !panel.classList.contains("hidden");
 
 if(isVisible){
-panel.classList.add("hidden");
-return;
+    panel.classList.add("hidden");
+    closeButton.classList.add("hidden");
+    return;
 }
 
 // 🔥 luăm telefon din localStorage
@@ -2324,6 +2326,7 @@ return;
 }
 
 panel.classList.remove("hidden");
+closeButton.classList.remove("hidden");
 
 loadClientHistory(phone);
 }
