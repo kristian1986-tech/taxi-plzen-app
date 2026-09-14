@@ -173,6 +173,20 @@ opacity: 1;
   box-shadow: 8px 0 30px rgba(0,0,0,0.35);
 }
 
+#sideMenu::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#sideMenu > * {
+  position: relative;
+  z-index: 1;
+}  
+
 #sideMenu.open {
   transform: translateX(0);
 }
