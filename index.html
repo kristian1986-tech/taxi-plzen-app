@@ -1183,6 +1183,47 @@ localStorage.setItem("routeCache", JSON.stringify(routeCache));
 lastCalculatedRoute = currentRoute;
   
 };
+
+
+   
+
+
+let startY = 0;
+let currentY = 0;
+let draggingCard = false;
+
+const mainCard = document.querySelector(".w-full.max-w-md.mx-auto");
+
+mainCard.addEventListener("touchstart", (e) => {
+    startY = e.touches[0].clientY;
+    draggingCard = true;
+    mainCard.style.transition = "none";
+});
+
+mainCard.addEventListener("touchmove", (e) => {
+    if (!draggingCard) return;
+
+    currentY = e.touches[0].clientY;
+    const diff = currentY - startY;
+
+    mainCard.style.transform = `translateY(calc(70vh + ${diff}px))`;
+});
+
+mainCard.addEventListener("touchend", () => {
+    draggingCard = false;
+    mainCard.style.transition = "transform 0.5s ease";
+
+    if (currentY < startY - 100) {
+        mainCard.style.transform = "translateY(0)";
+    } else if (currentY > startY + 100) {
+        mainCard.style.transform = "translateY(70vh)";
+    } else {
+        mainCard.style.transform = "translateY(70vh)";
+    }
+});
+
+   
+   
    
 /* CREATE */
 window.createRide = async function(){
