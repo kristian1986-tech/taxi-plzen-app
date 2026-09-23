@@ -1488,6 +1488,10 @@ if(
     driverMarker.setPosition(newPosition);
   }
 
+  if(data.status === "confirmed" || data.status === "in_progress"){
+  map.panTo(newPosition);
+}
+
   // desenăm ruta doar când șoferul vine spre client
   if(
     data.status === "confirmed" &&
