@@ -167,7 +167,6 @@ opacity: 1;
   background-color: #ffffff !important;
   color: #111827;
   z-index: 1000;
-  pointer-events: auto !important;
 
   transform: translateX(-100%);
   transition: transform 0.35s ease;
@@ -194,6 +193,19 @@ opacity: 1;
   visibility: visible;
 }
     
+
+
+#sideMenu {
+    left: -100%;
+    transform: none;
+    transition: left 0.35s ease;
+}
+
+#sideMenu.open {
+    left: 0;
+    transform: none;
+}
+
     
 </style>   
   
